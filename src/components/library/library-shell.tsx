@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState, type ReactNode } from 'react';
-import { getStoredUser } from '@/lib/mock/auth';
+import { getStoredUser, logout } from '@/lib/mock/auth';
 import {
   LIBRARY_NAV_ITEMS,
   type LibraryNavKey
@@ -10,7 +11,6 @@ import {
 import { PortalShellActionMenus } from '@/components/shared/portal-shell-action-menus';
 import { useRoutePrefetch } from '@/components/shared/use-route-prefetch';
 import { useShellSidebar } from '@/components/shared/use-shell-sidebar';
-import { requestLogout } from '@/components/auth/logout-flow';
 
 const LIBRARY_PREFETCH_ROUTES = LIBRARY_NAV_ITEMS.map((item) => item.href);
 
@@ -31,6 +31,7 @@ export function LibraryShell({
   hideHeader = true,
   children
 }: LibraryShellProps) {
+  const router = useRouter();
   
   const prefetchRoute = useRoutePrefetch(LIBRARY_PREFETCH_ROUTES);
   const [displayName, setDisplayName] = useState('Sarah Rivera');
@@ -168,7 +169,10 @@ export function LibraryShell({
                   label: 'Sign Out',
                   icon: 'fa-right-from-bracket',
                   danger: true,
-                  onClick: requestLogout
+                  onClick: () => {
+                    logout();
+                    router.push('/login');
+                  }
                 }
               ]}
             />

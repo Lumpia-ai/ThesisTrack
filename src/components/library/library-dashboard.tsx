@@ -1,20 +1,130 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   LIBRARY_DEPARTMENT_SUMMARY,
   LIBRARY_PROJECTS,
   LIBRARY_RECENT_STUDIES,
+  getDepartmentLabel,
   getProjectIcon
 } from '@/components/library/library-data';
-import { LibraryDepartmentBadge, LibraryStatCard } from '@/components/library/library-primitives';
 import { LibraryShell } from '@/components/library/library-shell';
+
+export type DepartmentStyle = {
+  accent: string;
+  icon: string;
+  cardBg: string;
+  cardBorder: string;
+  cardBorderHover: string;
+  cardShadowHover: string;
+  cardTopAccent: string;
+  badgeBg: string;
+  border: string;
+  text: string;
+  barFill: string;
+  trackBg: string;
+};
+
+// Official USTP department color palette curated for the minimalist theme
+export const MINIMALIST_DEPT_THEMES: Record<string, DepartmentStyle> = {
+  IT: {
+    accent: '#F59E0B',
+    icon: 'fa-laptop-code',
+    cardBg: '#FFFDF6',
+    cardBorder: '#FDE68A',
+    cardBorderHover: '#FCD34D',
+    cardShadowHover: 'rgba(245, 158, 11, 0.08)',
+    cardTopAccent: '#F59E0B',
+    badgeBg: '#FEF3C7',
+    border: '#FCD34D',
+    text: '#0F172A',
+    barFill: '#F59E0B',
+    trackBg: '#FEF3C7'
+  },
+  MET: {
+    accent: '#800000',
+    icon: 'fa-industry',
+    cardBg: '#FFF8F8',
+    cardBorder: '#FEE2E2',
+    cardBorderHover: '#FECDD3',
+    cardShadowHover: 'rgba(128, 0, 0, 0.08)',
+    cardTopAccent: '#800000',
+    badgeBg: '#FDF2F2',
+    border: '#FECDD3',
+    text: '#800000',
+    barFill: '#800000',
+    trackBg: '#FEE2E2'
+  },
+  TCM: {
+    accent: '#700F9D',
+    icon: 'fa-broadcast-tower',
+    cardBg: '#FAF8FF',
+    cardBorder: '#EDE9FE',
+    cardBorderHover: '#DDD6FE',
+    cardShadowHover: 'rgba(112, 15, 157, 0.08)',
+    cardTopAccent: '#700F9D',
+    badgeBg: '#F5F3FF',
+    border: '#DDD6FE',
+    text: '#6D28D9',
+    barFill: '#7C3AED',
+    trackBg: '#EDE9FE'
+  },
+  ESM: {
+    accent: '#15803D',
+    icon: 'fa-bolt',
+    cardBg: '#F7FCF8',
+    cardBorder: '#DCFCE7',
+    cardBorderHover: '#BBF7D0',
+    cardShadowHover: 'rgba(21, 128, 61, 0.08)',
+    cardTopAccent: '#15803D',
+    badgeBg: '#F0FDF4',
+    border: '#BBF7D0',
+    text: '#166534',
+    barFill: '#16A34A',
+    trackBg: '#DCFCE7'
+  },
+  NAME: {
+    accent: '#003A8F',
+    icon: 'fa-ship',
+    cardBg: '#F8FAFF',
+    cardBorder: '#DBEAFE',
+    cardBorderHover: '#BFDBFE',
+    cardShadowHover: 'rgba(0, 58, 143, 0.08)',
+    cardTopAccent: '#003A8F',
+    badgeBg: '#EFF6FF',
+    border: '#BFDBFE',
+    text: '#003A8F',
+    barFill: '#003A8F',
+    trackBg: '#DBEAFE'
+  }
+};
+
+export function getDepartmentStyle(dept: string): DepartmentStyle {
+  return (
+    MINIMALIST_DEPT_THEMES[dept] ?? {
+      accent: '#64748B',
+      icon: 'fa-building-columns',
+      cardBg: '#F8FAFC',
+      cardBorder: '#E2E8F0',
+      cardBorderHover: '#CBD5E1',
+      cardShadowHover: 'rgba(15, 23, 42, 0.06)',
+      cardTopAccent: '#64748B',
+      badgeBg: '#F1F5F9',
+      border: '#E2E8F0',
+      text: '#475569',
+      barFill: '#64748B',
+      trackBg: '#E2E8F0'
+    }
+  );
+}
 
 function getTopProject() {
   return [...LIBRARY_PROJECTS].sort((left, right) => right.views - left.views)[0] ?? LIBRARY_PROJECTS[0];
 }
 
 export function LibraryDashboard() {
+  const router = useRouter();
   const featuredProjects = LIBRARY_PROJECTS.slice(0, 4);
   const topProject = getTopProject();
 
@@ -25,148 +135,389 @@ export function LibraryDashboard() {
       description="Discover, explore, and reference completed academic research."
       hideHeader={true}
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem', paddingBottom: '2rem' }}>
+      <div className="lib-dash-wrapper">
         
-        {/* Hero Search Section */}
-        <section style={{ position: 'relative', borderRadius: '1.5rem', overflow: 'hidden', background: 'linear-gradient(135deg, #003A8F, #1E40AF)', color: 'white', padding: '3rem 2rem', boxShadow: '0 20px 40px rgba(0, 58, 143, 0.15)' }}>
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")', opacity: 0.5 }}></div>
-          
-          <div style={{ position: 'relative', zIndex: 1, maxWidth: '800px', margin: '0 auto', textAlign: 'center', padding: '1.5rem 0' }}>
-            <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '0.8rem', letterSpacing: '-0.02em', textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>Digital Knowledge Vault</h2>
-            <p style={{ fontSize: '1.1rem', opacity: 0.9, marginBottom: '2.5rem', maxWidth: '600px', margin: '0 auto 2.5rem' }}>Access and manage thousands of completed academic studies, thesis projects, and technology transfer records across all university departments.</p>
+        {/* Minimalist Hero Section */}
+        <section className="lib-dash-hero" aria-labelledby="hero-title">
+          <div className="lib-dash-hero-inner">
+            <div className="lib-hero-badge">
+              <i className="fas fa-university text-amber-600" aria-hidden="true" />
+              <span>Institutional Knowledge Vault</span>
+              <span className="lib-pulse-dot" aria-hidden="true" />
+            </div>
+
+            <h2 id="hero-title" className="lib-hero-title">
+              Digital Knowledge <span className="lib-hero-title-accent">Vault</span>
+            </h2>
             
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-              <Link href="/library/repository" style={{ textDecoration: 'none', background: '#F6BE00', color: '#003A8F', border: 'none', padding: '0.8rem 2rem', borderRadius: '2rem', fontWeight: 700, fontSize: '1rem', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s', boxShadow: '0 8px 15px rgba(246, 190, 0, 0.3)', display: 'flex', alignItems: 'center', gap: '0.6rem' }} onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 20px rgba(246, 190, 0, 0.4)'; }} onMouseOut={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 8px 15px rgba(246, 190, 0, 0.3)'; }}>
-                <i className="fas fa-search" aria-hidden="true" /> Browse Repository
+            <p className="lib-hero-desc">
+              Access and manage thousands of completed academic studies, thesis projects, and technology transfer records across all university departments.
+            </p>
+            
+            <div>
+              <Link
+                href="/library/repository"
+                className="lib-hero-cta"
+                title="Browse Repository"
+              >
+                <i className="fas fa-search" aria-hidden="true" />
+                <span>Browse Repository</span>
+                <i className="fas fa-arrow-right" style={{ fontSize: '0.8rem' }} aria-hidden="true" />
               </Link>
+            </div>
+
+            {/* Minimalist Meta Row */}
+            <div className="lib-hero-meta-row" aria-label="Vault quick statistics">
+              <div className="lib-hero-meta-item">
+                <i className="fas fa-book text-amber-600" aria-hidden="true" />
+                <span>342 Archived Projects</span>
+              </div>
+              <span className="lib-hero-meta-sep">•</span>
+              <div className="lib-hero-meta-item">
+                <i className="fas fa-building-columns text-amber-600" aria-hidden="true" />
+                <span>5 Academic Departments</span>
+              </div>
+              <span className="lib-hero-meta-sep">•</span>
+              <div className="lib-hero-meta-item">
+                <i className="fas fa-check-circle text-amber-600" aria-hidden="true" />
+                <span>Peer-Reviewed &amp; Verified</span>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Bento Stats Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
-          <div style={{ background: 'white', borderRadius: '1.2rem', padding: '1.5rem', boxShadow: '0 10px 25px rgba(0, 58, 143, 0.05)', display: 'flex', flexDirection: 'column', gap: '1rem', borderTop: '4px solid #003A8F', position: 'relative', overflow: 'hidden' }}>
-             <i className="fas fa-star" style={{ position: 'absolute', right: '-15px', bottom: '-15px', fontSize: '6rem', color: '#003A8F', opacity: 0.05, transform: 'rotate(-10deg)' }}></i>
-             <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-               <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#EFF6FF', color: '#003A8F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><i className="fas fa-crown"></i></div>
-               <span style={{ color: '#64748B', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: '0.85rem' }}>Most Viewed Research</span>
-             </div>
-             <div>
-               <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.2rem', fontWeight: 800, color: '#0F172A', lineHeight: 1.3 }}>{topProject.title}</h3>
-               <p style={{ margin: 0, color: '#3B82F6', fontWeight: 700, fontSize: '0.9rem' }}>{topProject.views.toLocaleString()} views this semester</p>
-             </div>
-          </div>
-          <div style={{ background: 'white', borderRadius: '1.2rem', padding: '1.5rem', boxShadow: '0 10px 25px rgba(0, 58, 143, 0.05)', display: 'flex', flexDirection: 'column', gap: '1rem', borderTop: '4px solid #F59E0B', position: 'relative', overflow: 'hidden' }}>
-             <i className="fas fa-archive" style={{ position: 'absolute', right: '-15px', bottom: '-15px', fontSize: '6rem', color: '#F59E0B', opacity: 0.05, transform: 'rotate(-10deg)' }}></i>
-             <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-               <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#FEF3C7', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><i className="fas fa-books"></i></div>
-               <span style={{ color: '#64748B', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: '0.85rem' }}>Published Archives</span>
-             </div>
-             <div>
-               <h3 style={{ margin: '0 0 0.2rem 0', fontSize: '2.2rem', fontWeight: 800, color: '#0F172A' }}>342</h3>
-               <p style={{ margin: 0, color: '#64748B', fontWeight: 600, fontSize: '0.9rem' }}>Across 5 departments</p>
-             </div>
-          </div>
-          <div style={{ background: 'white', borderRadius: '1.2rem', padding: '1.5rem', boxShadow: '0 10px 25px rgba(0, 58, 143, 0.05)', display: 'flex', flexDirection: 'column', gap: '1rem', borderTop: '4px solid #16A34A', position: 'relative', overflow: 'hidden' }}>
-             <i className="fas fa-plus-circle" style={{ position: 'absolute', right: '-15px', bottom: '-15px', fontSize: '6rem', color: '#16A34A', opacity: 0.05, transform: 'rotate(-10deg)' }}></i>
-             <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-               <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#DCFCE7', color: '#16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><i className="fas fa-chart-line"></i></div>
-               <span style={{ color: '#64748B', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: '0.85rem' }}>New Additions</span>
-             </div>
-             <div>
-               <h3 style={{ margin: '0 0 0.2rem 0', fontSize: '2.2rem', fontWeight: 800, color: '#0F172A' }}>18</h3>
-               <p style={{ margin: 0, color: '#16A34A', fontWeight: 700, fontSize: '0.9rem' }}><i className="fas fa-arrow-trend-up" style={{ marginRight: '0.3rem' }}></i> +4 from last month</p>
-             </div>
-          </div>
-        </div>
+        {/* Minimalist Stat Cards Grid */}
+        <div className="lib-bento-grid">
+          
+          {/* Card 1: Most Viewed Research */}
+          <Link
+            href={`/library/project-details?id=${topProject.id}`}
+            className="lib-bento-card"
+          >
+            <div>
+              <div className="lib-bento-head">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                  <div className="lib-bento-icon-box">
+                    <i className="fas fa-crown" style={{ color: '#F59E0B', fontSize: '1rem' }} aria-hidden="true" />
+                  </div>
+                  <span className="lib-bento-kicker">Most Viewed Research</span>
+                </div>
+              </div>
 
-        {/* Department Analytics */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
-          {LIBRARY_DEPARTMENT_SUMMARY.map((department) => (
-            <div key={department.department} style={{ background: 'white', borderRadius: '1rem', padding: '1.2rem', boxShadow: '0 4px 6px rgba(0,0,0,0.02)', border: '1px solid #F1F5F9' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
-                <span style={{ background: '#F8FAFC', color: '#475569', padding: '0.3rem 0.6rem', borderRadius: '0.5rem', fontWeight: 700, fontSize: '0.8rem', border: '1px solid #E2E8F0' }}>{department.department}</span>
-                <strong style={{ color: '#0F172A', fontSize: '1.2rem', fontWeight: 800 }}>{department.count}</strong>
+              <div style={{ marginTop: '0.85rem' }}>
+                <h3 style={{ margin: '0 0 0.4rem 0', fontSize: '1.1rem', fontWeight: 700, color: '#0F172A', lineHeight: 1.35 }}>
+                  {topProject.title}
+                </h3>
               </div>
-              <div style={{ width: '100%', height: '6px', background: '#F1F5F9', borderRadius: '3px', overflow: 'hidden' }}>
-                <div style={{ width: `${Math.min(department.count, 100)}%`, height: '100%', background: 'linear-gradient(90deg, #003A8F, #3B82F6)', borderRadius: '3px' }}></div>
-              </div>
-              <span style={{ display: 'block', marginTop: '0.5rem', fontSize: '0.75rem', color: '#94A3B8', fontWeight: 600 }}>Published Projects</span>
             </div>
-          ))}
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid #F1F5F9', paddingTop: '0.75rem' }}>
+              <p style={{ margin: 0, color: '#003A8F', fontWeight: 600, fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <i className="fas fa-eye" style={{ color: '#003A8F' }} aria-hidden="true" />
+                <span>{topProject.views.toLocaleString()} views this semester</span>
+              </p>
+              <span style={{ color: '#64748B', fontSize: '0.8rem', fontWeight: 600 }}>
+                View <i className="fas fa-chevron-right" style={{ fontSize: '0.65rem' }} aria-hidden="true" />
+              </span>
+            </div>
+          </Link>
+
+          {/* Card 2: Published Archives */}
+          <div className="lib-bento-card">
+            <div>
+              <div className="lib-bento-head">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                  <div className="lib-bento-icon-box">
+                    <i className="fas fa-archive" style={{ color: '#003A8F', fontSize: '1rem' }} aria-hidden="true" />
+                  </div>
+                  <span className="lib-bento-kicker">Published Archives</span>
+                </div>
+              </div>
+
+              <div style={{ marginTop: '0.85rem' }}>
+                <div className="lib-bento-metric">342</div>
+                <p className="lib-bento-subtext">Across 5 academic departments</p>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', borderTop: '1px solid #F1F5F9', paddingTop: '0.75rem', color: '#64748B', fontSize: '0.8rem' }}>
+              <i className="fas fa-layer-group" style={{ color: '#003A8F' }} aria-hidden="true" />
+              <span>Verified institutional repository</span>
+            </div>
+          </div>
+
+          {/* Card 3: New Additions */}
+          <div className="lib-bento-card">
+            <div>
+              <div className="lib-bento-head">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                  <div className="lib-bento-icon-box">
+                    <i className="fas fa-chart-line" style={{ color: '#16A34A', fontSize: '1rem' }} aria-hidden="true" />
+                  </div>
+                  <span className="lib-bento-kicker">New Additions</span>
+                </div>
+              </div>
+
+              <div style={{ marginTop: '0.85rem' }}>
+                <div className="lib-bento-metric">18</div>
+                <p className="lib-bento-subtext">+4 from last month</p>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', borderTop: '1px solid #F1F5F9', paddingTop: '0.75rem', color: '#64748B', fontSize: '0.8rem' }}>
+              <i className="fas fa-clock" style={{ color: '#16A34A' }} aria-hidden="true" />
+              <span>Current semester intake</span>
+            </div>
+          </div>
         </div>
 
-        {/* Featured Discoveries Grid */}
-        <section style={{ background: 'white', borderRadius: '1.5rem', padding: '2rem', boxShadow: '0 10px 25px rgba(0, 58, 143, 0.05)', border: '1px solid #F1F5F9' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-            <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#FEF3C7', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}><i className="fas fa-bolt"></i></div>
-              Featured Discoveries
-            </h3>
-            <Link href="/library/repository" style={{ textDecoration: 'none', background: '#F8FAFC', color: '#003A8F', padding: '0.6rem 1.2rem', borderRadius: '0.6rem', fontWeight: 600, border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', gap: '0.5rem', transition: 'background 0.2s' }} onMouseOver={(e) => e.currentTarget.style.background = '#EFF6FF'} onMouseOut={(e) => e.currentTarget.style.background = '#F8FAFC'}>
-              Explore Collection <i className="fas fa-arrow-right"></i>
+        {/* Minimalist Department Analytics Section with Subtle Department Colors */}
+        <section className="lib-dept-section">
+          <div className="lib-dept-header">
+            <div className="lib-dept-header-title">
+              <h3>Departmental Distribution</h3>
+              <p>Archived research and project count across all academic units</p>
+            </div>
+            <span style={{ fontSize: '0.8rem', color: '#64748B', fontWeight: 600 }}>
+              5 Departments Total
+            </span>
+          </div>
+
+          <div className="lib-dept-grid">
+            {LIBRARY_DEPARTMENT_SUMMARY.map((department) => {
+              const deptStyle = getDepartmentStyle(department.department);
+              const label = getDepartmentLabel(department.department);
+              const percent = Math.min(department.count, 100);
+
+              return (
+                <div
+                  key={department.department}
+                  className="lib-dept-card"
+                  style={
+                    {
+                      '--dept-bg': deptStyle.cardBg,
+                      '--dept-border': deptStyle.cardBorder,
+                      '--dept-border-hover': deptStyle.cardBorderHover,
+                      '--dept-shadow-hover': deptStyle.cardShadowHover,
+                      '--dept-top-accent': deptStyle.cardTopAccent
+                    } as React.CSSProperties
+                  }
+                >
+                  <div>
+                    <div className="lib-dept-top">
+                      <span
+                        className="lib-dept-pill"
+                        style={{
+                          background: deptStyle.badgeBg,
+                          color: deptStyle.text,
+                          borderColor: deptStyle.border
+                        }}
+                      >
+                        <i className={`fas ${deptStyle.icon}`} style={{ fontSize: '0.68rem' }} aria-hidden="true" />
+                        <span>{department.department}</span>
+                      </span>
+                      <strong className="lib-dept-count">{department.count}</strong>
+                    </div>
+
+                    <div className="lib-dept-name" title={label}>
+                      {label}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div
+                      className="lib-dept-progress-track"
+                      style={{ background: deptStyle.trackBg }}
+                    >
+                      <div
+                        className="lib-dept-progress-fill"
+                        style={{
+                          width: `${percent}%`,
+                          background: deptStyle.barFill
+                        }}
+                      />
+                    </div>
+                    <span className="lib-dept-footer-label">
+                      Published Projects
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Minimalist Featured Discoveries */}
+        <section className="lib-featured-section">
+          <div className="lib-featured-header">
+            <div>
+              <h3 className="lib-section-heading">Featured Discoveries</h3>
+              <p className="lib-section-subheading">Selected research projects with high academic impact</p>
+            </div>
+
+            <Link
+              href="/library/repository"
+              className="lib-featured-link"
+            >
+              <span>Explore Collection</span>
+              <i className="fas fa-arrow-right" style={{ fontSize: '0.75rem' }} aria-hidden="true" />
             </Link>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
-            {featuredProjects.map((project) => (
-              <Link href={`/library/project-details?id=${project.id}`} key={project.id} style={{ textDecoration: 'none', background: '#F8FAFC', borderRadius: '1.2rem', padding: '1.5rem', border: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', gap: '1rem', transition: 'all 0.2s', position: 'relative', overflow: 'hidden' }} onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 15px 30px rgba(0, 58, 143, 0.1)'; e.currentTarget.style.borderColor = '#93C5FD' }} onMouseOut={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#E2E8F0' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <span style={{ background: 'white', color: '#003A8F', padding: '0.3rem 0.8rem', borderRadius: '2rem', fontSize: '0.8rem', fontWeight: 700, border: '1px solid #E2E8F0', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>{project.department}</span>
-                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'white', color: '#64748B', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
-                    <i className={`fas ${getProjectIcon(project.type)}`} aria-hidden="true" />
+          <div className="lib-cards-grid">
+            {featuredProjects.map((project) => {
+              const deptStyle = getDepartmentStyle(project.department);
+
+              return (
+                <Link
+                  href={`/library/project-details?id=${project.id}`}
+                  key={project.id}
+                  className="lib-project-card group"
+                >
+                  <div className="lib-project-card-top">
+                    <span
+                      className="lib-dept-pill"
+                      style={{
+                        background: deptStyle.badgeBg,
+                        color: deptStyle.text,
+                        borderColor: deptStyle.border
+                      }}
+                    >
+                      <i className={`fas ${deptStyle.icon}`} style={{ fontSize: '0.68rem' }} aria-hidden="true" />
+                      <span>{project.department}</span>
+                    </span>
+                    
+                    <div
+                      className="lib-project-type-icon"
+                      title={project.type}
+                    >
+                      <i className={`fas ${getProjectIcon(project.type)}`} aria-hidden="true" />
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1.15rem', fontWeight: 800, color: '#0F172A', lineHeight: 1.4 }}>{project.title}</h4>
-                  <p style={{ margin: 0, color: '#64748B', fontSize: '0.9rem', lineHeight: 1.5 }}>{project.authors.join(', ')}</p>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid #E2E8F0' }}>
-                  <span style={{ color: '#64748B', fontSize: '0.85rem', fontWeight: 600 }}><i className="fas fa-calendar" style={{ marginRight: '0.4rem' }}></i> {project.year}</span>
-                  <span style={{ color: '#003A8F', fontSize: '0.85rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.3rem' }}>View Details <i className="fas fa-chevron-right" style={{ fontSize: '0.7rem' }}></i></span>
-                </div>
-              </Link>
-            ))}
+
+                  <div className="lib-project-body">
+                    <h4>{project.title}</h4>
+                    <p className="lib-project-authors">
+                      <i className="fas fa-user-graduate text-slate-400" style={{ fontSize: '0.75rem' }} aria-hidden="true" />
+                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {project.authors.join(', ')}
+                      </span>
+                    </p>
+                  </div>
+
+                  <div className="lib-project-card-bottom">
+                    <span className="lib-project-year">
+                      <i className="fas fa-calendar" style={{ fontSize: '0.75rem' }} aria-hidden="true" />
+                      <span>{project.year}</span>
+                    </span>
+                    <span className="lib-project-action-link">
+                      <span>View Details</span>
+                      <i className="fas fa-chevron-right" style={{ fontSize: '0.65rem' }} aria-hidden="true" />
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </section>
 
-        {/* Recently Indexed Archives (Table) */}
-        <section style={{ background: 'white', borderRadius: '1.5rem', boxShadow: '0 10px 25px rgba(0, 58, 143, 0.05)', overflow: 'hidden', borderTop: '4px solid #003A8F' }}>
-          <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #F1F5F9', background: '#F8FAFC' }}>
-            <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800, color: '#0F172A' }}>Recently Indexed Archives</h3>
+        {/* Minimalist Recently Indexed Archives (Table Section) */}
+        <section className="lib-table-section">
+          <div className="lib-table-header-bar">
+            <div>
+              <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: '#0F172A' }}>
+                Recently Indexed Archives
+              </h3>
+              <p style={{ margin: '0.15rem 0 0', fontSize: '0.82rem', color: '#64748B' }}>
+                Latest academic research cataloged into the repository
+              </p>
+            </div>
+            
+            <div className="lib-live-badge">
+              <span className="lib-pulse-dot" aria-hidden="true" />
+              <span>Live Index</span>
+            </div>
           </div>
-          <div className="table-scroll" style={{ padding: '0 1rem' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '900px' }}>
+
+          <div className="lib-table-wrap">
+            <table className="lib-modern-table">
               <thead>
-                <tr style={{ borderBottom: '2px solid #E2E8F0', color: '#64748B', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  <th style={{ padding: '1.2rem 1rem', fontWeight: 700 }}>Research Title</th>
-                  <th style={{ padding: '1.2rem 1rem', fontWeight: 700 }}>Department</th>
-                  <th style={{ padding: '1.2rem 1rem', fontWeight: 700 }}>Authors</th>
-                  <th style={{ padding: '1.2rem 1rem', fontWeight: 700 }}>Year</th>
-                  <th style={{ padding: '1.2rem 1rem', fontWeight: 700, textAlign: 'right' }}>Actions</th>
+                <tr>
+                  <th>Research Title</th>
+                  <th className="lib-col-dept">Department</th>
+                  <th>Authors</th>
+                  <th style={{ width: '80px', minWidth: '80px' }}>Year</th>
+                  <th style={{ textAlign: 'right', width: '100px', minWidth: '100px' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {LIBRARY_RECENT_STUDIES.map((study, i) => (
-                  <tr key={study.projectId} style={{ borderBottom: i === LIBRARY_RECENT_STUDIES.length - 1 ? 'none' : '1px solid #F1F5F9', transition: 'background 0.2s', cursor: 'pointer' }} onMouseOver={(e) => e.currentTarget.style.background = '#F8FAFC'} onMouseOut={(e) => e.currentTarget.style.background = 'transparent'} onClick={() => window.location.href = `/library/project-details?id=${study.projectId}`}>
-                    <td style={{ padding: '1.2rem 1rem', color: '#0F172A', fontWeight: 700, maxWidth: '300px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{study.title}</td>
-                    <td style={{ padding: '1.2rem 1rem' }}>
-                      <span style={{ background: '#EFF6FF', color: '#003A8F', padding: '0.3rem 0.8rem', borderRadius: '2rem', fontSize: '0.8rem', fontWeight: 700, border: '1px solid #BFDBFE' }}>{study.department}</span>
-                    </td>
-                    <td style={{ padding: '1.2rem 1rem', color: '#475569', fontSize: '0.95rem' }}>{study.authors}</td>
-                    <td style={{ padding: '1.2rem 1rem', color: '#64748B', fontWeight: 600 }}>{study.year}</td>
-                    <td style={{ padding: '1.2rem 1rem', textAlign: 'right' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.5rem' }}>
-                        <button style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #E2E8F0', background: 'white', color: '#64748B', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s' }} onMouseOver={(e) => { e.currentTarget.style.color = '#EF4444'; e.currentTarget.style.borderColor = '#FCA5A5'; e.currentTarget.style.background = '#FEF2F2' }} onMouseOut={(e) => { e.currentTarget.style.color = '#64748B'; e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.background = 'white' }} title="Download PDF" onClick={(e) => e.stopPropagation()}>
-                          <i className="fas fa-file-pdf"></i>
-                        </button>
-                        <button style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #E2E8F0', background: 'white', color: '#64748B', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s' }} onMouseOver={(e) => { e.currentTarget.style.color = '#003A8F'; e.currentTarget.style.borderColor = '#BFDBFE'; e.currentTarget.style.background = '#EFF6FF' }} onMouseOut={(e) => { e.currentTarget.style.color = '#64748B'; e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.background = 'white' }} title="Cite" onClick={(e) => e.stopPropagation()}>
-                          <i className="fas fa-quote-right"></i>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {LIBRARY_RECENT_STUDIES.map((study) => {
+                  const deptStyle = getDepartmentStyle(study.department);
+
+                  return (
+                    <tr
+                      key={study.projectId}
+                      onClick={() => router.push(`/library/project-details?id=${study.projectId}`)}
+                      title={`Click to view ${study.title}`}
+                    >
+                      <td>
+                        <div className="lib-table-title-cell">
+                          <div className="lib-table-doc-icon">
+                            <i className="fas fa-file-lines" aria-hidden="true" />
+                          </div>
+                          <span className="lib-table-title-text" title={study.title}>
+                            {study.title}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="lib-col-dept">
+                        <span
+                          className="lib-dept-pill"
+                          style={{
+                            background: deptStyle.badgeBg,
+                            color: deptStyle.text,
+                            borderColor: deptStyle.border
+                          }}
+                        >
+                          <i className={`fas ${deptStyle.icon}`} style={{ fontSize: '0.68rem' }} aria-hidden="true" />
+                          <span>{study.department}</span>
+                        </span>
+                      </td>
+                      <td style={{ color: '#475569', fontSize: '0.88rem' }}>
+                        {study.authors}
+                      </td>
+                      <td style={{ color: '#64748B', fontWeight: 500, fontSize: '0.85rem' }}>
+                        {study.year}
+                      </td>
+                      <td style={{ textAlign: 'right' }}>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                          <button
+                            type="button"
+                            className="lib-action-btn"
+                            title="Download PDF"
+                            aria-label={`Download PDF for ${study.title}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                            }}
+                          >
+                            <i className="fas fa-file-pdf" aria-hidden="true" />
+                          </button>
+                          <button
+                            type="button"
+                            className="lib-action-btn"
+                            title="Cite"
+                            aria-label={`Cite ${study.title}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                            }}
+                          >
+                            <i className="fas fa-quote-right" aria-hidden="true" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

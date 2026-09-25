@@ -15,6 +15,7 @@ import {
   LibraryDepartmentBadge,
   LibraryModal
 } from '@/components/library/library-primitives';
+import { getDepartmentStyle } from '@/components/library/library-dashboard';
 import { LibraryShell } from '@/components/library/library-shell';
 
 const ITEMS_PER_PAGE = 6;
@@ -161,92 +162,186 @@ export function LibraryRepository() {
           </div>
         ) : viewMode === 'scholar' ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', zIndex: 1 }}>
-            {paginatedProjects.map((project) => (
-              <article key={project.id} style={{ background: 'white', borderRadius: '1.5rem', padding: '2rem', border: '1px solid #E2E8F0', boxShadow: '0 4px 15px rgba(15, 23, 42, 0.03)', display: 'flex', gap: '1.8rem', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', cursor: 'default' }} onMouseOver={(e) => { e.currentTarget.style.boxShadow = '0 15px 35px rgba(15, 23, 42, 0.08)'; e.currentTarget.style.borderColor = '#CBD5E1'; e.currentTarget.style.transform = 'translateY(-2px)'; }} onMouseOut={(e) => { e.currentTarget.style.boxShadow = '0 4px 15px rgba(15, 23, 42, 0.03)'; e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.transform = 'none'; }}>
-                <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: 'linear-gradient(135deg, #F8FAFC, #F1F5F9)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#003A8F', fontSize: '2rem', flexShrink: 0, boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.8), 0 4px 8px rgba(0,0,0,0.04)' }}>
-                  <i className={`fas ${getProjectIcon(project.type)}`} />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <h3 onClick={() => setActiveProjectId(project.id)} style={{ margin: '0 0 0.4rem 0', color: '#0F172A', fontSize: '1.3rem', cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={(e) => e.currentTarget.style.color = '#003A8F'} onMouseOut={(e) => e.currentTarget.style.color = '#0F172A'}>{project.detailTitle || project.title}</h3>
-                  <div style={{ color: '#64748B', fontSize: '0.95rem', marginBottom: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <strong style={{ color: '#334155' }}>{project.authorsShort || project.authors.join(', ')}</strong> 
-                    <span style={{ color: '#CBD5E1' }}>•</span> {project.year} 
-                    <span style={{ color: '#CBD5E1' }}>•</span> {getDepartmentLabel(project.department)}
-                  </div>
-                  <p style={{ margin: '0 0 1.5rem 0', color: '#475569', fontSize: '1rem', lineHeight: 1.6 }}>{project.abstract}</p>
-                  
-                  <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                    <span style={{ background: 'rgba(246, 190, 0, 0.15)', color: '#92400E', padding: '0.3rem 0.8rem', borderRadius: '2rem', fontSize: '0.85rem', fontWeight: 700 }}>{project.department}</span>
-                    <span style={{ background: '#F1F5F9', color: '#475569', padding: '0.3rem 0.8rem', borderRadius: '2rem', fontSize: '0.85rem', fontWeight: 600 }}>{project.type}</span>
-                    <span style={{ background: 'rgba(22, 163, 74, 0.1)', color: '#15803D', padding: '0.3rem 0.8rem', borderRadius: '2rem', fontSize: '0.85rem', fontWeight: 600 }}><i className="fas fa-eye" style={{ marginRight: '0.3rem' }}></i>{formatViewCount(project.views)}</span>
-                    
-                    <button onClick={() => setActiveProjectId(project.id)} style={{ marginLeft: 'auto', background: '#F8FAFC', border: '1px solid #E2E8F0', color: '#0F172A', padding: '0.5rem 1.2rem', borderRadius: '2rem', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' }} onMouseOver={(e) => { e.currentTarget.style.background = '#0F172A'; e.currentTarget.style.color = 'white'; e.currentTarget.style.borderColor = '#0F172A'; }} onMouseOut={(e) => { e.currentTarget.style.background = '#F8FAFC'; e.currentTarget.style.color = '#0F172A'; e.currentTarget.style.borderColor = '#E2E8F0'; }}>
-                      Details <i className="fas fa-arrow-right" style={{ fontSize: '0.8rem' }}></i>
-                    </button>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        ) : viewMode === 'cards' ? (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem', zIndex: 1 }}>
-            {paginatedProjects.map((project) => (
-              <article key={project.id} style={{ background: 'white', borderRadius: '1.5rem', padding: '1.8rem', border: '1px solid #E2E8F0', boxShadow: '0 4px 15px rgba(15, 23, 42, 0.03)', display: 'flex', flexDirection: 'column', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }} onMouseOver={(e) => { e.currentTarget.style.boxShadow = '0 15px 35px rgba(15, 23, 42, 0.08)'; e.currentTarget.style.borderColor = '#CBD5E1'; e.currentTarget.style.transform = 'translateY(-4px)'; }} onMouseOut={(e) => { e.currentTarget.style.boxShadow = '0 4px 15px rgba(15, 23, 42, 0.03)'; e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.transform = 'none'; }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.2rem' }}>
-                  <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'linear-gradient(135deg, #F8FAFC, #F1F5F9)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#003A8F', fontSize: '1.8rem', boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.8), 0 4px 8px rgba(0,0,0,0.04)' }}>
+            {paginatedProjects.map((project) => {
+              const deptStyle = getDepartmentStyle(project.department);
+
+              return (
+                <article
+                  key={project.id}
+                  style={{
+                    background: 'white',
+                    borderRadius: '1rem',
+                    padding: '1.8rem',
+                    border: '1px solid #E2E8F0',
+                    borderTop: `3px solid ${deptStyle.cardTopAccent}`,
+                    boxShadow: '0 2px 8px rgba(15, 23, 42, 0.03)',
+                    display: 'flex',
+                    gap: '1.5rem',
+                    transition: 'all 0.22s cubic-bezier(0.16, 1, 0.3, 1)',
+                    cursor: 'default'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.boxShadow = `0 8px 24px ${deptStyle.cardShadowHover}`;
+                    e.currentTarget.style.borderColor = deptStyle.cardBorderHover;
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(15, 23, 42, 0.03)';
+                    e.currentTarget.style.borderColor = '#E2E8F0';
+                    e.currentTarget.style.transform = 'none';
+                  }}
+                >
+                  <div style={{ width: '56px', height: '56px', borderRadius: '12px', background: '#F8FAFC', border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#003A8F', fontSize: '1.6rem', flexShrink: 0 }}>
                     <i className={`fas ${getProjectIcon(project.type)}`} />
                   </div>
-                  <span style={{ background: 'rgba(246, 190, 0, 0.15)', color: '#92400E', padding: '0.3rem 0.8rem', borderRadius: '2rem', fontSize: '0.8rem', fontWeight: 800 }}>{project.department}</span>
-                </div>
-                
-                <h3 onClick={() => setActiveProjectId(project.id)} style={{ margin: '0 0 0.5rem 0', color: '#0F172A', fontSize: '1.15rem', cursor: 'pointer', transition: 'color 0.2s', lineHeight: 1.4 }} onMouseOver={(e) => e.currentTarget.style.color = '#003A8F'} onMouseOut={(e) => e.currentTarget.style.color = '#0F172A'}>{project.title}</h3>
-                <div style={{ color: '#64748B', fontSize: '0.85rem', marginBottom: '1.2rem', fontWeight: 500 }}>
-                  {project.year} <span style={{ color: '#CBD5E1', margin: '0 0.3rem' }}>•</span> {project.authorsShort || project.authors[0]}
-                </div>
-                
-                <p style={{ margin: '0 0 1.5rem 0', color: '#475569', fontSize: '0.95rem', lineHeight: 1.6, flex: 1, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{project.abstract}</p>
-                
-                <button onClick={() => setActiveProjectId(project.id)} style={{ width: '100%', background: '#F8FAFC', border: '1px solid #E2E8F0', color: '#0F172A', padding: '0.8rem', borderRadius: '0.8rem', fontWeight: 700, fontSize: '0.95rem', cursor: 'pointer', transition: 'all 0.2s' }} onMouseOver={(e) => { e.currentTarget.style.background = '#0F172A'; e.currentTarget.style.color = 'white'; e.currentTarget.style.borderColor = '#0F172A'; }} onMouseOut={(e) => { e.currentTarget.style.background = '#F8FAFC'; e.currentTarget.style.color = '#0F172A'; e.currentTarget.style.borderColor = '#E2E8F0'; }}>
-                  View Full Study
-                </button>
-              </article>
-            ))}
+                  <div style={{ flex: 1 }}>
+                    <h3 onClick={() => setActiveProjectId(project.id)} style={{ margin: '0 0 0.4rem 0', color: '#0F172A', fontSize: '1.2rem', fontWeight: 700, cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={(e) => e.currentTarget.style.color = '#003A8F'} onMouseOut={(e) => e.currentTarget.style.color = '#0F172A'}>{project.detailTitle || project.title}</h3>
+                    <div style={{ color: '#64748B', fontSize: '0.88rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <strong style={{ color: '#334155' }}>{project.authorsShort || project.authors.join(', ')}</strong> 
+                      <span style={{ color: '#CBD5E1' }}>•</span> {project.year} 
+                      <span style={{ color: '#CBD5E1' }}>•</span> {getDepartmentLabel(project.department)}
+                    </div>
+                    <p style={{ margin: '0 0 1.25rem 0', color: '#475569', fontSize: '0.92rem', lineHeight: 1.6 }}>{project.abstract}</p>
+                    
+                    <div style={{ display: 'flex', gap: '0.65rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                      <span
+                        className="lib-dept-pill"
+                        style={{
+                          background: deptStyle.badgeBg,
+                          color: deptStyle.text,
+                          borderColor: deptStyle.border
+                        }}
+                      >
+                        <i className={`fas ${deptStyle.icon}`} style={{ fontSize: '0.68rem' }} aria-hidden="true" />
+                        <span>{project.department}</span>
+                      </span>
+                      <span style={{ background: '#F1F5F9', color: '#475569', padding: '0.2rem 0.65rem', borderRadius: '9999px', fontSize: '0.78rem', fontWeight: 600, border: '1px solid #E2E8F0' }}>{project.type}</span>
+                      <span style={{ background: '#F8FAFC', color: '#64748B', padding: '0.2rem 0.65rem', borderRadius: '9999px', fontSize: '0.78rem', fontWeight: 600, border: '1px solid #E2E8F0' }}><i className="fas fa-eye text-slate-400" style={{ marginRight: '0.3rem' }}></i>{formatViewCount(project.views)}</span>
+                      
+                      <button onClick={() => setActiveProjectId(project.id)} style={{ marginLeft: 'auto', background: '#FFFFFF', border: '1px solid #003A8F', color: '#003A8F', padding: '0.45rem 1.1rem', borderRadius: '0.5rem', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', transition: 'all 0.18s ease', display: 'flex', alignItems: 'center', gap: '0.45rem' }} onMouseOver={(e) => { e.currentTarget.style.background = '#003A8F'; e.currentTarget.style.color = 'white'; }} onMouseOut={(e) => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.color = '#003A8F'; }}>
+                        Details <i className="fas fa-arrow-right" style={{ fontSize: '0.75rem' }}></i>
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        ) : viewMode === 'cards' ? (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem', zIndex: 1 }}>
+            {paginatedProjects.map((project) => {
+              const deptStyle = getDepartmentStyle(project.department);
+
+              return (
+                <article
+                  key={project.id}
+                  style={{
+                    background: 'white',
+                    borderRadius: '0.85rem',
+                    padding: '1.4rem',
+                    border: '1px solid #E2E8F0',
+                    borderTop: `3px solid ${deptStyle.cardTopAccent}`,
+                    boxShadow: '0 1px 3px rgba(15, 23, 42, 0.02)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    transition: 'all 0.22s cubic-bezier(0.16, 1, 0.3, 1)'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.boxShadow = `0 8px 24px ${deptStyle.cardShadowHover}`;
+                    e.currentTarget.style.borderColor = deptStyle.cardBorderHover;
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.boxShadow = '0 1px 3px rgba(15, 23, 42, 0.02)';
+                    e.currentTarget.style.borderColor = '#E2E8F0';
+                    e.currentTarget.style.transform = 'none';
+                  }}
+                >
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                      <span
+                        className="lib-dept-pill"
+                        style={{
+                          background: deptStyle.badgeBg,
+                          color: deptStyle.text,
+                          borderColor: deptStyle.border
+                        }}
+                      >
+                        <i className={`fas ${deptStyle.icon}`} style={{ fontSize: '0.68rem' }} aria-hidden="true" />
+                        <span>{project.department}</span>
+                      </span>
+                      <div className="lib-project-type-icon" title={project.type}>
+                        <i className={`fas ${getProjectIcon(project.type)}`} />
+                      </div>
+                    </div>
+                    
+                    <h3 onClick={() => setActiveProjectId(project.id)} style={{ margin: '0 0 0.4rem 0', color: '#0F172A', fontSize: '1.05rem', fontWeight: 700, cursor: 'pointer', transition: 'color 0.2s', lineHeight: 1.35 }} onMouseOver={(e) => e.currentTarget.style.color = '#003A8F'} onMouseOut={(e) => e.currentTarget.style.color = '#0F172A'}>{project.title}</h3>
+                    <div style={{ color: '#64748B', fontSize: '0.82rem', marginBottom: '0.85rem', fontWeight: 500 }}>
+                      {project.year} <span style={{ color: '#CBD5E1', margin: '0 0.3rem' }}>•</span> {project.authorsShort || project.authors[0]}
+                    </div>
+                    
+                    <p style={{ margin: '0 0 1.25rem 0', color: '#475569', fontSize: '0.9rem', lineHeight: 1.55, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{project.abstract}</p>
+                  </div>
+                  
+                  <button onClick={() => setActiveProjectId(project.id)} style={{ width: '100%', background: '#FFFFFF', border: '1px solid #003A8F', color: '#003A8F', padding: '0.65rem', borderRadius: '0.6rem', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', transition: 'all 0.18s ease' }} onMouseOver={(e) => { e.currentTarget.style.background = '#003A8F'; e.currentTarget.style.color = 'white'; }} onMouseOut={(e) => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.color = '#003A8F'; }}>
+                    View Full Study
+                  </button>
+                </article>
+              );
+            })}
           </div>
         ) : (
-          <section style={{ background: 'white', borderRadius: '1.2rem', boxShadow: '0 4px 6px rgba(0,0,0,0.02)', border: '1px solid #E2E8F0', overflow: 'hidden' }}>
+          <section style={{ background: 'white', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)', border: '1px solid #E2E8F0', overflow: 'hidden' }}>
             <div className="table-scroll">
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '800px' }}>
+              <table className="lib-modern-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '800px' }}>
                 <thead>
-                  <tr style={{ background: '#F8FAFC', borderBottom: '2px solid #E2E8F0', color: '#64748B', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    <th style={{ padding: '1rem 1.5rem', fontWeight: 700 }}>Study Title</th>
-                    <th style={{ padding: '1rem 1.5rem', fontWeight: 700 }}>Department</th>
-                    <th style={{ padding: '1rem 1.5rem', fontWeight: 700 }}>Year</th>
-                    <th style={{ padding: '1rem 1.5rem', fontWeight: 700, textAlign: 'right' }}>Actions</th>
+                  <tr>
+                    <th>Study Title</th>
+                    <th className="lib-col-dept">Department</th>
+                    <th style={{ width: '80px', minWidth: '80px' }}>Year</th>
+                    <th style={{ textAlign: 'right', width: '100px', minWidth: '100px' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedProjects.map((project, i) => (
-                    <tr key={project.id} style={{ borderBottom: i === paginatedProjects.length - 1 ? 'none' : '1px solid #F1F5F9', transition: 'background 0.2s' }} onMouseOver={(e) => e.currentTarget.style.background = '#F8FAFC'} onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}>
-                      <td style={{ padding: '1rem 1.5rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                          <i className={`fas ${getProjectIcon(project.type)}`} style={{ color: '#003A8F' }}></i>
-                          <div>
-                            <strong onClick={() => setActiveProjectId(project.id)} style={{ color: '#0F172A', display: 'block', cursor: 'pointer' }}>{project.title}</strong>
-                            <span style={{ color: '#64748B', fontSize: '0.85rem' }}>{project.authorsShort || project.authors[0]}</span>
+                  {paginatedProjects.map((project) => {
+                    const deptStyle = getDepartmentStyle(project.department);
+
+                    return (
+                      <tr key={project.id}>
+                        <td>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <div className="lib-table-doc-icon">
+                              <i className={`fas ${getProjectIcon(project.type)}`}></i>
+                            </div>
+                            <div>
+                              <strong onClick={() => setActiveProjectId(project.id)} style={{ color: '#0F172A', display: 'block', cursor: 'pointer' }}>{project.title}</strong>
+                              <span style={{ color: '#64748B', fontSize: '0.82rem' }}>{project.authorsShort || project.authors[0]}</span>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td style={{ padding: '1rem 1.5rem' }}>
-                        <LibraryDepartmentBadge>{project.department}</LibraryDepartmentBadge>
-                      </td>
-                      <td style={{ padding: '1rem 1.5rem', color: '#64748B', fontWeight: 600 }}>{project.year}</td>
-                      <td style={{ padding: '1rem 1.5rem', textAlign: 'right' }}>
-                        <button onClick={() => setActiveProjectId(project.id)} style={{ background: 'transparent', color: '#003A8F', padding: '0.4rem 0.8rem', borderRadius: '0.4rem', border: '1px solid #003A8F', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}>
-                          Details
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td className="lib-col-dept">
+                          <span
+                            className="lib-dept-pill"
+                            style={{
+                              background: deptStyle.badgeBg,
+                              color: deptStyle.text,
+                              borderColor: deptStyle.border
+                            }}
+                          >
+                            <i className={`fas ${deptStyle.icon}`} style={{ fontSize: '0.68rem' }} aria-hidden="true" />
+                            <span>{project.department}</span>
+                          </span>
+                        </td>
+                        <td style={{ color: '#64748B', fontWeight: 600, fontSize: '0.85rem' }}>{project.year}</td>
+                        <td style={{ textAlign: 'right' }}>
+                          <button onClick={() => setActiveProjectId(project.id)} className="lib-action-btn" title="View Study Details">
+                            <i className="fas fa-chevron-right" aria-hidden="true" />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

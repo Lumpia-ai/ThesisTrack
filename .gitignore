@@ -5,8 +5,7 @@ dist
 .next-dev-*.log
 .env
 .env.local
+env
+capstone-dev-main/
+scratch/
 
-.vercel
-
-# TypeScript incremental build cache
-*.tsbuildinfo
