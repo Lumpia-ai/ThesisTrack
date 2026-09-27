@@ -2965,5 +2965,341 @@
   background: #002C6B;
 }
 
+/* ==========================================================================
+   Phase 8: Research Insights & Trends
+   ========================================================================== */
+
+.lib-insights-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.lib-insights-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+@media (max-width: 900px) {
+  .lib-insights-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lib-insights-card {
+  background: #FFFFFF;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lib-insights-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+.lib-insights-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  gap: 0.75rem;
+}
+
+.lib-insights-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.lib-insights-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0F172A;
+  letter-spacing: -0.01em;
+}
+
+.lib-insights-subtitle {
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+  color: #64748B;
+  font-weight: 500;
+}
+
+/* Distribution Rows */
+.lib-dist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.lib-dist-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.lib-dist-label {
+  flex-shrink: 0;
+}
+
+.lib-dist-year-label {
+  width: 64px;
+  font-weight: 700;
+  color: #334155;
+  font-size: 0.88rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.lib-dist-track {
+  flex: 1;
+  height: 7px;
+  background: #F1F5F9;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.lib-dist-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.lib-dist-count {
+  width: 36px;
+  text-align: right;
+  font-weight: 800;
+  color: #0F172A;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* Keywords cloud */
+.lib-keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.lib-keyword-chip {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #334155;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.lib-keyword-chip:hover {
+  background: #FFFFFF;
+  border-color: #003A8F;
+  color: #003A8F;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 58, 143, 0.08);
+}
+
+.lib-keyword-chip-count {
+  background: #EFF6FF;
+  color: #003A8F;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* Emerging Topics List */
+.lib-topic-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.lib-topic-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #F8FAFC;
+  border-radius: 0.65rem;
+  border: 1px solid #E2E8F0;
+  transition: all 0.15s ease;
+}
+
+.lib-topic-item:hover {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.lib-topic-name {
+  color: #0F172A;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.lib-topic-growth {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #BBF7D0;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Gaps and Suggested Topics */
+.lib-direction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.lib-direction-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #F8FAFC;
+  border-radius: 0.65rem;
+  border: 1px solid #E2E8F0;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #334155;
+  transition: all 0.15s ease;
+}
+
+.lib-direction-item:hover {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+}
+
+.lib-gap-bullet {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  color: #DC2626;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
+
+.lib-suggest-bullet {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  color: #16A34A;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
+
+/* Recommended Reading Section */
+.lib-reading-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 1.15rem;
+}
+
+.lib-reading-card {
+  background: #FFFFFF;
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  border: 1px solid #E2E8F0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
+  position: relative;
+  overflow: hidden;
+}
+
+.lib-reading-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  transform: translateY(-2px);
+}
+
+.lib-reading-card-title {
+  margin: 0 0 0.45rem;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #0F172A;
+  line-height: 1.35;
+  transition: color 0.15s ease;
+}
+
+.lib-reading-card:hover .lib-reading-card-title {
+  color: #003A8F;
+}
+
+.lib-reading-card-desc {
+  margin: 0;
+  color: #64748B;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.lib-reading-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.85rem;
+  border-top: 1px solid #F1F5F9;
+}
+
+.lib-reading-btn {
+  text-decoration: none;
+  background: #FFFFFF;
+  color: #003A8F;
+  padding: 0.35rem 0.85rem;
+  border-radius: 0.45rem;
+  border: 1px solid #003A8F;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.15s ease;
+}
+
+.lib-reading-btn:hover {
+  background: #003A8F;
+  color: #FFFFFF;
+}
+
 
 
