@@ -3,7 +3,6 @@ import { requireAuthenticatedUser } from '@/lib/auth';
 import { getAuthorizedDocumentFile } from '@/lib/storage/document-authorization';
 import { assertDocumentBucket, createSignedUrl } from '@/lib/storage/supabase-storage';
 import { handleApiError, successResponse } from '@/lib/utils';
-import { withApiLogging } from '@/lib/api-logging';
 
 export const runtime = 'nodejs';
 
@@ -17,7 +16,7 @@ const DOCUMENT_VIEWER_ROLES = [
   UserRole.ADMIN
 ];
 
-async function handlePOST(
+export async function POST(
   request: Request,
   props: { params: Promise<{ id: string }> }
 ) {
@@ -34,5 +33,3 @@ async function handlePOST(
     return handleApiError(error);
   }
 }
-
-export const POST = withApiLogging('POST', '/api/document-files/[id]/signed-url', handlePOST);

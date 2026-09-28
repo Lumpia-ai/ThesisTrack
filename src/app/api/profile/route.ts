@@ -11,7 +11,6 @@ import {
   parseJsonBody,
   successResponse
 } from '@/lib/utils';
-import { withApiLogging } from '@/lib/api-logging';
 
 export const runtime = 'nodejs';
 
@@ -19,7 +18,7 @@ export const runtime = 'nodejs';
  * GET /api/profile
  * Returns the authenticated user's full profile from the database.
  */
-async function handleGET(request: Request) {
+export async function GET(request: Request) {
   try {
     const user = await requireAuthenticatedUser(request);
 
@@ -50,7 +49,7 @@ type UpdateProfileBody = {
  * Allows an authenticated user to update their own profile fields.
  * Only profile-specific fields are editable here (not email, name, role, etc.).
  */
-async function handlePATCH(request: Request) {
+export async function PATCH(request: Request) {
   try {
     const user = await requireAuthenticatedUser(request);
 
@@ -130,13 +129,6 @@ async function handlePATCH(request: Request) {
       select: publicUserSelect
     });
 
-    if (data.profileImage !== undefined && user.profileImage && user.profileImage !== data.profileImage) {
-      const { deleteProfileImageFromCloudinary } = await import('@/lib/cloudinary');
-      await deleteProfileImageFromCloudinary(user.profileImage).catch((error) => {
-        console.error('Failed to remove previous profile image from Cloudinary:', error);
-      });
-    }
-
     if (newName && newName !== oldName) {
       try {
         const groupsWithOldName = await prisma.group.findMany({
@@ -168,6 +160,3 @@ async function handlePATCH(request: Request) {
     return handleApiError(error);
   }
 }
-
-export const GET = withApiLogging('GET', '/api/profile', handleGET);
-export const PATCH = withApiLogging('PATCH', '/api/profile', handlePATCH);

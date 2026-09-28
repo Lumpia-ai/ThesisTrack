@@ -1,16 +1,14 @@
-import LandingPage from '../page';
-import { AuthRouteModal } from '@/components/auth/auth-route-modal';
+import { AuthLayout } from '@/components/layouts/auth-layout';
+import { LoginPage } from '@/components/auth/login-page';
 
 export const metadata = {
-  title: 'Log in - ThesisTrack'
+  title: 'Login - ThesisTrack'
 };
 
-// The landing page with the auth modal open on the matching view (see AuthRouteModal).
 export default function Page() {
   return (
-    <>
-      <LandingPage />
-      <AuthRouteModal initialView="login" />
-    </>
+    <AuthLayout>
+      <LoginPage />
+    </AuthLayout>
   );
 }

@@ -3,11 +3,10 @@ import { getAuthTokenFromRequest, verifyAuthToken } from '@/lib/auth';
 import { sendAccountRestoreEmail } from '@/lib/mailer';
 import { prisma } from '@/lib/prisma';
 import { successResponse, handleApiError } from '@/lib/utils';
-import { withApiLogging } from '@/lib/api-logging';
 
 export const runtime = 'nodejs';
 
-async function handleGET(request: Request) {
+export async function GET(request: Request) {
   try {
     const token = getAuthTokenFromRequest(request);
     const payload = token ? verifyAuthToken(token) : null;
@@ -79,7 +78,7 @@ async function handleGET(request: Request) {
   }
 }
 
-async function handlePOST() {
+export async function POST() {
   const response = NextResponse.json({
     success: true
   });
@@ -94,6 +93,3 @@ async function handlePOST() {
 
   return response;
 }
-
-export const GET = withApiLogging('GET', '/api/auth/session-status', handleGET);
-export const POST = withApiLogging('POST', '/api/auth/session-status', handlePOST);

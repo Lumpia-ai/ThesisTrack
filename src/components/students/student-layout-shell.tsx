@@ -2,14 +2,13 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { logoutWithApi } from '@/lib/client-auth';
 import type { StudentDashboardData } from '@/lib/services/student-workspace';
 import { useRoutePrefetch } from '@/components/shared/use-route-prefetch';
 import { STUDENT_NAV_ITEMS, STUDENT_NAV_SECTIONS } from '@/components/students/student-navigation';
 import { PremiumAnimatedButton } from '@/components/ui/premium-animated-button';
-import { isBackupTitleNotification } from '@/lib/notification-tags';
-import { requestLogout } from '@/components/auth/logout-flow';
 
 const SIDEBAR_STORAGE_KEY = 'studentShellSidebarCollapsed';
 const STUDENT_THEME_STORAGE_KEY = 'studentWorkspaceTheme';
@@ -190,18 +189,6 @@ function getResolvedStudentTheme(value: string | null): StudentThemeMode {
 function sortNotifications(items: StudentNotification[]) {
   return [...items].sort((left, right) => new Date(right.created_at).getTime() - new Date(left.created_at).getTime());
 }
-
-// A group can get re-saved several times in quick succession while an adviser is
-// setting it up (e.g. adjusting membership/roles), and each save that adds a
-// "new" member fires one of these — so the same student can end up with several
-// unread ones stacked up, not just the latest. Accepting the invite modal (or
-// opening one from the bell dropdown) needs to clear all of them, or the oldest
-// leftover keeps resurfacing the modal even after the student has already synced.
-const GROUP_INVITE_NOTIFICATION_TITLES = new Set([
-  'Group Assignment Updated',
-  'New Group Assignment',
-  'Group Leadership Assigned'
-]);
 
 function toClientNotification(notification: StudentNotification) {
   return {
@@ -1116,6 +1103,7 @@ function LimitedStudentLockedFeature({
 
 export function StudentLayoutShell({ children, data }: StudentLayoutShellProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const profileMenuRef = useRef<HTMLDivElement | null>(null);
   const notificationMenuRef = useRef<HTMLDivElement | null>(null);
   const [workspaceAccess, setWorkspaceAccess] = useState<StudentWorkspaceAccess>(() => getInitialWorkspaceAccess(data));
@@ -1437,7 +1425,7 @@ export function StudentLayoutShell({ children, data }: StudentLayoutShellProps) 
           priority: notif.type === 'warning' || notif.type === 'danger' ? 'high' : 'normal',
           read: notif.status === 'READ',
           created_at: notif.createdAt,
-          dateLabel: new Date(notif.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+          dateLabel: new Date(notif.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
         } as any);
       });
     }
@@ -1707,16 +1695,9 @@ export function StudentLayoutShell({ children, data }: StudentLayoutShellProps) 
                           className="flex gap-4 w-full"
                           onClick={() => {
                             if (!notification.read) {
-                              if (GROUP_INVITE_NOTIFICATION_TITLES.has(notification.title)) {
-                                const backlogIds = realNotifications
-                                  .filter((n) => GROUP_INVITE_NOTIFICATION_TITLES.has(n.title) && n.status !== 'READ')
-                                  .map((n) => n.id as string);
-                                markNotificationsRead(
-                                  backlogIds.includes(notification.id) ? backlogIds : [...backlogIds, notification.id]
-                                );
+                              markNotificationRead(notification.id);
+                              if (notification.title === 'Group Assignment Updated' || notification.title === 'New Group Assignment' || notification.title === 'Group Leadership Assigned') {
                                 setTimeout(() => window.location.reload(), 300);
-                              } else {
-                                markNotificationRead(notification.id);
                               }
                             }
                             setNotificationMenuOpen(false);
@@ -1728,12 +1709,9 @@ export function StudentLayoutShell({ children, data }: StudentLayoutShellProps) 
                           <span className="notification-menu-item-copy">
                             <span className="notification-menu-item-head">
                               <strong>{notification.title}</strong>
-                              {isBackupTitleNotification(notification.title) ? (
-                                <span className="notification-menu-item-tag">Backup</span>
-                              ) : null}
                               {!notification.read ? <span className="notification-menu-item-dot" aria-hidden="true" /> : null}
                             </span>
-                            <small className="line-clamp-2" title={notification.message}>{notification.message}</small>
+                            <small>{notification.message}</small>
                             <span className="notification-menu-item-footer">
                               <span className="notification-menu-item-meta">
                                 <span>{notification.dateLabel}</span>
@@ -1885,7 +1863,10 @@ export function StudentLayoutShell({ children, data }: StudentLayoutShellProps) 
                 <button
                   className="profile-dropdown-link is-danger"
                   type="button"
-                  onClick={requestLogout}
+                  onClick={async () => {
+                    await logoutWithApi();
+                    router.push('/login');
+                  }}
                 >
                   <i aria-hidden="true" className="fas fa-right-from-bracket" /> Sign Out
                 </button>
@@ -1940,31 +1921,27 @@ export function StudentLayoutShell({ children, data }: StudentLayoutShellProps) 
                         key={item.key}
                         className={`sidebar-nav-dropdown${projectOverviewMenuOpen ? ' is-open' : ''}${isActive || isChildActive ? ' is-active' : ''}`}
                       >
-                        <div className="sidebar-nav-dropdown-row">
-                          <Link prefetch={false}
-                            href={item.href}
-                            aria-current={isActive ? 'page' : undefined}
-                            className={`sidebar-link${isActive || isChildActive ? ' is-active' : ''}`}
-                            title={sidebarCollapsed ? item.label : undefined}
-                            onFocus={() => prefetchRoute(item.href)}
-                            onMouseEnter={() => prefetchRoute(item.href)}
-                          >
-                            <span className="sidebar-link-icon">
-                              <i aria-hidden="true" className={`fas ${item.icon}`} />
-                            </span>
-                            <span className="sidebar-link-label">{item.label}</span>
-                          </Link>
-                          <button
-                            aria-controls={`student-${item.key}-submenu`}
-                            aria-expanded={projectOverviewMenuOpen}
-                            aria-label={projectOverviewMenuOpen ? `Collapse ${item.label}` : `Expand ${item.label}`}
-                            className="sidebar-nav-dropdown-toggle"
-                            type="button"
-                            onClick={() => setProjectOverviewMenuOpen((current) => !current)}
-                          >
-                            <i aria-hidden="true" className="fas fa-chevron-down sidebar-nav-chevron" />
-                          </button>
-                        </div>
+                        <button
+                          aria-controls={`student-${item.key}-submenu`}
+                          aria-expanded={projectOverviewMenuOpen}
+                          className={`sidebar-link${isActive || isChildActive || projectOverviewMenuOpen ? ' is-active' : ''}`}
+                          title={sidebarCollapsed ? item.label : undefined}
+                          type="button"
+                          onFocus={() => prefetchRoute(item.href)}
+                          onMouseEnter={() => prefetchRoute(item.href)}
+                          onClick={() => {
+                            setProjectOverviewMenuOpen((current) => !current);
+                            if (!isActive) {
+                              router.push(item.href);
+                            }
+                          }}
+                        >
+                          <span className="sidebar-link-icon">
+                            <i aria-hidden="true" className={`fas ${item.icon}`} />
+                          </span>
+                          <span className="sidebar-link-label">{item.label}</span>
+                          <i aria-hidden="true" className="fas fa-chevron-down sidebar-nav-chevron" />
+                        </button>
                         <div className="sidebar-submenu" id={`student-${item.key}-submenu`} aria-label={`${item.label} sections`}>
                           {children.map((child) => {
                             const isChildLinkActive = matchesRoute(pathname, child.href);
@@ -2073,17 +2050,7 @@ export function StudentLayoutShell({ children, data }: StudentLayoutShellProps) 
                 <PremiumAnimatedButton
                   onPress={async () => {
                     if (data.profile.pendingGroupInviteId) {
-                      // Clear every unread group-invite notification, not just the one
-                      // currently shown — otherwise an older leftover (from an earlier
-                      // group edit) stays unread and reopens this same modal next visit.
-                      const backlogIds = realNotifications
-                        .filter((n) => GROUP_INVITE_NOTIFICATION_TITLES.has(n.title) && n.status !== 'READ')
-                        .map((n) => n.id as string);
-                      markNotificationsRead(
-                        backlogIds.includes(data.profile.pendingGroupInviteId)
-                          ? backlogIds
-                          : [...backlogIds, data.profile.pendingGroupInviteId]
-                      );
+                      markNotificationRead(data.profile.pendingGroupInviteId);
                       await new Promise((r) => setTimeout(r, 600));
                       setShowGroupInviteModal(false);
                       setTimeout(() => window.location.reload(), 300);

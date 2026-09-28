@@ -79,18 +79,10 @@ const legacyRoutes = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  allowedDevOrigins: ['localhost', '192.168.1.37', '192.168.1.19'],
-  // The Research Head portal moved from /admin to /research-head; keep old bookmarks and any
-  // /admin links already stored (e.g. in notifications) working.
-  async redirects() {
-    return [
-      { source: '/admin', destination: '/research-head/dashboard', permanent: false },
-      { source: '/admin/:path*', destination: '/research-head/:path*', permanent: false }
-    ];
-  },
+  allowedDevOrigins: ['localhost', '172.27.240.1'],
   experimental: {
     serverActions: {
-      allowedOrigins: ['localhost:3000', '192.168.1.37:3000', '192.168.1.19:3000']
+      allowedOrigins: ['localhost:3000', '172.27.240.1:3000']
     }
   }
 };

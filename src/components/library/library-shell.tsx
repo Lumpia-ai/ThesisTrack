@@ -91,8 +91,10 @@ export function LibraryShell({
 
   return (
     <div
-      className={`student-shell${sidebarCollapsed ? ' is-sidebar-collapsed' : ''}${sidebarOpen ? ' is-sidebar-open' : ''}`} data-theme={themeMode}
+      className={`student-shell library-shell${sidebarCollapsed ? ' is-sidebar-collapsed' : ''}${sidebarOpen ? ' is-sidebar-open' : ''}`}
+      data-theme={themeMode}
       data-sidebar-collapsed={sidebarCollapsed ? 'true' : 'false'}
+      suppressHydrationWarning
     >
             {/* Decorative Light Background for Glassmorphism */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">

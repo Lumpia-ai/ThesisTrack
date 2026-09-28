@@ -18,7 +18,6 @@ import {
   parseJsonBody,
   successResponse
 } from '@/lib/utils';
-import { withApiLogging } from '@/lib/api-logging';
 
 export const runtime = 'nodejs';
 
@@ -118,7 +117,7 @@ type RouteContext = {
   }>;
 };
 
-async function handlePATCH(request: Request, context: RouteContext) {
+export async function PATCH(request: Request, context: RouteContext) {
   try {
     const authUser = await requireAuthenticatedUser(request, MANAGED_USER_ROLES);
 
@@ -278,5 +277,3 @@ async function handlePATCH(request: Request, context: RouteContext) {
     return handleApiError(error);
   }
 }
-
-export const PATCH = withApiLogging('PATCH', '/api/users/[id]', handlePATCH);

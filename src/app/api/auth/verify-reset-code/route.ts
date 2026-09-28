@@ -16,7 +16,6 @@ import {
   parseJsonBody,
   successResponse
 } from '@/lib/utils';
-import { withApiLogging } from '@/lib/api-logging';
 
 export const runtime = 'nodejs';
 
@@ -31,7 +30,7 @@ function invalidCodeError() {
   });
 }
 
-async function handlePOST(request: Request) {
+export async function POST(request: Request) {
   try {
     const body = await parseJsonBody<VerifyResetCodeBody>(request);
     const email = normalizeEmail(body.email);
@@ -134,5 +133,3 @@ async function handlePOST(request: Request) {
     return handleApiError(error);
   }
 }
-
-export const POST = withApiLogging('POST', '/api/auth/verify-reset-code', handlePOST);

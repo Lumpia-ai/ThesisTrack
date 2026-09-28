@@ -6,7 +6,6 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { BrandName } from '@/components/branding/brand-copy';
 import { LogoIcon } from '@/components/branding/logo-icon';
-import { AuthModal, type AuthView, shouldOpenAuthModal } from '@/components/auth/auth-modal';
 import { useBranding } from '@/components/branding/branding-provider';
 import styles from '@/app/page.module.css';
 
@@ -14,8 +13,6 @@ export function LandingNavigation() {
   const { branding } = useBranding();
   const [isOpen, setIsOpen] = useState(false);
   const [activeHref, setActiveHref] = useState('/#home');
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [authView, setAuthView] = useState<AuthView | null>(null);
   const pathname = usePathname();
   const navigation = branding.navigation;
   const visibleLinks = useMemo(
@@ -27,14 +24,7 @@ export function LandingNavigation() {
     setIsOpen(false);
   }, [pathname]);
 
-  useEffect(() => {
-    const updateScrolled = () => setIsScrolled(window.scrollY > 8);
 
-    updateScrolled();
-    window.addEventListener('scroll', updateScrolled, { passive: true });
-
-    return () => window.removeEventListener('scroll', updateScrolled);
-  }, []);
 
   useEffect(() => {
     if (pathname !== '/') {
@@ -66,15 +56,12 @@ export function LandingNavigation() {
 
       frame = window.requestAnimationFrame(() => {
         frame = 0;
-        // Only highlight a link while the activation line is inside its own section, so
-        // unlinked sections (e.g. Hall of Excellence) leave every link unhighlighted.
-        const activationLine = 140;
-        const activeSection = sectionLinks.find((item) => {
-          const rect = item.section.getBoundingClientRect();
-          return rect.top <= activationLine && rect.bottom > activationLine;
-        });
+        const activationLine = window.scrollY + 140;
+        const activeSection = sectionLinks.reduce((current, item) => (
+          item.section.offsetTop <= activationLine ? item : current
+        ), sectionLinks[0]);
 
-        setActiveHref(activeSection ? activeSection.href : '');
+        setActiveHref(activeSection.href);
       });
     };
 
@@ -110,22 +97,15 @@ export function LandingNavigation() {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen]);
 
-  const isLinkActive = (href: string) => {
+  const getActiveClassName = (href: string) => {
     const isAboutLink = href === '/about' && pathname === '/about';
     const isSectionLink = pathname === '/' && href === activeHref;
 
-    return isAboutLink || isSectionLink;
+    return `${styles.navLink} ${isAboutLink || isSectionLink ? styles.navLinkActive : ''}`;
   };
 
-  const getActiveClassName = (href: string) => (
-    `${styles.navLink} ${isLinkActive(href) ? styles.navLinkActive : ''}`
-  );
-
   return (
-    <nav
-      className={`${styles.navbar} ${styles.navbarFloating} ${isScrolled ? styles.navbarScrolled : ''}`}
-      aria-label="Primary navigation"
-    >
+    <nav className={styles.navbar} aria-label="Primary navigation">
       <div className={`${styles.container} ${styles.navbarInner}`}>
         <Link href="/#home" className={styles.brand} aria-label="Go to ThesisTrack home">
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
@@ -164,7 +144,6 @@ export function LandingNavigation() {
                 key={link.href}
                 href={link.href}
                 className={getActiveClassName(link.href)}
-                aria-current={isLinkActive(link.href) ? 'page' : undefined}
                 onClick={() => setIsOpen(false)}
               >
                 {link.label}
@@ -174,43 +153,25 @@ export function LandingNavigation() {
 
           <div className={styles.navActions}>
             {navigation.showRegister ? (
-              <Link
-                href="/register"
-                className={`${styles.navAuthButton} ${styles.navAuthOutline}`}
-                onClick={(event) => {
-                  // Plain click opens the register view; new-tab/middle clicks still reach the full /register page.
-                  if (shouldOpenAuthModal(event)) {
-                    event.preventDefault();
-                    setIsOpen(false);
-                    setAuthView('register');
-                  }
-                }}
-              >
-                {navigation.registerLabel}
+              <Link href="/register" className={`${styles.buttonSecondary} ${styles.navActionButton} hidden sm:flex`}>
+                <span className={styles.buttonText}>{navigation.registerLabel}</span>
+                <span className={styles.buttonIcon} aria-hidden="true">
+                  <i className="fas fa-user-plus" />
+                </span>
               </Link>
             ) : null}
 
             {navigation.showLogin ? (
-              <Link
-                href="/login"
-                className={`${styles.navAuthButton} ${styles.navAuthPrimary}`}
-                onClick={(event) => {
-                  // Plain click opens the modal; new-tab/middle clicks still reach the full /login page.
-                  if (shouldOpenAuthModal(event)) {
-                    event.preventDefault();
-                    setIsOpen(false);
-                    setAuthView('login');
-                  }
-                }}
-              >
-                {navigation.loginLabel}
+              <Link href="/login" className={`${styles.buttonPrimary} ${styles.navActionButton}`}>
+                <span className={styles.buttonText}>{navigation.loginLabel}</span>
+                <span className={styles.buttonIcon} aria-hidden="true">
+                  <i className="fas fa-right-to-bracket" />
+                </span>
               </Link>
             ) : null}
           </div>
         </div>
       </div>
-
-      <AuthModal view={authView} onViewChange={setAuthView} onClose={() => setAuthView(null)} />
     </nav>
   );
 }

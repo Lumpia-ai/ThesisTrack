@@ -12,7 +12,6 @@ import {
   setGoogleRegistrationCookie,
 } from '@/lib/google-oauth';
 import { prisma } from '@/lib/prisma';
-import { withApiLogging } from '@/lib/api-logging';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -56,7 +55,7 @@ function getRoleRedirectPath(role: ReturnType<typeof toPublicUser>['role']) {
       return '/system-admin/dashboard';
     case 'research_head':
     case 'admin':
-      return '/research-head/dashboard';
+      return '/admin/dashboard';
     case 'adviser':
       return '/adviser/adviser-mode/dashboard';
     case 'panel':
@@ -81,7 +80,7 @@ function getSyncRedirect(request: NextRequest, role: ReturnType<typeof toPublicU
   return url;
 }
 
-async function handleGET(request: NextRequest) {
+export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
   const error = requestUrl.searchParams.get('error');
@@ -176,5 +175,3 @@ async function handleGET(request: NextRequest) {
     return NextResponse.redirect(getLoginRedirect(request, 'error'));
   }
 }
-
-export const GET = withApiLogging('GET', '/api/auth/google/callback', handleGET);

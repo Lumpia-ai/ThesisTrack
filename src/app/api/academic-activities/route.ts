@@ -3,7 +3,6 @@ import { requireAuthenticatedUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { getBestProjectAccessRecord } from '@/lib/storage/document-authorization';
 import { HttpError, handleApiError, normalizeText, successResponse } from '@/lib/utils';
-import { withApiLogging } from '@/lib/api-logging';
 
 export const runtime = 'nodejs';
 
@@ -52,7 +51,7 @@ function toActivityPayload(activity: any) {
   };
 }
 
-async function handleGET(request: Request) {
+export async function GET(request: Request) {
   try {
     const user = await requireAuthenticatedUser(request, ACTIVITY_VIEWER_ROLES);
     const { searchParams } = new URL(request.url);
@@ -81,7 +80,7 @@ async function handleGET(request: Request) {
   }
 }
 
-async function handlePOST(request: Request) {
+export async function POST(request: Request) {
   try {
     const user = await requireAuthenticatedUser(request, [UserRole.STUDENT]);
     const body = await request.json().catch(() => ({}));
@@ -162,6 +161,3 @@ async function handlePOST(request: Request) {
     return handleApiError(error);
   }
 }
-
-export const GET = withApiLogging('GET', '/api/academic-activities', handleGET);
-export const POST = withApiLogging('POST', '/api/academic-activities', handlePOST);

@@ -4,55 +4,14 @@ import { useMemo, useState } from 'react';
 import {
   PARTNER_FEEDBACK,
   PARTNER_IMPLEMENTATIONS,
-  getPartnerStatusTone,
-  type PartnerFeedbackEntry
+  getPartnerStatusTone
 } from '@/components/partner/partner-data';
+import { getDepartmentStyle } from '@/components/library/library-dashboard';
 import {
   PartnerModal,
   PartnerStatusBadge
 } from '@/components/partner/partner-primitives';
 import { PartnerShell } from '@/components/partner/partner-shell';
-
-const FEEDBACK_STATS = [
-  {
-    title: 'Reports Submitted',
-    icon: 'fa-file-alt',
-    accent: '#2563EB',
-    soft: 'rgba(37, 99, 235, 0.14)',
-    note: 'All time',
-    value: () => PARTNER_FEEDBACK.length
-  },
-  {
-    title: 'Needs Follow-up',
-    icon: 'fa-exclamation-circle',
-    accent: '#F59E0B',
-    soft: 'rgba(245, 158, 11, 0.14)',
-    note: 'Awaiting response',
-    value: () => PARTNER_FEEDBACK.filter((entry) => entry.status === 'Needs Follow-up').length
-  },
-  {
-    title: 'Resolved Items',
-    icon: 'fa-check-circle',
-    accent: '#16A34A',
-    soft: 'rgba(22, 163, 74, 0.14)',
-    note: 'Closed out',
-    value: () => PARTNER_FEEDBACK.filter((entry) => entry.status === 'Resolved').length
-  },
-  {
-    title: 'Active Implementations',
-    icon: 'fa-rocket',
-    accent: '#8B5CF6',
-    soft: 'rgba(139, 92, 246, 0.14)',
-    note: 'Reportable projects',
-    value: () => PARTNER_IMPLEMENTATIONS.length
-  }
-];
-
-const CATEGORY_META: Record<PartnerFeedbackEntry['category'], { icon: string; accent: string; soft: string }> = {
-  'Progress Report': { icon: 'fa-chart-line', accent: '#2563EB', soft: 'rgba(37, 99, 235, 0.14)' },
-  'Issue Log': { icon: 'fa-triangle-exclamation', accent: '#F43F5E', soft: 'rgba(244, 63, 94, 0.14)' },
-  'Impact Feedback': { icon: 'fa-bullseye', accent: '#16A34A', soft: 'rgba(22, 163, 74, 0.14)' }
-};
 
 export function PartnerFeedback() {
   const [categoryFilter, setCategoryFilter] = useState('All Categories');
@@ -65,7 +24,16 @@ export function PartnerFeedback() {
     });
   }, [categoryFilter]);
 
-  const selectedFeedback = PARTNER_FEEDBACK.find((entry) => entry.id === selectedFeedbackId) ?? PARTNER_FEEDBACK[0];
+  const selectedFeedback =
+    PARTNER_FEEDBACK.find((entry) => entry.id === selectedFeedbackId) ?? PARTNER_FEEDBACK[0];
+
+  const needsFollowUpCount = useMemo(() => {
+    return PARTNER_FEEDBACK.filter((i) => i.status === 'Needs Follow-up').length;
+  }, []);
+
+  const resolvedCount = useMemo(() => {
+    return PARTNER_FEEDBACK.filter((i) => i.status === 'Resolved').length;
+  }, []);
 
   return (
     <PartnerShell
@@ -74,94 +42,238 @@ export function PartnerFeedback() {
       description="Share partner observations, issue logs, and rollout updates"
       notificationCount={2}
     >
-      <div className="flex flex-col gap-8">
-        {/* KPI Stat Bar */}
-        <section className="grid grid-cols-1 divide-y divide-[var(--border)] overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] sm:grid-cols-2 sm:divide-y-0 sm:divide-x lg:grid-cols-4">
-          {FEEDBACK_STATS.map((stat) => (
-            <div key={stat.title} className="flex items-center gap-4 p-5">
-              <span
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-xl"
-                style={{ background: stat.soft, color: stat.accent }}
-              >
-                <i aria-hidden="true" className={`fas ${stat.icon}`} />
-              </span>
-              <div className="min-w-0">
-                <p className="truncate text-xs font-bold uppercase tracking-wide text-[var(--muted)]">{stat.title}</p>
-                <p className="text-2xl font-extrabold leading-tight text-[var(--text)]">{stat.value()}</p>
-                <p className="truncate text-xs font-medium text-[var(--muted)]">{stat.note}</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+        
+        {/* Minimalist Bento KPI Section */}
+        <div className="lib-bento-grid">
+          <article className="lib-bento-card">
+            <div className="lib-bento-card-content">
+              <div className="lib-bento-head">
+                <span className="lib-bento-kicker">Total Reports</span>
+                <div className="lib-bento-icon-box" style={{ background: '#EFF6FF', color: '#003A8F' }}>
+                  <i className="fas fa-file-lines" aria-hidden="true" />
+                </div>
               </div>
+              <div className="lib-bento-metric">{PARTNER_FEEDBACK.length}</div>
+              <p className="lib-bento-subtext">Partner documentation filed</p>
             </div>
-          ))}
-        </section>
+          </article>
+
+          <article className="lib-bento-card">
+            <div className="lib-bento-card-content">
+              <div className="lib-bento-head">
+                <span className="lib-bento-kicker">Needs Follow-up</span>
+                <div className="lib-bento-icon-box" style={{ background: '#FEF3C7', color: '#F59E0B' }}>
+                  <i className="fas fa-circle-exclamation" aria-hidden="true" />
+                </div>
+              </div>
+              <div className="lib-bento-metric">{needsFollowUpCount}</div>
+              <p className="lib-bento-subtext">Requires team coordination</p>
+            </div>
+          </article>
+
+          <article className="lib-bento-card">
+            <div className="lib-bento-card-content">
+              <div className="lib-bento-head">
+                <span className="lib-bento-kicker">Resolved Items</span>
+                <div className="lib-bento-icon-box" style={{ background: '#DCFCE7', color: '#16A34A' }}>
+                  <i className="fas fa-circle-check" aria-hidden="true" />
+                </div>
+              </div>
+              <div className="lib-bento-metric">{resolvedCount}</div>
+              <p className="lib-bento-subtext">Successfully addressed</p>
+            </div>
+          </article>
+
+          <article className="lib-bento-card">
+            <div className="lib-bento-card-content">
+              <div className="lib-bento-head">
+                <span className="lib-bento-kicker">Deployments</span>
+                <div className="lib-bento-icon-box" style={{ background: '#CCFBF1', color: '#0D9488' }}>
+                  <i className="fas fa-rocket" aria-hidden="true" />
+                </div>
+              </div>
+              <div className="lib-bento-metric">{PARTNER_IMPLEMENTATIONS.length}</div>
+              <p className="lib-bento-subtext">Active project rollouts</p>
+            </div>
+          </article>
+        </div>
 
         {/* Filter and Actions Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-[var(--shadow-sm)]">
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-2 px-1 font-bold text-[var(--muted)]">
-              <i aria-hidden="true" className="fas fa-filter" /> Category
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '1rem',
+            background: '#FFFFFF',
+            padding: '0.85rem 1.25rem',
+            borderRadius: '0.85rem',
+            border: '1px solid #E2E8F0',
+            boxShadow: '0 1px 3px rgba(15, 23, 42, 0.02)'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#475569', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}>
+              <i className="fas fa-filter" style={{ color: '#003A8F', fontSize: '0.82rem' }} aria-hidden="true" />
+              <span>Category:</span>
             </span>
-            <select
-              value={categoryFilter}
-              onChange={(event) => setCategoryFilter(event.target.value)}
-              className="min-w-[200px] cursor-pointer rounded-xl border border-[var(--border)] bg-[var(--surface-sunken)] px-4 py-2.5 text-sm font-semibold text-[var(--muted)] outline-none"
-            >
-              <option>All Categories</option>
-              <option>Progress Report</option>
-              <option>Issue Log</option>
-              <option>Impact Feedback</option>
-            </select>
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <select
+                value={categoryFilter}
+                onChange={(event) => setCategoryFilter(event.target.value)}
+                aria-label="Filter by report category"
+                style={{
+                  appearance: 'none',
+                  padding: '0.5rem 2.2rem 0.5rem 0.95rem',
+                  borderRadius: '0.5rem',
+                  border: '1px solid #CBD5E1',
+                  background: '#F8FAFC',
+                  color: '#1E293B',
+                  fontWeight: 600,
+                  fontSize: '0.85rem',
+                  outline: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                <option>All Categories</option>
+                <option>Progress Report</option>
+                <option>Issue Log</option>
+                <option>Impact Feedback</option>
+              </select>
+              <i
+                className="fas fa-chevron-down"
+                style={{
+                  position: 'absolute',
+                  right: '0.75rem',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  pointerEvents: 'none',
+                  color: '#64748B',
+                  fontSize: '0.72rem'
+                }}
+                aria-hidden="true"
+              />
+            </div>
+            <span style={{ fontSize: '0.82rem', color: '#64748B', fontWeight: 600, marginLeft: '0.25rem' }}>
+              Showing {feedbackEntries.length} of {PARTNER_FEEDBACK.length} reports
+            </span>
           </div>
+
           <button
             type="button"
             onClick={() => setSubmitOpen(true)}
-            className="inline-flex items-center gap-2 rounded-xl bg-[var(--primary)] px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:brightness-110"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.55rem 1.15rem',
+              borderRadius: '0.5rem',
+              border: '1px solid #003A8F',
+              background: '#003A8F',
+              color: '#FFFFFF',
+              fontWeight: 600,
+              fontSize: '0.85rem',
+              cursor: 'pointer',
+              boxShadow: '0 1px 2px rgba(0, 58, 143, 0.15)',
+              transition: 'all 0.15s ease'
+            }}
           >
-            <i aria-hidden="true" className="fas fa-plus" /> New Feedback Report
+            <i className="fas fa-plus" aria-hidden="true" />
+            <span>New Feedback Report</span>
           </button>
         </div>
 
         {/* Feedback Grid */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <div className="partner-feedback-grid">
           {feedbackEntries.map((entry) => {
-            const meta = CATEGORY_META[entry.category];
+            const relatedImplementation = PARTNER_IMPLEMENTATIONS.find(
+              (impl) => impl.id === entry.implementationId
+            );
+            const deptStyle = relatedImplementation ? getDepartmentStyle(relatedImplementation.department) : null;
+            const tone = getPartnerStatusTone(entry.status);
+
+            const categoryConfig = {
+              'Progress Report': { icon: 'fa-chart-line', color: '#003A8F', bg: '#EFF6FF', border: '#BFDBFE' },
+              'Issue Log': { icon: 'fa-triangle-exclamation', color: '#DC2626', bg: '#FEF2F2', border: '#FECACA' },
+              'Impact Feedback': { icon: 'fa-star', color: '#D97706', bg: '#FFFBEB', border: '#FDE68A' }
+            }[entry.category] ?? { icon: 'fa-file-lines', color: '#475569', bg: '#F1F5F9', border: '#E2E8F0' };
 
             return (
               <article
                 key={entry.id}
-                className="flex flex-col gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)] transition hover:-translate-y-1 hover:shadow-[var(--shadow-md)]"
+                className="partner-feedback-card"
+                style={{
+                  borderTop: `3px solid ${deptStyle ? deptStyle.cardTopAccent : '#003A8F'}`
+                }}
               >
-                <div className="flex items-start gap-3">
-                  <span
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-lg"
-                    style={{ background: meta.soft, color: meta.accent }}
-                  >
-                    <i aria-hidden="true" className={`fas ${meta.icon}`} />
-                  </span>
-                  <h3 className="text-base font-extrabold leading-snug text-[var(--text)]">{entry.title}</h3>
+                <div className="partner-feedback-head">
+                  <div className="partner-feedback-toprow">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <span
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                          background: categoryConfig.bg,
+                          color: categoryConfig.color,
+                          border: `1px solid ${categoryConfig.border}`,
+                          padding: '0.22rem 0.65rem',
+                          borderRadius: '999px',
+                          fontSize: '0.75rem',
+                          fontWeight: 700
+                        }}
+                      >
+                        <i className={`fas ${categoryConfig.icon}`} style={{ fontSize: '0.68rem' }} aria-hidden="true" />
+                        <span>{entry.category}</span>
+                      </span>
+
+                      {relatedImplementation && deptStyle && (
+                        <span
+                          className="lib-dept-pill"
+                          style={{
+                            background: deptStyle.badgeBg,
+                            color: deptStyle.text,
+                            borderColor: deptStyle.border
+                          }}
+                        >
+                          <i className={`fas ${deptStyle.icon}`} style={{ fontSize: '0.68rem' }} aria-hidden="true" />
+                          <span>{relatedImplementation.department}</span>
+                        </span>
+                      )}
+                    </div>
+
+                    <span style={{ color: '#64748B', fontWeight: 600, fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                      <i className="far fa-calendar-alt" style={{ color: '#94A3B8' }} aria-hidden="true" />
+                      {entry.submittedAt}
+                    </span>
+                  </div>
+
+                  <h3 className="partner-feedback-title">{entry.title}</h3>
+
+                  {relatedImplementation && (
+                    <div className="partner-feedback-project">
+                      <i className="fas fa-layer-group" style={{ color: deptStyle?.accent || '#003A8F' }} aria-hidden="true" />
+                      <span>{relatedImplementation.title}</span>
+                    </div>
+                  )}
                 </div>
 
-                <div className="flex flex-wrap items-center gap-3 text-sm">
-                  <span className="rounded-full px-3 py-1 text-xs font-bold" style={{ background: meta.soft, color: meta.accent }}>
-                    {entry.category}
-                  </span>
-                  <span className="font-semibold text-[var(--muted)]">
-                    <i aria-hidden="true" className="far fa-calendar-alt mr-1.5" />
-                    {entry.submittedAt}
-                  </span>
-                </div>
-
-                <p className="flex-1 rounded-xl border border-[var(--border)] bg-[var(--surface-sunken)] p-4 text-sm leading-relaxed text-[var(--muted)]">
+                <div className="partner-feedback-summary-box">
                   {entry.summary}
-                </p>
+                </div>
 
-                <div className="mt-auto flex items-center justify-between border-t border-[var(--border)] pt-4">
-                  <PartnerStatusBadge tone={getPartnerStatusTone(entry.status)}>{entry.status}</PartnerStatusBadge>
+                <div className="partner-feedback-footer">
+                  <PartnerStatusBadge tone={tone}>{entry.status}</PartnerStatusBadge>
+
                   <button
                     type="button"
                     onClick={() => setSelectedFeedbackId(entry.id)}
-                    className="rounded-lg border border-[var(--primary)] px-4 py-1.5 text-sm font-bold text-[var(--primary)] transition hover:bg-[var(--primary-soft)]"
+                    className="partner-feedback-open-btn"
                   >
-                    Open Entry
+                    <i className="fas fa-file-lines" style={{ color: '#003A8F' }} aria-hidden="true" />
+                    <span>Open Entry</span>
                   </button>
                 </div>
               </article>
@@ -169,123 +281,353 @@ export function PartnerFeedback() {
           })}
         </div>
 
+        {/* Empty state if filtered results are 0 */}
+        {feedbackEntries.length === 0 && (
+          <div
+            style={{
+              background: '#FFFFFF',
+              borderRadius: '1rem',
+              border: '1px solid #E2E8F0',
+              padding: '3rem 1.5rem',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.75rem'
+            }}
+          >
+            <div
+              style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '12px',
+                background: '#F1F5F9',
+                color: '#64748B',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.25rem'
+              }}
+            >
+              <i className="fas fa-folder-open" aria-hidden="true" />
+            </div>
+            <h4 style={{ margin: 0, color: '#0F172A', fontWeight: 700, fontSize: '1rem' }}>No feedback reports found</h4>
+            <p style={{ margin: 0, color: '#64748B', fontSize: '0.85rem' }}>
+              No reports match the selected category &quot;{categoryFilter}&quot;.
+            </p>
+            <button
+              type="button"
+              onClick={() => setCategoryFilter('All Categories')}
+              style={{
+                marginTop: '0.5rem',
+                padding: '0.45rem 1rem',
+                background: '#EFF6FF',
+                border: '1px solid #BFDBFE',
+                borderRadius: '0.5rem',
+                color: '#003A8F',
+                fontWeight: 600,
+                fontSize: '0.82rem',
+                cursor: 'pointer'
+              }}
+            >
+              Reset Filter
+            </button>
+          </div>
+        )}
+
         {/* Info Note */}
-        <section className="flex items-start gap-5 rounded-2xl border border-[var(--border)] border-t-4 border-t-[var(--primary)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)]">
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--primary-soft)] text-xl text-[var(--primary)]">
-            <i aria-hidden="true" className="fas fa-info-circle" />
-          </span>
-          <div>
-            <h3 className="text-base font-extrabold text-[var(--text)]">Partner Reporting Notes</h3>
-            <p className="mt-1 text-sm leading-relaxed text-[var(--muted)]">
+        <section className="partner-feedback-info-card">
+          <div
+            style={{
+              width: '44px',
+              height: '44px',
+              borderRadius: '10px',
+              background: '#EFF6FF',
+              color: '#003A8F',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '1.25rem',
+              flexShrink: 0
+            }}
+          >
+            <i className="fas fa-info-circle" aria-hidden="true" />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: 1 }}>
+            <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: '#0F172A' }}>
+              Partner Reporting Notes
+            </h3>
+            <p style={{ margin: 0, color: '#475569', fontSize: '0.88rem', lineHeight: 1.5 }}>
               Use this area for implementation blockers, user feedback, and operational impact documentation.
             </p>
-            <p className="mt-3 rounded-xl border border-[var(--border)] bg-[var(--surface-sunken)] p-4 text-sm leading-relaxed text-[var(--muted)]">
-              Reporting records support TTO validation, refinement requests, and implementation closeout. Keep summaries
-              concise and attach evidence during scheduled reviews.
-            </p>
+            <div
+              style={{
+                background: '#F8FAFC',
+                padding: '0.85rem 1rem',
+                borderRadius: '0.65rem',
+                border: '1px solid #E2E8F0',
+                color: '#475569',
+                fontSize: '0.84rem',
+                lineHeight: 1.5,
+                marginTop: '0.25rem'
+              }}
+            >
+              Reporting records support TTO validation, refinement requests, and implementation closeout. Keep summaries concise and attach evidence during scheduled reviews.
+            </div>
           </div>
         </section>
+
       </div>
 
+      {/* Details Modal */}
       <PartnerModal
         open={Boolean(selectedFeedbackId)}
         title={selectedFeedback.title}
         onClose={() => setSelectedFeedbackId('')}
         footer={
-          <div className="flex w-full justify-end">
+          <div style={{ display: 'flex', width: '100%', justifyContent: 'flex-end' }}>
             <button
               type="button"
               onClick={() => setSelectedFeedbackId('')}
-              className="rounded-xl bg-[var(--primary)] px-6 py-2.5 text-sm font-bold text-white shadow-sm transition hover:brightness-110"
+              style={{
+                background: '#003A8F',
+                color: '#FFFFFF',
+                border: '1px solid #003A8F',
+                padding: '0.55rem 1.3rem',
+                borderRadius: '0.5rem',
+                fontWeight: 600,
+                fontSize: '0.85rem',
+                cursor: 'pointer'
+              }}
             >
               Close
             </button>
           </div>
         }
       >
-        <div className="flex flex-col gap-4 py-1">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="rounded-full bg-[var(--surface-alt)] px-3 py-1.5 text-xs font-bold text-[var(--muted-strong)]">
-              {selectedFeedback.category}
-            </span>
-            <span className="text-sm font-semibold text-[var(--muted)]">
-              <i aria-hidden="true" className="far fa-calendar-alt mr-1.5" />
-              {selectedFeedback.submittedAt}
-            </span>
-            <PartnerStatusBadge tone={getPartnerStatusTone(selectedFeedback.status)}>{selectedFeedback.status}</PartnerStatusBadge>
-          </div>
+        {(() => {
+          const related = PARTNER_IMPLEMENTATIONS.find((impl) => impl.id === selectedFeedback.implementationId);
+          const dept = related ? getDepartmentStyle(related.department) : null;
+          return (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', padding: '0.5rem 0' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <span
+                  style={{
+                    background: '#EFF6FF',
+                    color: '#003A8F',
+                    border: '1px solid #BFDBFE',
+                    padding: '0.3rem 0.8rem',
+                    borderRadius: '999px',
+                    fontWeight: 700,
+                    fontSize: '0.8rem'
+                  }}
+                >
+                  {selectedFeedback.category}
+                </span>
 
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-sunken)] p-5">
-            <span className="mb-3 block text-xs font-bold uppercase tracking-wide text-[var(--muted)]">Summary details</span>
-            <p className="text-sm leading-relaxed text-[var(--text)]">{selectedFeedback.summary}</p>
-          </div>
-        </div>
+                {related && dept && (
+                  <span
+                    className="lib-dept-pill"
+                    style={{
+                      background: dept.badgeBg,
+                      color: dept.text,
+                      borderColor: dept.border
+                    }}
+                  >
+                    <i className={`fas ${dept.icon}`} style={{ fontSize: '0.68rem' }} aria-hidden="true" />
+                    <span>{related.department}</span>
+                  </span>
+                )}
+
+                <span style={{ color: '#64748B', fontWeight: 600, fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                  <i className="far fa-calendar-alt" style={{ color: '#94A3B8' }} aria-hidden="true" />
+                  {selectedFeedback.submittedAt}
+                </span>
+
+                <PartnerStatusBadge tone={getPartnerStatusTone(selectedFeedback.status)}>
+                  {selectedFeedback.status}
+                </PartnerStatusBadge>
+              </div>
+
+              {related && (
+                <div style={{ background: '#F8FAFC', padding: '1rem', borderRadius: '0.65rem', border: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                  <span style={{ fontSize: '0.72rem', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>
+                    Associated Implementation
+                  </span>
+                  <strong style={{ color: '#0F172A', fontSize: '0.92rem' }}>{related.title}</strong>
+                  <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.8rem', color: '#475569', marginTop: '0.25rem', flexWrap: 'wrap' }}>
+                    <span>Partner: <strong>{related.partner}</strong></span>
+                    <span>Phase: <strong>{related.currentPhase}</strong></span>
+                  </div>
+                </div>
+              )}
+
+              <div style={{ background: '#FFFFFF', padding: '1.25rem', borderRadius: '0.75rem', border: '1px solid #E2E8F0' }}>
+                <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, marginBottom: '0.6rem' }}>
+                  Summary Details
+                </span>
+                <p style={{ margin: 0, color: '#0F172A', fontSize: '0.92rem', lineHeight: 1.6 }}>
+                  {selectedFeedback.summary}
+                </p>
+              </div>
+            </div>
+          );
+        })()}
       </PartnerModal>
 
+      {/* New Feedback Report Modal */}
       <PartnerModal
         open={submitOpen}
         title="New Feedback Report"
         onClose={() => setSubmitOpen(false)}
         footer={
-          <div className="flex w-full justify-end gap-4">
+          <div style={{ display: 'flex', gap: '0.75rem', width: '100%', justifyContent: 'flex-end' }}>
             <button
               type="button"
               onClick={() => setSubmitOpen(false)}
-              className="rounded-xl border border-[var(--border-strong)] px-5 py-2.5 text-sm font-bold text-[var(--muted)] transition hover:border-[var(--primary)] hover:text-[var(--primary)]"
+              style={{
+                background: '#FFFFFF',
+                color: '#475569',
+                border: '1px solid #E2E8F0',
+                padding: '0.55rem 1.15rem',
+                borderRadius: '0.5rem',
+                fontWeight: 600,
+                fontSize: '0.85rem',
+                cursor: 'pointer'
+              }}
             >
               Cancel
             </button>
             <button
               type="button"
               onClick={() => setSubmitOpen(false)}
-              className="inline-flex items-center gap-2 rounded-xl bg-[var(--primary)] px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:brightness-110"
+              style={{
+                background: '#003A8F',
+                color: '#FFFFFF',
+                border: '1px solid #003A8F',
+                padding: '0.55rem 1.3rem',
+                borderRadius: '0.5rem',
+                fontWeight: 600,
+                fontSize: '0.85rem',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                cursor: 'pointer'
+              }}
             >
-              Submit Report
+              <i className="fas fa-paper-plane" aria-hidden="true" />
+              <span>Submit Report</span>
             </button>
           </div>
         }
       >
-        <div className="flex flex-col gap-5 py-1">
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-bold text-[var(--muted-strong)]" htmlFor="partner-feedback-implementation">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', padding: '0.5rem 0' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+            <label htmlFor="partner-feedback-implementation" style={{ fontWeight: 700, color: '#334155', fontSize: '0.88rem' }}>
               Implementation Project
             </label>
-            <select
-              id="partner-feedback-implementation"
-              className="cursor-pointer rounded-xl border border-[var(--border)] bg-[var(--surface-sunken)] px-4 py-3 text-sm font-semibold text-[var(--text)] outline-none"
-            >
-              {PARTNER_IMPLEMENTATIONS.map((implementation) => (
-                <option key={implementation.id} value={implementation.id}>
-                  {implementation.title}
-                </option>
-              ))}
-            </select>
+            <div style={{ position: 'relative' }}>
+              <select
+                id="partner-feedback-implementation"
+                style={{
+                  width: '100%',
+                  appearance: 'none',
+                  padding: '0.65rem 2.2rem 0.65rem 0.95rem',
+                  borderRadius: '0.5rem',
+                  border: '1px solid #CBD5E1',
+                  background: '#F8FAFC',
+                  outline: 'none',
+                  color: '#0F172A',
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  fontSize: '0.88rem'
+                }}
+              >
+                {PARTNER_IMPLEMENTATIONS.map((implementation) => (
+                  <option key={implementation.id} value={implementation.id}>
+                    [{implementation.department}] {implementation.title}
+                  </option>
+                ))}
+              </select>
+              <i
+                className="fas fa-chevron-down"
+                style={{
+                  position: 'absolute',
+                  right: '0.85rem',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  pointerEvents: 'none',
+                  color: '#64748B',
+                  fontSize: '0.75rem'
+                }}
+                aria-hidden="true"
+              />
+            </div>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-bold text-[var(--muted-strong)]" htmlFor="partner-feedback-category">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+            <label htmlFor="partner-feedback-category" style={{ fontWeight: 700, color: '#334155', fontSize: '0.88rem' }}>
               Report Category
             </label>
-            <select
-              defaultValue="Progress Report"
-              id="partner-feedback-category"
-              className="cursor-pointer rounded-xl border border-[var(--border)] bg-[var(--surface-sunken)] px-4 py-3 text-sm font-semibold text-[var(--text)] outline-none"
-            >
-              <option>Progress Report</option>
-              <option>Issue Log</option>
-              <option>Impact Feedback</option>
-            </select>
+            <div style={{ position: 'relative' }}>
+              <select
+                defaultValue="Progress Report"
+                id="partner-feedback-category"
+                style={{
+                  width: '100%',
+                  appearance: 'none',
+                  padding: '0.65rem 2.2rem 0.65rem 0.95rem',
+                  borderRadius: '0.5rem',
+                  border: '1px solid #CBD5E1',
+                  background: '#F8FAFC',
+                  outline: 'none',
+                  color: '#0F172A',
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  fontSize: '0.88rem'
+                }}
+              >
+                <option>Progress Report</option>
+                <option>Issue Log</option>
+                <option>Impact Feedback</option>
+              </select>
+              <i
+                className="fas fa-chevron-down"
+                style={{
+                  position: 'absolute',
+                  right: '0.85rem',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  pointerEvents: 'none',
+                  color: '#64748B',
+                  fontSize: '0.75rem'
+                }}
+                aria-hidden="true"
+              />
+            </div>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-bold text-[var(--muted-strong)]" htmlFor="partner-feedback-summary">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+            <label htmlFor="partner-feedback-summary" style={{ fontWeight: 700, color: '#334155', fontSize: '0.88rem' }}>
               Detailed Summary
             </label>
             <textarea
               id="partner-feedback-summary"
               rows={5}
               placeholder="Describe the progress, issue, or feedback in detail..."
-              className="resize-y rounded-xl border border-[var(--border)] bg-[var(--surface-sunken)] p-3 text-sm text-[var(--text)] outline-none"
+              style={{
+                width: '100%',
+                padding: '0.85rem',
+                borderRadius: '0.5rem',
+                border: '1px solid #CBD5E1',
+                background: '#F8FAFC',
+                outline: 'none',
+                color: '#0F172A',
+                resize: 'vertical',
+                fontSize: '0.88rem',
+                lineHeight: 1.5,
+                fontFamily: 'inherit'
+              }}
             />
           </div>
         </div>
@@ -293,3 +635,4 @@ export function PartnerFeedback() {
     </PartnerShell>
   );
 }
+

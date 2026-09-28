@@ -4,7 +4,6 @@ import { requireAuthenticatedUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { handleApiError, successResponse } from '@/lib/utils';
 import { ensureProjectMilestoneWorkflow } from '@/lib/milestone-checkpoint-tracking';
-import { withApiLogging } from '@/lib/api-logging';
 
 const DEADLINE_MANAGER_ROLES: UserRole[] = [
   UserRole.ADMIN,
@@ -13,7 +12,7 @@ const DEADLINE_MANAGER_ROLES: UserRole[] = [
   UserRole.PROGRAM_HEAD
 ];
 
-async function handleGET(request: Request, props: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, props: { params: Promise<{ id: string }> }) {
   try {
     const { id: projectId } = await props.params;
     const user = await requireAuthenticatedUser(request);
@@ -58,5 +57,3 @@ async function handleGET(request: Request, props: { params: Promise<{ id: string
     return handleApiError(error);
   }
 }
-
-export const GET = withApiLogging('GET', '/api/projects/[id]/milestones', handleGET);

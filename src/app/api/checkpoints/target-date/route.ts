@@ -3,9 +3,8 @@ import { prisma } from '@/lib/prisma';
 import { requireAuthenticatedUser } from '@/lib/auth';
 import { handleApiError } from '@/lib/utils';
 import { UserRole } from '@/generated/prisma/client';
-import { withApiLogging } from '@/lib/api-logging';
 
-async function handlePATCH(req: NextRequest) {
+export async function PATCH(req: NextRequest) {
   try {
     const user = await requireAuthenticatedUser(req, [UserRole.STUDENT]);
 
@@ -34,5 +33,3 @@ async function handlePATCH(req: NextRequest) {
     return handleApiError(error);
   }
 }
-
-export const PATCH = withApiLogging('PATCH', '/api/checkpoints/target-date', handlePATCH);

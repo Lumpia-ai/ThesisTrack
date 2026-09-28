@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, type ReactNode } from 'react';
-import { getStoredUser } from '@/lib/mock/auth';
+import { getStoredUser, logout } from '@/lib/mock/auth';
 import {
   PROGRAM_HEAD_NAV_GROUPS,
   type ProgramHeadNavKey
@@ -11,7 +11,6 @@ import {
 import { PortalShellActionMenus } from '@/components/shared/portal-shell-action-menus';
 import { useRoutePrefetch } from '@/components/shared/use-route-prefetch';
 import { useShellSidebar } from '@/components/shared/use-shell-sidebar';
-import { requestLogout } from '@/components/auth/logout-flow';
 
 const PROGRAM_HEAD_PREFETCH_ROUTES = PROGRAM_HEAD_NAV_GROUPS.flatMap((group) => group.items.map((item) => item.href));
 
@@ -81,7 +80,9 @@ export function ProgramHeadShell({
   }, [closeSidebar]);
 
   const handleLogout = () => {
-    requestLogout();
+    logout();
+    router.push('/login');
+    router.refresh();
   };
 
   const [themeMode, setThemeMode] = useState('light');

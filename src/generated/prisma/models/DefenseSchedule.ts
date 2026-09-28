@@ -37,7 +37,6 @@ export type DefenseScheduleMinAggregateOutputType = {
   chairDecision: $Enums.DefenseChairDecision | null
   chairDecisionAt: Date | null
   chairDecisionRemarks: string | null
-  previousProjectTitle: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -55,7 +54,6 @@ export type DefenseScheduleMaxAggregateOutputType = {
   chairDecision: $Enums.DefenseChairDecision | null
   chairDecisionAt: Date | null
   chairDecisionRemarks: string | null
-  previousProjectTitle: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -73,7 +71,6 @@ export type DefenseScheduleCountAggregateOutputType = {
   chairDecision: number
   chairDecisionAt: number
   chairDecisionRemarks: number
-  previousProjectTitle: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -93,7 +90,6 @@ export type DefenseScheduleMinAggregateInputType = {
   chairDecision?: true
   chairDecisionAt?: true
   chairDecisionRemarks?: true
-  previousProjectTitle?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -111,7 +107,6 @@ export type DefenseScheduleMaxAggregateInputType = {
   chairDecision?: true
   chairDecisionAt?: true
   chairDecisionRemarks?: true
-  previousProjectTitle?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -129,7 +124,6 @@ export type DefenseScheduleCountAggregateInputType = {
   chairDecision?: true
   chairDecisionAt?: true
   chairDecisionRemarks?: true
-  previousProjectTitle?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -220,7 +214,6 @@ export type DefenseScheduleGroupByOutputType = {
   chairDecision: $Enums.DefenseChairDecision | null
   chairDecisionAt: Date | null
   chairDecisionRemarks: string | null
-  previousProjectTitle: string | null
   createdAt: Date
   updatedAt: Date
   _count: DefenseScheduleCountAggregateOutputType | null
@@ -259,7 +252,6 @@ export type DefenseScheduleWhereInput = {
   chairDecision?: Prisma.EnumDefenseChairDecisionNullableFilter<"DefenseSchedule"> | $Enums.DefenseChairDecision | null
   chairDecisionAt?: Prisma.DateTimeNullableFilter<"DefenseSchedule"> | Date | string | null
   chairDecisionRemarks?: Prisma.StringNullableFilter<"DefenseSchedule"> | string | null
-  previousProjectTitle?: Prisma.StringNullableFilter<"DefenseSchedule"> | string | null
   createdAt?: Prisma.DateTimeFilter<"DefenseSchedule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DefenseSchedule"> | Date | string
   project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>
@@ -280,7 +272,6 @@ export type DefenseScheduleOrderByWithRelationInput = {
   chairDecision?: Prisma.SortOrderInput | Prisma.SortOrder
   chairDecisionAt?: Prisma.SortOrderInput | Prisma.SortOrder
   chairDecisionRemarks?: Prisma.SortOrderInput | Prisma.SortOrder
-  previousProjectTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   project?: Prisma.ProjectOrderByWithRelationInput
@@ -304,7 +295,6 @@ export type DefenseScheduleWhereUniqueInput = Prisma.AtLeast<{
   chairDecision?: Prisma.EnumDefenseChairDecisionNullableFilter<"DefenseSchedule"> | $Enums.DefenseChairDecision | null
   chairDecisionAt?: Prisma.DateTimeNullableFilter<"DefenseSchedule"> | Date | string | null
   chairDecisionRemarks?: Prisma.StringNullableFilter<"DefenseSchedule"> | string | null
-  previousProjectTitle?: Prisma.StringNullableFilter<"DefenseSchedule"> | string | null
   createdAt?: Prisma.DateTimeFilter<"DefenseSchedule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DefenseSchedule"> | Date | string
   project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>
@@ -325,7 +315,6 @@ export type DefenseScheduleOrderByWithAggregationInput = {
   chairDecision?: Prisma.SortOrderInput | Prisma.SortOrder
   chairDecisionAt?: Prisma.SortOrderInput | Prisma.SortOrder
   chairDecisionRemarks?: Prisma.SortOrderInput | Prisma.SortOrder
-  previousProjectTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.DefenseScheduleCountOrderByAggregateInput
@@ -349,7 +338,6 @@ export type DefenseScheduleScalarWhereWithAggregatesInput = {
   chairDecision?: Prisma.EnumDefenseChairDecisionNullableWithAggregatesFilter<"DefenseSchedule"> | $Enums.DefenseChairDecision | null
   chairDecisionAt?: Prisma.DateTimeNullableWithAggregatesFilter<"DefenseSchedule"> | Date | string | null
   chairDecisionRemarks?: Prisma.StringNullableWithAggregatesFilter<"DefenseSchedule"> | string | null
-  previousProjectTitle?: Prisma.StringNullableWithAggregatesFilter<"DefenseSchedule"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"DefenseSchedule"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"DefenseSchedule"> | Date | string
 }
@@ -365,7 +353,6 @@ export type DefenseScheduleCreateInput = {
   chairDecision?: $Enums.DefenseChairDecision | null
   chairDecisionAt?: Date | string | null
   chairDecisionRemarks?: string | null
-  previousProjectTitle?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   project: Prisma.ProjectCreateNestedOneWithoutDefenseSchedulesInput
@@ -386,7 +373,6 @@ export type DefenseScheduleUncheckedCreateInput = {
   chairDecision?: $Enums.DefenseChairDecision | null
   chairDecisionAt?: Date | string | null
   chairDecisionRemarks?: string | null
-  previousProjectTitle?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutDefenseScheduleInput
@@ -403,7 +389,6 @@ export type DefenseScheduleUpdateInput = {
   chairDecision?: Prisma.NullableEnumDefenseChairDecisionFieldUpdateOperationsInput | $Enums.DefenseChairDecision | null
   chairDecisionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chairDecisionRemarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  previousProjectTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   project?: Prisma.ProjectUpdateOneRequiredWithoutDefenseSchedulesNestedInput
@@ -424,7 +409,6 @@ export type DefenseScheduleUncheckedUpdateInput = {
   chairDecision?: Prisma.NullableEnumDefenseChairDecisionFieldUpdateOperationsInput | $Enums.DefenseChairDecision | null
   chairDecisionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chairDecisionRemarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  previousProjectTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutDefenseScheduleNestedInput
@@ -443,7 +427,6 @@ export type DefenseScheduleCreateManyInput = {
   chairDecision?: $Enums.DefenseChairDecision | null
   chairDecisionAt?: Date | string | null
   chairDecisionRemarks?: string | null
-  previousProjectTitle?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -459,7 +442,6 @@ export type DefenseScheduleUpdateManyMutationInput = {
   chairDecision?: Prisma.NullableEnumDefenseChairDecisionFieldUpdateOperationsInput | $Enums.DefenseChairDecision | null
   chairDecisionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chairDecisionRemarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  previousProjectTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -477,7 +459,6 @@ export type DefenseScheduleUncheckedUpdateManyInput = {
   chairDecision?: Prisma.NullableEnumDefenseChairDecisionFieldUpdateOperationsInput | $Enums.DefenseChairDecision | null
   chairDecisionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chairDecisionRemarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  previousProjectTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -505,7 +486,6 @@ export type DefenseScheduleCountOrderByAggregateInput = {
   chairDecision?: Prisma.SortOrder
   chairDecisionAt?: Prisma.SortOrder
   chairDecisionRemarks?: Prisma.SortOrder
-  previousProjectTitle?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -523,7 +503,6 @@ export type DefenseScheduleMaxOrderByAggregateInput = {
   chairDecision?: Prisma.SortOrder
   chairDecisionAt?: Prisma.SortOrder
   chairDecisionRemarks?: Prisma.SortOrder
-  previousProjectTitle?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -541,7 +520,6 @@ export type DefenseScheduleMinOrderByAggregateInput = {
   chairDecision?: Prisma.SortOrder
   chairDecisionAt?: Prisma.SortOrder
   chairDecisionRemarks?: Prisma.SortOrder
-  previousProjectTitle?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -670,7 +648,6 @@ export type DefenseScheduleCreateWithoutScheduledByInput = {
   chairDecision?: $Enums.DefenseChairDecision | null
   chairDecisionAt?: Date | string | null
   chairDecisionRemarks?: string | null
-  previousProjectTitle?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   project: Prisma.ProjectCreateNestedOneWithoutDefenseSchedulesInput
@@ -689,7 +666,6 @@ export type DefenseScheduleUncheckedCreateWithoutScheduledByInput = {
   chairDecision?: $Enums.DefenseChairDecision | null
   chairDecisionAt?: Date | string | null
   chairDecisionRemarks?: string | null
-  previousProjectTitle?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutDefenseScheduleInput
@@ -737,7 +713,6 @@ export type DefenseScheduleScalarWhereInput = {
   chairDecision?: Prisma.EnumDefenseChairDecisionNullableFilter<"DefenseSchedule"> | $Enums.DefenseChairDecision | null
   chairDecisionAt?: Prisma.DateTimeNullableFilter<"DefenseSchedule"> | Date | string | null
   chairDecisionRemarks?: Prisma.StringNullableFilter<"DefenseSchedule"> | string | null
-  previousProjectTitle?: Prisma.StringNullableFilter<"DefenseSchedule"> | string | null
   createdAt?: Prisma.DateTimeFilter<"DefenseSchedule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DefenseSchedule"> | Date | string
 }
@@ -753,7 +728,6 @@ export type DefenseScheduleCreateWithoutProjectInput = {
   chairDecision?: $Enums.DefenseChairDecision | null
   chairDecisionAt?: Date | string | null
   chairDecisionRemarks?: string | null
-  previousProjectTitle?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   scheduledBy?: Prisma.UserCreateNestedOneWithoutScheduledDefensesInput
@@ -772,7 +746,6 @@ export type DefenseScheduleUncheckedCreateWithoutProjectInput = {
   chairDecision?: $Enums.DefenseChairDecision | null
   chairDecisionAt?: Date | string | null
   chairDecisionRemarks?: string | null
-  previousProjectTitle?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   evaluations?: Prisma.EvaluationUncheckedCreateNestedManyWithoutDefenseScheduleInput
@@ -815,7 +788,6 @@ export type DefenseScheduleCreateWithoutEvaluationsInput = {
   chairDecision?: $Enums.DefenseChairDecision | null
   chairDecisionAt?: Date | string | null
   chairDecisionRemarks?: string | null
-  previousProjectTitle?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   project: Prisma.ProjectCreateNestedOneWithoutDefenseSchedulesInput
@@ -835,7 +807,6 @@ export type DefenseScheduleUncheckedCreateWithoutEvaluationsInput = {
   chairDecision?: $Enums.DefenseChairDecision | null
   chairDecisionAt?: Date | string | null
   chairDecisionRemarks?: string | null
-  previousProjectTitle?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -867,7 +838,6 @@ export type DefenseScheduleUpdateWithoutEvaluationsInput = {
   chairDecision?: Prisma.NullableEnumDefenseChairDecisionFieldUpdateOperationsInput | $Enums.DefenseChairDecision | null
   chairDecisionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chairDecisionRemarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  previousProjectTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   project?: Prisma.ProjectUpdateOneRequiredWithoutDefenseSchedulesNestedInput
@@ -887,7 +857,6 @@ export type DefenseScheduleUncheckedUpdateWithoutEvaluationsInput = {
   chairDecision?: Prisma.NullableEnumDefenseChairDecisionFieldUpdateOperationsInput | $Enums.DefenseChairDecision | null
   chairDecisionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chairDecisionRemarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  previousProjectTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -904,7 +873,6 @@ export type DefenseScheduleCreateManyScheduledByInput = {
   chairDecision?: $Enums.DefenseChairDecision | null
   chairDecisionAt?: Date | string | null
   chairDecisionRemarks?: string | null
-  previousProjectTitle?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -920,7 +888,6 @@ export type DefenseScheduleUpdateWithoutScheduledByInput = {
   chairDecision?: Prisma.NullableEnumDefenseChairDecisionFieldUpdateOperationsInput | $Enums.DefenseChairDecision | null
   chairDecisionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chairDecisionRemarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  previousProjectTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   project?: Prisma.ProjectUpdateOneRequiredWithoutDefenseSchedulesNestedInput
@@ -939,7 +906,6 @@ export type DefenseScheduleUncheckedUpdateWithoutScheduledByInput = {
   chairDecision?: Prisma.NullableEnumDefenseChairDecisionFieldUpdateOperationsInput | $Enums.DefenseChairDecision | null
   chairDecisionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chairDecisionRemarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  previousProjectTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutDefenseScheduleNestedInput
@@ -957,7 +923,6 @@ export type DefenseScheduleUncheckedUpdateManyWithoutScheduledByInput = {
   chairDecision?: Prisma.NullableEnumDefenseChairDecisionFieldUpdateOperationsInput | $Enums.DefenseChairDecision | null
   chairDecisionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chairDecisionRemarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  previousProjectTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -974,7 +939,6 @@ export type DefenseScheduleCreateManyProjectInput = {
   chairDecision?: $Enums.DefenseChairDecision | null
   chairDecisionAt?: Date | string | null
   chairDecisionRemarks?: string | null
-  previousProjectTitle?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -990,7 +954,6 @@ export type DefenseScheduleUpdateWithoutProjectInput = {
   chairDecision?: Prisma.NullableEnumDefenseChairDecisionFieldUpdateOperationsInput | $Enums.DefenseChairDecision | null
   chairDecisionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chairDecisionRemarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  previousProjectTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scheduledBy?: Prisma.UserUpdateOneWithoutScheduledDefensesNestedInput
@@ -1009,7 +972,6 @@ export type DefenseScheduleUncheckedUpdateWithoutProjectInput = {
   chairDecision?: Prisma.NullableEnumDefenseChairDecisionFieldUpdateOperationsInput | $Enums.DefenseChairDecision | null
   chairDecisionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chairDecisionRemarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  previousProjectTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   evaluations?: Prisma.EvaluationUncheckedUpdateManyWithoutDefenseScheduleNestedInput
@@ -1027,7 +989,6 @@ export type DefenseScheduleUncheckedUpdateManyWithoutProjectInput = {
   chairDecision?: Prisma.NullableEnumDefenseChairDecisionFieldUpdateOperationsInput | $Enums.DefenseChairDecision | null
   chairDecisionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chairDecisionRemarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  previousProjectTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1076,7 +1037,6 @@ export type DefenseScheduleSelect<ExtArgs extends runtime.Types.Extensions.Inter
   chairDecision?: boolean
   chairDecisionAt?: boolean
   chairDecisionRemarks?: boolean
-  previousProjectTitle?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
@@ -1098,7 +1058,6 @@ export type DefenseScheduleSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   chairDecision?: boolean
   chairDecisionAt?: boolean
   chairDecisionRemarks?: boolean
-  previousProjectTitle?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
@@ -1118,7 +1077,6 @@ export type DefenseScheduleSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   chairDecision?: boolean
   chairDecisionAt?: boolean
   chairDecisionRemarks?: boolean
-  previousProjectTitle?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
@@ -1138,12 +1096,11 @@ export type DefenseScheduleSelectScalar = {
   chairDecision?: boolean
   chairDecisionAt?: boolean
   chairDecisionRemarks?: boolean
-  previousProjectTitle?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type DefenseScheduleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "projectId" | "scheduledById" | "title" | "scheduledAt" | "location" | "meetingUrl" | "status" | "notes" | "chairDecision" | "chairDecisionAt" | "chairDecisionRemarks" | "previousProjectTitle" | "createdAt" | "updatedAt", ExtArgs["result"]["defenseSchedule"]>
+export type DefenseScheduleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "projectId" | "scheduledById" | "title" | "scheduledAt" | "location" | "meetingUrl" | "status" | "notes" | "chairDecision" | "chairDecisionAt" | "chairDecisionRemarks" | "createdAt" | "updatedAt", ExtArgs["result"]["defenseSchedule"]>
 export type DefenseScheduleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   scheduledBy?: boolean | Prisma.DefenseSchedule$scheduledByArgs<ExtArgs>
@@ -1179,7 +1136,6 @@ export type $DefenseSchedulePayload<ExtArgs extends runtime.Types.Extensions.Int
     chairDecision: $Enums.DefenseChairDecision | null
     chairDecisionAt: Date | null
     chairDecisionRemarks: string | null
-    previousProjectTitle: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["defenseSchedule"]>
@@ -1620,7 +1576,6 @@ export interface DefenseScheduleFieldRefs {
   readonly chairDecision: Prisma.FieldRef<"DefenseSchedule", 'DefenseChairDecision'>
   readonly chairDecisionAt: Prisma.FieldRef<"DefenseSchedule", 'DateTime'>
   readonly chairDecisionRemarks: Prisma.FieldRef<"DefenseSchedule", 'String'>
-  readonly previousProjectTitle: Prisma.FieldRef<"DefenseSchedule", 'String'>
   readonly createdAt: Prisma.FieldRef<"DefenseSchedule", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"DefenseSchedule", 'DateTime'>
 }

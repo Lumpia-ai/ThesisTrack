@@ -18,7 +18,6 @@ import {
   successResponse
 } from '@/lib/utils';
 import { ensureProjectMilestoneWorkflow, recordCheckpointSchedule } from '@/lib/milestone-checkpoint-tracking';
-import { withApiLogging } from '@/lib/api-logging';
 
 export const runtime = 'nodejs';
 
@@ -164,8 +163,7 @@ const scheduleGroupInclude = {
           title: true,
           scheduledAt: true,
           chairDecision: true,
-          chairDecisionRemarks: true,
-          previousProjectTitle: true
+          chairDecisionRemarks: true
         }
       },
       submissions: {
@@ -332,8 +330,7 @@ function getRedefenseReason(project: ScheduleTitleProjectRecord | null) {
       label: 'Redefense (New Title)',
       detail: `The panel required a new title after the ${lastDecidedSchedule.title} on ${decidedOn}.${
         lastDecidedSchedule.chairDecisionRemarks ? ` ${lastDecidedSchedule.chairDecisionRemarks}` : ''
-      }`,
-      previousTitle: lastDecidedSchedule.previousProjectTitle || null
+      }`
     };
   }
 
@@ -477,7 +474,7 @@ async function findAssignmentById(id: string) {
   });
 }
 
-async function handleGET(request: Request) {
+export async function GET(request: Request) {
   try {
     const authUser = await requireAuthenticatedUser(request, SCHEDULE_VIEWER_ROLES);
     const { searchParams } = new URL(request.url);
@@ -578,7 +575,7 @@ async function handleGET(request: Request) {
   }
 }
 
-async function handlePOST(request: Request) {
+export async function POST(request: Request) {
   try {
     const authUser = await requireAuthenticatedUser(request, SCHEDULE_MANAGER_ROLES);
     const body = await parseJsonBody<SaveDefenseScheduleBody>(request);
@@ -800,7 +797,7 @@ async function handlePOST(request: Request) {
   }
 }
 
-async function handleDELETE(request: Request) {
+export async function DELETE(request: Request) {
   try {
     const authUser = await requireAuthenticatedUser(request, SESSION_END_ROLES);
 
@@ -833,7 +830,3 @@ async function handleDELETE(request: Request) {
     return handleApiError(error);
   }
 }
-
-export const GET = withApiLogging('GET', '/api/defense-schedules', handleGET);
-export const POST = withApiLogging('POST', '/api/defense-schedules', handlePOST);
-export const DELETE = withApiLogging('DELETE', '/api/defense-schedules', handleDELETE);

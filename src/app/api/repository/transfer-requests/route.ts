@@ -1,10 +1,9 @@
 import { getRepositoryPrisma } from '@/lib/repository-prisma';
 import { errorResponse, handleApiError, HttpError, isValidEmail, normalizeEmail, normalizeText, successResponse } from '@/lib/utils';
-import { withApiLogging } from '@/lib/api-logging';
 
 export const runtime = 'nodejs';
 
-async function handlePOST(request: Request) {
+export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => ({}));
 
@@ -68,5 +67,3 @@ async function handlePOST(request: Request) {
     return handleApiError(error);
   }
 }
-
-export const POST = withApiLogging('POST', '/api/repository/transfer-requests', handlePOST);

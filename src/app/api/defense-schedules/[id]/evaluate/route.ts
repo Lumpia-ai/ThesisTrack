@@ -3,7 +3,6 @@ import { requireAuthenticatedUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { HttpError, handleApiError, parseJsonBody, successResponse } from '@/lib/utils';
 import { applyDefensePassOutcome, recordDefenseVoteOutcome } from '@/lib/milestone-checkpoint-tracking';
-import { withApiLogging } from '@/lib/api-logging';
 
 export const runtime = 'nodejs';
 
@@ -92,7 +91,7 @@ async function finalizeDefenseSchedule(
   }
 }
 
-async function handlePOST(request: Request, context: { params: Promise<{ id: string }> }) {
+export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   try {
     const { id: scheduleId } = await context.params;
     const authUser = await requireAuthenticatedUser(request);
@@ -177,5 +176,3 @@ async function handlePOST(request: Request, context: { params: Promise<{ id: str
     return handleApiError(error);
   }
 }
-
-export const POST = withApiLogging('POST', '/api/defense-schedules/[id]/evaluate', handlePOST);

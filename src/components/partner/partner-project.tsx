@@ -3,31 +3,11 @@
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { PARTNER_TECHNOLOGIES, getImpactStars, type PartnerDepartment } from '@/components/partner/partner-data';
-import {
-  PartnerDepartmentBadge,
-  PartnerModal
-} from '@/components/partner/partner-primitives';
+import { PartnerModal } from '@/components/partner/partner-primitives';
 import { PartnerShell } from '@/components/partner/partner-shell';
-import { getDepartmentBranding } from '@/config/department-branding';
+import { getDepartmentStyle } from '@/components/library/library-dashboard';
 
 const ITEMS_PER_PAGE = 6;
-
-function getDepartmentAccent(department: string) {
-  const branding = getDepartmentBranding(department);
-  const upper = department.trim().toUpperCase();
-
-  return {
-    ink: branding.primaryColor,
-    soft: upper === 'IT'
-      ? 'color-mix(in srgb, #111111 12%, transparent)'
-      : upper === 'NAME'
-        ? 'color-mix(in srgb, #DBEAFE 38%, transparent)'
-        : upper === 'MET'
-          ? 'color-mix(in srgb, #F3D7B6 38%, transparent)'
-          : `color-mix(in srgb, ${branding.primaryColor} 22%, transparent)`,
-    fill: `color-mix(in srgb, ${branding.primaryColor} 68%, var(--surface-accent))`
-  };
-}
 
 export function PartnerProject() {
   const [departmentFilter, setDepartmentFilter] = useState<'all' | PartnerDepartment>('all');
@@ -75,49 +55,65 @@ export function PartnerProject() {
       description="Discover, analyze, and request innovative solutions ready for industry adoption"
       notificationCount={2}
     >
-      <div className="relative flex flex-col gap-8 pb-8" style={{ color: 'var(--text)' }}>
-        <div className="pointer-events-none absolute left-1/2 top-[-3rem] h-72 w-[80%] -translate-x-1/2 rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, rgba(37,99,235,0.12), transparent 68%)' }} />
-
-        <div className="relative z-10 flex items-end justify-between gap-4">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem', paddingBottom: '2.5rem' }}>
+        
+        {/* Minimalist Page Header Bar */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <p className="mb-2 text-xs font-black uppercase tracking-[0.18em]" style={{ color: 'var(--primary)' }}>Technology repository</p>
-            <h2 className="text-3xl font-black tracking-tight md:text-4xl" style={{ color: 'var(--text)' }}>Available technologies</h2>
-            <p className="mt-2 text-sm" style={{ color: 'var(--muted)' }}>{technologies.length} projects ready for technology transfer</p>
+            <h2 style={{ margin: 0, fontSize: '1.35rem', fontWeight: 800, color: '#0F172A', letterSpacing: '-0.02em' }}>Available Technologies</h2>
+            <p style={{ margin: '0.2rem 0 0 0', color: '#64748B', fontSize: '0.88rem' }}>
+              Discover, analyze, and request innovative solutions ready for industry adoption
+            </p>
           </div>
-          <Link className="btn btn-outline hidden md:inline-flex" href="/partner/requests">
-            View requests <i aria-hidden="true" className="fas fa-arrow-right ml-2" />
-          </Link>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.4rem 0.85rem',
+              background: '#FFFFFF',
+              border: '1px solid #E2E8F0',
+              borderRadius: '0.5rem',
+              fontSize: '0.82rem',
+              fontWeight: 600,
+              color: '#334155',
+              boxShadow: '0 1px 2px rgba(15, 23, 42, 0.03)'
+            }}
+          >
+            <i className="fas fa-layer-group" style={{ color: '#003A8F' }} aria-hidden="true" />
+            <span>Showing {technologies.length} of {PARTNER_TECHNOLOGIES.length} Technologies</span>
+          </div>
         </div>
 
-        <section className="relative z-10 rounded-[1.5rem] border p-4 shadow-soft md:p-5" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
-          <div className="flex flex-col gap-4 xl:flex-row xl:items-end">
-            <label className="relative min-w-0 flex-1">
-              <span className="sr-only">Search repository</span>
-              <i aria-hidden="true" className="fas fa-search absolute left-4 top-1/2 -translate-y-1/2" style={{ color: 'var(--muted)' }} />
-              <input
-                className="w-full rounded-xl border py-3 pl-11 pr-4 text-sm outline-none transition focus:ring-2"
-                placeholder="Search by keyword, technology, or application..."
-                type="search"
-                value={search}
-                onChange={(event) => {
-                  setSearch(event.target.value);
-                  setCurrentPage(1);
-                }}
-                style={{ background: 'var(--surface-sunken)', borderColor: 'var(--border)', color: 'var(--text)', boxShadow: 'inset 0 0 0 1px transparent' }}
-              />
-            </label>
+        {/* Modern Filter Bar */}
+        <section className="lib-filter-card" aria-label="Technology Repository Filters">
+          <div className="lib-filter-row">
+            
+            {/* Search Input */}
+            <div className="lib-filter-field" style={{ flex: '2 1 280px' }}>
+              <label htmlFor="partner-project-search" className="lib-filter-label">Search Repository</label>
+              <div className="lib-search-input-wrap">
+                <i className="fas fa-search lib-search-input-icon" style={{ color: '#003A8F' }} aria-hidden="true" />
+                <input
+                  id="partner-project-search"
+                  placeholder="Search by keyword, technology, or application..."
+                  type="text"
+                  className="lib-search-input"
+                  value={search}
+                  onChange={(event) => { setSearch(event.target.value); setCurrentPage(1); }}
+                />
+              </div>
+            </div>
 
-            <div className="flex flex-1 flex-col gap-3 sm:flex-row">
-              <label className="flex flex-1 flex-col gap-2 text-[0.72rem] font-bold uppercase tracking-[0.12em]" style={{ color: 'var(--muted)' }}>
-                Department
+            {/* Department Filter */}
+            <div className="lib-filter-field" style={{ flex: '1 1 150px' }}>
+              <label htmlFor="partner-project-dept" className="lib-filter-label">Department</label>
+              <div className="lib-select-wrap">
                 <select
+                  id="partner-project-dept"
+                  className="lib-filter-select"
                   value={departmentFilter}
-                  onChange={(event) => {
-                    setDepartmentFilter(event.target.value as 'all' | PartnerDepartment);
-                    setCurrentPage(1);
-                  }}
-                  className="rounded-xl border px-3 py-3 text-sm font-medium outline-none"
-                  style={{ background: 'var(--surface-sunken)', borderColor: 'var(--border)', color: 'var(--text)' }}
+                  onChange={(event) => { setDepartmentFilter(event.target.value as 'all' | PartnerDepartment); setCurrentPage(1); }}
                 >
                   <option value="all">All Departments</option>
                   <option value="IT">IT</option>
@@ -126,105 +122,167 @@ export function PartnerProject() {
                   <option value="ESM">ESM</option>
                   <option value="NAME">NAME</option>
                 </select>
-              </label>
+                <i className="fas fa-chevron-down lib-select-chevron" aria-hidden="true" />
+              </div>
+            </div>
 
-              <label className="flex flex-1 flex-col gap-2 text-[0.72rem] font-bold uppercase tracking-[0.12em]" style={{ color: 'var(--muted)' }}>
-                Sort options
+            {/* Sort Filter */}
+            <div className="lib-filter-field" style={{ flex: '1 1 170px' }}>
+              <label htmlFor="partner-project-sort" className="lib-filter-label">Sort Options</label>
+              <div className="lib-select-wrap">
                 <select
+                  id="partner-project-sort"
+                  className="lib-filter-select"
                   value={sortBy}
-                  onChange={(event) => {
-                    setSortBy(event.target.value);
-                    setCurrentPage(1);
-                  }}
-                  className="rounded-xl border px-3 py-3 text-sm font-medium outline-none"
-                  style={{ background: 'var(--surface-sunken)', borderColor: 'var(--border)', color: 'var(--text)' }}
+                  onChange={(event) => { setSortBy(event.target.value); setCurrentPage(1); }}
                 >
                   <option>Sort by: Latest</option>
                   <option>Most Popular</option>
                   <option>Highest Impact</option>
                   <option>Technology Readiness</option>
                 </select>
-              </label>
+                <i className="fas fa-chevron-down lib-select-chevron" aria-hidden="true" />
+              </div>
             </div>
 
-            <div className="flex items-center gap-2 rounded-xl border p-1" style={{ background: 'var(--surface-sunken)', borderColor: 'var(--border)' }}>
-              {[
-                { key: 'scholar', label: 'Scholar', icon: 'fa-grip-lines' },
-                { key: 'cards', label: 'Cards', icon: 'fa-table-cells-large' },
-                { key: 'table', label: 'Table', icon: 'fa-table-list' }
-              ].map((view) => (
+            {/* View Mode Toggle */}
+            <div className="lib-filter-field">
+              <span className="lib-filter-label">View</span>
+              <div className="lib-view-toggle">
                 <button
-                  key={view.key}
                   type="button"
-                  aria-pressed={viewMode === view.key}
-                  onClick={() => setViewMode(view.key as 'scholar' | 'cards' | 'table')}
-                  className="flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition"
-                  style={{
-                    background: viewMode === view.key ? 'var(--surface)' : 'transparent',
-                    color: viewMode === view.key ? 'var(--primary)' : 'var(--muted)',
-                    boxShadow: viewMode === view.key ? '0 6px 18px rgba(15, 23, 42, 0.08)' : 'none'
-                  }}
+                  onClick={() => setViewMode('scholar')}
+                  className={`lib-view-toggle-btn${viewMode === 'scholar' ? ' is-active' : ''}`}
+                  title="Scholar View"
                 >
-                  <i aria-hidden="true" className={`fas ${view.icon}`} />
-                  {view.label}
+                  <i className="fas fa-grip-lines" style={{ color: viewMode === 'scholar' ? '#003A8F' : '#64748B' }} aria-hidden="true" />
+                  <span>Scholar</span>
                 </button>
-              ))}
+                <button
+                  type="button"
+                  onClick={() => setViewMode('cards')}
+                  className={`lib-view-toggle-btn${viewMode === 'cards' ? ' is-active' : ''}`}
+                  title="Cards View"
+                >
+                  <i className="fas fa-table-cells-large" style={{ color: viewMode === 'cards' ? '#003A8F' : '#64748B' }} aria-hidden="true" />
+                  <span>Cards</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('table')}
+                  className={`lib-view-toggle-btn${viewMode === 'table' ? ' is-active' : ''}`}
+                  title="Table View"
+                >
+                  <i className="fas fa-table-list" style={{ color: viewMode === 'table' ? '#003A8F' : '#64748B' }} aria-hidden="true" />
+                  <span>Table</span>
+                </button>
+              </div>
             </div>
+
           </div>
         </section>
 
+        {/* Results Container */}
         {technologies.length === 0 ? (
-          <div className="rounded-2xl border border-dashed p-12 text-center" style={{ background: 'var(--surface)', borderColor: 'var(--border-strong)', color: 'var(--muted)' }}>
-            <i aria-hidden="true" className="fas fa-magnifying-glass mb-4 text-3xl" style={{ color: 'var(--primary)' }} />
-            <h3 className="mb-1 text-lg font-black" style={{ color: 'var(--text)' }}>No technologies match those filters</h3>
-            <p className="text-sm">Try another search term or department.</p>
+          <div className="lib-empty-state">
+            <div className="lib-empty-state-icon">
+              <i className="fas fa-search" style={{ color: '#003A8F' }} aria-hidden="true" />
+            </div>
+            <div>
+              <h3 className="lib-empty-state-title">No technologies found</h3>
+              <p className="lib-empty-state-text">Try adjusting your filters or search terms.</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setSearch('');
+                setDepartmentFilter('all');
+                setSortBy('Sort by: Latest');
+                setCurrentPage(1);
+              }}
+              className="lib-clear-filters-btn"
+            >
+              Reset Filters
+            </button>
           </div>
         ) : viewMode === 'scholar' ? (
-          <div className="relative z-10 flex flex-col gap-4">
+          <div className="partner-scholar-list">
             {paginatedTechnologies.map((technology) => {
-              const accent = getDepartmentAccent(technology.department);
+              const deptStyle = getDepartmentStyle(technology.department);
 
               return (
                 <article
                   key={technology.id}
-                  className="group flex gap-4 rounded-[1.5rem] border p-5 shadow-soft transition duration-200 hover:-translate-y-1 md:p-6"
-                  style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}
+                  className="partner-scholar-card"
+                  style={{
+                    borderTop: `3px solid ${deptStyle.cardTopAccent || '#003A8F'}`
+                  }}
                 >
-                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-2xl" style={{ background: accent.soft, color: accent.ink }}>
-                    <i aria-hidden="true" className={`fas ${technology.icon}`} />
+                  <div
+                    className="partner-scholar-icon-box"
+                    style={{
+                      background: deptStyle.badgeBg,
+                      borderColor: deptStyle.border
+                    }}
+                  >
+                    <i className={`fas ${technology.icon}`} style={{ color: deptStyle.accent }} aria-hidden="true" />
                   </div>
-
-                  <div className="min-w-0 flex-1">
-                    <div className="mb-3 flex flex-wrap items-center gap-2">
-                      <Link href={`/partner/details?id=${technology.id}`} className="text-xl font-black leading-tight" style={{ color: 'var(--text)' }}>
-                        {technology.title}
-                      </Link>
-                      <PartnerDepartmentBadge style={{ background: 'transparent', borderColor: 'transparent', color: accent.ink, textShadow: 'none' }}>
-                        {technology.department}
-                      </PartnerDepartmentBadge>
-                    </div>
-
-                    <div className="mb-3 flex flex-wrap items-center gap-2 text-sm" style={{ color: 'var(--muted)' }}>
-                      <strong style={{ color: 'var(--text)' }}>{technology.developers}</strong>
-                      <span>•</span>
+                  <div style={{ flex: 1 }}>
+                    <Link href={`/partner/details?id=${technology.id}`} style={{ textDecoration: 'none' }}>
+                      <h3 className="partner-scholar-title">{technology.title}</h3>
+                    </Link>
+                    <div className="partner-scholar-meta">
+                      <strong style={{ color: '#334155' }}>{technology.developers}</strong>
+                      <span style={{ color: '#CBD5E1' }}>•</span>
+                      <span style={{ color: deptStyle.text, fontWeight: 600 }}>{technology.department}</span>
+                      <span style={{ color: '#CBD5E1' }}>•</span>
                       <span>{technology.trl}</span>
-                      <span>•</span>
-                      <span>{technology.industries[0]}</span>
                     </div>
+                    <p className="partner-scholar-abstract">{technology.abstract}</p>
 
-                    <p className="mb-4 max-w-4xl text-sm leading-6" style={{ color: 'var(--muted)' }}>{technology.abstract}</p>
-
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded-full border px-2.5 py-1 text-[0.68rem] font-bold uppercase tracking-[0.08em]" style={{ background: 'var(--surface-sunken)', borderColor: 'var(--border)', color: 'var(--muted)' }}>{technology.readinessPercent}% Ready</span>
-                      <span className="rounded-full border px-2.5 py-1 text-[0.68rem] font-bold uppercase tracking-[0.08em]" style={{ background: 'var(--surface-sunken)', borderColor: 'var(--border)', color: 'var(--muted)' }}>{technology.platform}</span>
-                      <span className="ml-auto flex items-center gap-2">
-                        <Link className="btn btn-outline" href={`/partner/details?id=${technology.id}`}>
-                          Read study
-                        </Link>
-                        <button className="btn btn-primary" type="button" onClick={() => setSelectedTechnologyId(technology.id)}>
-                          <i aria-hidden="true" className="fas fa-handshake mr-2" /> Adopt
-                        </button>
+                    <div className="partner-scholar-footer">
+                      <span
+                        className="lib-dept-pill"
+                        style={{
+                          background: deptStyle.badgeBg,
+                          color: deptStyle.text,
+                          borderColor: deptStyle.border
+                        }}
+                      >
+                        <i className={`fas ${deptStyle.icon}`} style={{ fontSize: '0.68rem' }} aria-hidden="true" />
+                        <span>{technology.department}</span>
                       </span>
+
+                      <span className="partner-readiness-badge">
+                        <i className="fas fa-check-circle" style={{ color: '#16A34A', fontSize: '0.75rem' }} aria-hidden="true" />
+                        <span>{technology.readinessPercent}% Ready</span>
+                      </span>
+
+                      {technology.industries[0] && (
+                        <span className="partner-industry-tag">
+                          {technology.industries[0]}
+                        </span>
+                      )}
+
+                      <div className="partner-scholar-actions">
+                        <Link
+                          href={`/partner/details?id=${technology.id}`}
+                          className="partner-details-btn"
+                          style={{ padding: '0.45rem 0.95rem' }}
+                        >
+                          <span>Read Study</span>
+                          <i className="fas fa-arrow-right" style={{ fontSize: '0.72rem', color: '#003A8F', marginLeft: '0.25rem' }} aria-hidden="true" />
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedTechnologyId(technology.id)}
+                          className="partner-adopt-btn"
+                          style={{ padding: '0.45rem 1rem' }}
+                        >
+                          <i className="fas fa-handshake" style={{ color: '#F59E0B' }} aria-hidden="true" />
+                          <span>Adopt</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </article>
@@ -232,108 +290,187 @@ export function PartnerProject() {
             })}
           </div>
         ) : viewMode === 'cards' ? (
-          <div className="relative z-10 grid gap-5 lg:grid-cols-3">
+          <div className="partner-tech-grid">
             {paginatedTechnologies.map((technology) => {
-              const accent = getDepartmentAccent(technology.department);
+              const deptStyle = getDepartmentStyle(technology.department);
 
               return (
-                <article key={technology.id} className="group flex flex-col overflow-hidden rounded-[1.5rem] border shadow-soft transition duration-200 hover:-translate-y-1 hover:shadow-card" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
-                  <div className="h-1.5" style={{ background: accent.soft }} />
-                  <div className="flex flex-1 flex-col p-5 md:p-6">
-                    <div className="mb-5 flex items-start justify-between gap-3">
-                      <span className="flex h-12 w-12 items-center justify-center rounded-2xl text-xl" style={{ background: accent.soft, color: accent.ink }}>
-                        <i aria-hidden="true" className={`fas ${technology.icon}`} />
-                      </span>
-                      <PartnerDepartmentBadge style={{ background: 'transparent', borderColor: 'transparent', color: accent.ink, textShadow: 'none' }}>
-                        {technology.department}
-                      </PartnerDepartmentBadge>
+                <article
+                  key={technology.id}
+                  className="partner-tech-card"
+                  style={{
+                    borderTop: `3px solid ${deptStyle.cardTopAccent || '#003A8F'}`
+                  }}
+                >
+                  <div className="partner-tech-top">
+                    <div
+                      className="partner-tech-icon-box"
+                      style={{
+                        background: deptStyle.badgeBg,
+                        borderColor: deptStyle.border
+                      }}
+                    >
+                      <i aria-hidden="true" className={`fas ${technology.icon}`} style={{ color: deptStyle.accent }} />
                     </div>
+                    <span
+                      className="lib-dept-pill"
+                      style={{
+                        background: deptStyle.badgeBg,
+                        color: deptStyle.text,
+                        borderColor: deptStyle.border
+                      }}
+                    >
+                      <i className={`fas ${deptStyle.icon}`} style={{ fontSize: '0.68rem' }} aria-hidden="true" />
+                      <span>{technology.department}</span>
+                    </span>
+                  </div>
 
-                    <h3 className="min-h-[3.25rem] text-lg font-black leading-snug" style={{ color: 'var(--text)' }}>{technology.title}</h3>
-                    <p className="mt-2 line-clamp-3 text-sm leading-6" style={{ color: 'var(--muted)' }}>{technology.summary}</p>
+                  <div>
+                    <h3 className="partner-tech-title">{technology.title}</h3>
+                    <p className="partner-tech-summary">{technology.summary}</p>
+                  </div>
 
-                    <div className="mt-4 flex min-h-[2rem] flex-wrap gap-2 text-[0.68rem] font-bold uppercase tracking-[0.08em]" style={{ color: 'var(--muted)' }}>
-                      <span className="rounded-full border px-2.5 py-1" style={{ borderColor: 'var(--border)', background: 'var(--surface-sunken)' }}>{technology.trl}</span>
-                      <span className="rounded-full border px-2.5 py-1" style={{ borderColor: 'var(--border)', background: 'var(--surface-sunken)' }}>{technology.platform}</span>
+                  <div className="partner-readiness-box">
+                    <div className="partner-readiness-head">
+                      <span>Readiness: {technology.trl}</span>
+                      <span style={{ color: deptStyle.accent, fontWeight: 700 }}>{technology.readinessPercent}%</span>
                     </div>
-
-                    <div className="mt-5 rounded-xl border p-4" style={{ background: 'var(--surface-sunken)', borderColor: 'var(--border)' }}>
-                      <div className="mb-2 flex items-center justify-between text-xs font-bold">
-                        <span style={{ color: 'var(--muted)' }}>Readiness · {technology.readinessLabel}</span>
-                        <span style={{ color: accent.ink }}>{technology.readinessPercent}%</span>
-                      </div>
-                      <div className="h-2 overflow-hidden rounded-full" style={{ background: 'var(--surface-accent)' }}>
-                        <div className="h-full rounded-full transition-all duration-500" style={{ width: `${technology.readinessPercent}%`, background: accent.fill }} />
-                      </div>
-                      <div className="mt-3 flex items-center justify-between text-xs">
-                        <span style={{ color: 'var(--muted)' }}>Impact rating</span>
-                        <span style={{ color: 'var(--accent, #F6BE00)' }}>{getImpactStars(technology.impactRating)}</span>
-                      </div>
+                    <div className="partner-readiness-track">
+                      <div
+                        className="partner-readiness-fill"
+                        style={{
+                          width: `${technology.readinessPercent}%`,
+                          background: deptStyle.barFill
+                        }}
+                      />
                     </div>
-
-                    <div className="mt-5 flex gap-2">
-                      <button className="btn btn-primary flex-1" type="button" onClick={() => setSelectedTechnologyId(technology.id)}>
-                        <i aria-hidden="true" className="fas fa-handshake mr-2" /> Adopt
-                      </button>
-                      <Link className="btn btn-outline flex-1 text-center" href={`/partner/details?id=${technology.id}`}>
-                        Details
-                      </Link>
+                    <div className="partner-impact-row">
+                      <strong style={{ color: '#334155', fontWeight: 600 }}>Impact:</strong>
+                      <span style={{ color: '#F59E0B', letterSpacing: '0.08em' }}>{getImpactStars(technology.impactRating)}</span>
                     </div>
+                  </div>
+
+                  <div className="partner-card-actions">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedTechnologyId(technology.id)}
+                      className="partner-adopt-btn"
+                    >
+                      <i className="fas fa-handshake" style={{ color: '#F59E0B' }} aria-hidden="true" />
+                      <span>Adopt</span>
+                    </button>
+                    <Link
+                      className="partner-details-btn"
+                      href={`/partner/details?id=${technology.id}`}
+                    >
+                      <span>Details</span>
+                      <i className="fas fa-arrow-right" style={{ fontSize: '0.72rem', color: '#003A8F', marginLeft: '0.2rem' }} aria-hidden="true" />
+                    </Link>
                   </div>
                 </article>
               );
             })}
           </div>
         ) : (
-          <section className="relative z-10 overflow-hidden rounded-[1.5rem] border shadow-soft" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
+          <section className="partner-table-section">
             <div className="table-scroll">
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '800px' }}>
+              <table className="lib-modern-table" style={{ width: '100%', minWidth: '800px' }}>
                 <thead>
-                  <tr style={{ background: 'var(--surface-sunken)', borderBottom: '2px solid var(--border)', color: 'var(--muted)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                    <th style={{ padding: '1.1rem 1.5rem', fontWeight: 800 }}>Technology / project</th>
-                    <th style={{ padding: '1.1rem 1.5rem', fontWeight: 800 }}>Readiness</th>
-                    <th style={{ padding: '1.1rem 1.5rem', fontWeight: 800 }}>Department</th>
-                    <th style={{ padding: '1.1rem 1.5rem', fontWeight: 800, textAlign: 'right' }}>Actions</th>
+                  <tr>
+                    <th style={{ minWidth: '280px' }}>Technology / Project</th>
+                    <th style={{ width: '170px', minWidth: '170px' }}>Readiness</th>
+                    <th className="lib-col-dept">Department</th>
+                    <th style={{ textAlign: 'right', width: '150px', minWidth: '150px' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedTechnologies.map((technology, index) => {
-                    const accent = getDepartmentAccent(technology.department);
+                  {paginatedTechnologies.map((technology) => {
+                    const deptStyle = getDepartmentStyle(technology.department);
 
                     return (
-                      <tr key={technology.id} style={{ borderBottom: index === paginatedTechnologies.length - 1 ? 'none' : '1px solid var(--border)' }}>
-                        <td style={{ padding: '1rem 1.5rem' }}>
-                          <div className="flex items-center gap-3">
-                            <span className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: accent.soft, color: accent.ink }}>
-                              <i aria-hidden="true" className={`fas ${technology.icon}`} />
-                            </span>
+                      <tr key={technology.id}>
+                        <td>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                            <div
+                              style={{
+                                width: '38px',
+                                height: '38px',
+                                borderRadius: '8px',
+                                background: deptStyle.badgeBg,
+                                border: `1px solid ${deptStyle.border}`,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0
+                              }}
+                            >
+                              <i className={`fas ${technology.icon}`} style={{ color: deptStyle.accent, fontSize: '1rem' }} aria-hidden="true" />
+                            </div>
                             <div>
-                              <Link href={`/partner/details?id=${technology.id}`} className="block font-bold" style={{ color: 'var(--text)' }}>
+                              <Link
+                                href={`/partner/details?id=${technology.id}`}
+                                style={{
+                                  color: '#0F172A',
+                                  display: 'block',
+                                  fontWeight: 700,
+                                  textDecoration: 'none',
+                                  fontSize: '0.92rem',
+                                  lineHeight: 1.35
+                                }}
+                              >
                                 {technology.title}
                               </Link>
-                              <span className="text-xs" style={{ color: 'var(--muted)' }}>{technology.industries.slice(0, 2).join(', ')}</span>
+                              <span style={{ color: '#64748B', fontSize: '0.8rem' }}>
+                                {technology.industries.slice(0, 2).join(', ')}
+                              </span>
                             </div>
                           </div>
                         </td>
-                        <td style={{ padding: '1rem 1.5rem' }}>
-                          <div className="flex items-center gap-3">
-                            <span className="min-w-[42px] font-bold" style={{ color: 'var(--text)' }}>{technology.readinessPercent}%</span>
-                            <div style={{ width: '110px', height: '6px', background: 'var(--surface-accent)', borderRadius: '999px', overflow: 'hidden' }}>
-                              <div style={{ width: `${technology.readinessPercent}%`, background: accent.fill, height: '100%' }} />
+                        <td>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <span style={{ color: '#0F172A', fontWeight: 700, fontSize: '0.85rem', minWidth: '38px' }}>
+                              {technology.readinessPercent}%
+                            </span>
+                            <div style={{ width: '90px', height: '6px', background: '#E2E8F0', borderRadius: '999px', overflow: 'hidden' }}>
+                              <div
+                                style={{
+                                  width: `${technology.readinessPercent}%`,
+                                  background: deptStyle.barFill,
+                                  height: '100%',
+                                  borderRadius: '999px'
+                                }}
+                              />
                             </div>
                           </div>
                         </td>
-                        <td style={{ padding: '1rem 1.5rem' }}>
-                          <PartnerDepartmentBadge style={{ background: 'transparent', borderColor: 'transparent', color: accent.ink, textShadow: 'none' }}>
-                            {technology.department}
-                          </PartnerDepartmentBadge>
+                        <td className="lib-col-dept">
+                          <span
+                            className="lib-dept-pill"
+                            style={{
+                              background: deptStyle.badgeBg,
+                              color: deptStyle.text,
+                              borderColor: deptStyle.border
+                            }}
+                          >
+                            <i className={`fas ${deptStyle.icon}`} style={{ fontSize: '0.68rem' }} aria-hidden="true" />
+                            <span>{technology.department}</span>
+                          </span>
                         </td>
-                        <td style={{ padding: '1rem 1.5rem', textAlign: 'right' }}>
-                          <div className="flex justify-end gap-2">
-                            <Link className="btn btn-outline small" href={`/partner/details?id=${technology.id}`}>
+                        <td style={{ textAlign: 'right' }}>
+                          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.45rem' }}>
+                            <Link
+                              href={`/partner/details?id=${technology.id}`}
+                              className="partner-action-mini-btn is-report"
+                            >
+                              <i className="fas fa-eye" style={{ color: '#003A8F', marginRight: '0.35rem', fontSize: '0.72rem' }} aria-hidden="true" />
                               View
                             </Link>
-                            <button className="btn btn-primary small" type="button" onClick={() => setSelectedTechnologyId(technology.id)}>
+                            <button
+                              type="button"
+                              onClick={() => setSelectedTechnologyId(technology.id)}
+                              className="partner-action-mini-btn is-monitor"
+                            >
+                              <i className="fas fa-handshake" style={{ color: '#F59E0B', marginRight: '0.35rem', fontSize: '0.72rem' }} aria-hidden="true" />
                               Adopt
                             </button>
                           </div>
@@ -347,99 +484,108 @@ export function PartnerProject() {
           </section>
         )}
 
+        {/* Dynamic Pagination */}
         {totalPages > 1 && (
-          <div className="relative z-10 flex justify-center gap-2">
+          <nav className="lib-pagination" aria-label="Technology Pagination">
             <button
               type="button"
               disabled={currentPage === 1}
-              onClick={() => setCurrentPage((page) => page - 1)}
-              className="btn btn-outline small"
-              style={{ opacity: currentPage === 1 ? 0.55 : 1, cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}
+              onClick={() => setCurrentPage((c) => Math.max(1, c - 1))}
+              className="lib-page-nav-btn"
+              aria-label="Previous Page"
             >
-              <i aria-hidden="true" className="fas fa-chevron-left mr-2" /> Prev
+              <i className="fas fa-chevron-left" style={{ fontSize: '0.75rem', color: currentPage === 1 ? '#94A3B8' : '#003A8F' }} aria-hidden="true" />
+              <span>Prev</span>
             </button>
-
-            {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
-              <button
-                key={page}
-                type="button"
-                onClick={() => setCurrentPage(page)}
-                className="flex h-10 w-10 items-center justify-center rounded-lg border text-sm font-bold transition"
-                style={{
-                  background: page === currentPage ? 'var(--primary)' : 'var(--surface)',
-                  borderColor: page === currentPage ? 'var(--primary)' : 'var(--border)',
-                  color: page === currentPage ? 'white' : 'var(--text)'
-                }}
-              >
-                {page}
-              </button>
-            ))}
-
+            <div style={{ display: 'flex', gap: '0.35rem' }}>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  type="button"
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`lib-page-num-btn${page === currentPage ? ' is-active' : ''}`}
+                  aria-current={page === currentPage ? 'page' : undefined}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
             <button
               type="button"
               disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage((page) => page + 1)}
-              className="btn btn-outline small"
-              style={{ opacity: currentPage === totalPages ? 0.55 : 1, cursor: currentPage === totalPages ? 'not-allowed' : 'pointer' }}
+              onClick={() => setCurrentPage((c) => Math.min(totalPages, c + 1))}
+              className="lib-page-nav-btn"
+              aria-label="Next Page"
             >
-              Next <i aria-hidden="true" className="fas fa-chevron-right ml-2" />
+              <span>Next</span>
+              <i className="fas fa-chevron-right" style={{ fontSize: '0.75rem', color: currentPage === totalPages ? '#94A3B8' : '#003A8F' }} aria-hidden="true" />
             </button>
-          </div>
+          </nav>
         )}
       </div>
 
       <PartnerModal
         open={Boolean(selectedTechnology)}
-        title="Request adoption"
+        title="Request Adoption"
         narrow
         onClose={() => setSelectedTechnologyId('')}
         footer={
-          <div className="flex w-full justify-end gap-3">
-            <button className="btn btn-outline" type="button" onClick={() => setSelectedTechnologyId('')}>
+          <div style={{ display: 'flex', gap: '0.75rem', width: '100%', justifyContent: 'flex-end' }}>
+            <button
+              className="btn btn-outline"
+              onClick={() => setSelectedTechnologyId('')}
+              style={{ padding: '0.55rem 1.1rem', borderRadius: '0.5rem', fontWeight: 600, border: '1px solid #E2E8F0', color: '#475569', background: '#FFFFFF' }}
+            >
               Cancel
             </button>
             {selectedTechnology ? (
-              <Link className="btn btn-primary" href={`/partner/request?id=${selectedTechnology.id}`}>
-                Continue request <i aria-hidden="true" className="fas fa-arrow-right ml-2" />
+              <Link
+                className="btn btn-primary"
+                href={`/partner/request?id=${selectedTechnology.id}`}
+                style={{
+                  padding: '0.55rem 1.1rem',
+                  borderRadius: '0.5rem',
+                  background: '#003A8F',
+                  border: '1px solid #003A8F',
+                  fontWeight: 600,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  color: 'white',
+                  textDecoration: 'none'
+                }}
+              >
+                <span>Open Request Form</span>
+                <i className="fas fa-arrow-right" style={{ fontSize: '0.8rem' }} aria-hidden="true" />
               </Link>
             ) : null}
           </div>
         }
       >
-        <div className="flex flex-col gap-5 py-2">
-          <div className="flex items-center gap-4 rounded-xl border p-4" style={{ background: 'var(--primary-soft)', borderColor: 'var(--border)' }}>
-            <span className="flex h-12 w-12 items-center justify-center rounded-xl" style={{ background: 'var(--surface)', color: 'var(--primary)' }}>
-              <i aria-hidden="true" className={`fas ${selectedTechnology?.icon}`} />
-            </span>
-            <div>
-              <span className="text-[0.68rem] font-black uppercase tracking-[0.12em]" style={{ color: 'var(--primary)' }}>Target project</span>
-              <h3 className="mt-1 text-lg font-black" style={{ color: 'var(--text)' }}>{selectedTechnology?.title}</h3>
+        <div style={{ padding: '1.25rem 0 0.5rem' }}>
+          <p style={{ margin: '0 0 1rem 0', color: '#475569', lineHeight: 1.6, fontSize: '0.92rem' }}>
+            You are initiating a formal adoption request for the <strong style={{ color: '#0F172A' }}>{selectedTechnology?.title}</strong> technology. 
+          </p>
+          <div style={{ background: '#F8FAFC', padding: '1rem 1.2rem', borderRadius: '0.75rem', border: '1px solid #E2E8F0', marginBottom: '1.25rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem' }}>
+              <span style={{ color: '#64748B', fontWeight: 600, fontSize: '0.82rem' }}>Department</span>
+              <strong style={{ color: '#0F172A', fontSize: '0.85rem' }}>{selectedTechnology?.department}</strong>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem' }}>
+              <span style={{ color: '#64748B', fontWeight: 600, fontSize: '0.82rem' }}>Current TRL</span>
+              <strong style={{ color: '#0F172A', fontSize: '0.85rem' }}>{selectedTechnology?.trl}</strong>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ color: '#64748B', fontWeight: 600, fontSize: '0.82rem' }}>Readiness Score</span>
+              <strong style={{ color: '#16A34A', fontSize: '0.85rem', fontWeight: 700 }}>{selectedTechnology?.readinessPercent}%</strong>
             </div>
           </div>
-
-          <label className="flex flex-col gap-2 text-sm font-bold" htmlFor="partner-project-plan" style={{ color: 'var(--text)' }}>
-            Proposed implementation plan
-            <textarea
-              id="partner-project-plan"
-              rows={4}
-              defaultValue="We plan to deploy the system in a controlled pilot environment before full organizational rollout."
-              className="rounded-xl border p-3 font-normal outline-none"
-              style={{ background: 'var(--surface-sunken)', borderColor: 'var(--border)', color: 'var(--text)' }}
-            />
-          </label>
-
-          <label className="flex flex-col gap-2 text-sm font-bold" htmlFor="partner-project-date" style={{ color: 'var(--text)' }}>
-            Expected timeline
-            <input
-              id="partner-project-date"
-              type="date"
-              defaultValue="2026-05-15"
-              className="rounded-xl border p-3 font-normal outline-none"
-              style={{ background: 'var(--surface-sunken)', borderColor: 'var(--border)', color: 'var(--text)' }}
-            />
-          </label>
+          <p style={{ margin: 0, color: '#64748B', fontSize: '0.85rem', lineHeight: 1.5 }}>
+            Proceeding will open the Adoption Request form where you can outline your implementation strategy and budget allocation.
+          </p>
         </div>
       </PartnerModal>
     </PartnerShell>
   );
 }
+

@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server';
-import { Prisma } from '@/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
 import { getServerAuthenticatedUser } from '@/lib/auth';
 import { sendGroupAssignmentEmail } from '@/lib/mailer';
 import { getLatestDefenseOutcomeTag, getProjectProgressSummary } from '@/lib/milestone-checkpoint-tracking';
-import { withApiLogging } from '@/lib/api-logging';
 
 const DEFAULT_GROUP_LIMIT = 100;
 const MAX_GROUP_LIMIT = 200;
@@ -129,7 +127,7 @@ async function findAssignedStudents(students: string[], excludeGroupId?: string)
   return students.filter((student) => assignedStudentKeys.has(normalizeStudentName(student)));
 }
 
-async function handleGET(request: Request) {
+export async function GET(request: Request) {
   try {
     const user = await getServerAuthenticatedUser();
     if (!user) {
@@ -253,7 +251,7 @@ async function handleGET(request: Request) {
   }
 }
 
-async function handlePOST(request: Request) {
+export async function POST(request: Request) {
   try {
     const body = await request.json();
     const {
@@ -387,19 +385,6 @@ async function handlePOST(request: Request) {
     
     return NextResponse.json(newGroup, { status: 201 });
   } catch (error: any) {
-    // A collided group code is a routine, expected outcome of manual entry (not
-    // a real server error) — surface it as a clean 409 with a specific message
-    // instead of the raw Prisma constraint error the client would otherwise see.
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-      const target = Array.isArray(error.meta?.target) ? error.meta.target.map((value) => String(value)) : [];
-      if (target.includes('code')) {
-        return NextResponse.json(
-          { error: 'This group code is already in use. Choose a different code.' },
-          { status: 409 }
-        );
-      }
-    }
-
     console.error('Error creating group:', error);
     return NextResponse.json({ error: 'Failed to create group', details: error.message }, { status: 500 });
   }
@@ -407,7 +392,7 @@ async function handlePOST(request: Request) {
 
 const GROUP_WRITE_ELEVATED_ROLES = new Set(['PROGRAM_HEAD', 'RESEARCH_HEAD', 'ADMIN', 'SYSTEM_ADMIN']);
 
-async function handlePUT(request: Request) {
+export async function PUT(request: Request) {
   try {
     const authUser = await getServerAuthenticatedUser();
     if (!authUser) {
@@ -724,7 +709,3 @@ async function handlePUT(request: Request) {
     return NextResponse.json({ error: 'Failed to update group' }, { status: 500 });
   }
 }
-
-export const GET = withApiLogging('GET', '/api/groups', handleGET);
-export const POST = withApiLogging('POST', '/api/groups', handlePOST);
-export const PUT = withApiLogging('PUT', '/api/groups', handlePUT);

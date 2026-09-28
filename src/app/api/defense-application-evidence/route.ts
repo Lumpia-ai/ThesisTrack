@@ -4,7 +4,6 @@ import { prisma } from '@/lib/prisma';
 import { HttpError, handleApiError, normalizeText, successResponse } from '@/lib/utils';
 import { syncCheckpointReview } from '@/lib/milestone-checkpoint-tracking';
 import { assertDocumentBucket, deleteFile } from '@/lib/storage/supabase-storage';
-import { withApiLogging } from '@/lib/api-logging';
 
 export const runtime = 'nodejs';
 
@@ -41,7 +40,7 @@ const VALID_CHECKPOINT_KEYS = new Set([
 // evidence photo itself for a given stage — separate from that stage's other
 // decisions, since by the time this evidence exists the rest of the stage has
 // typically already been cleared.
-async function handlePATCH(request: Request) {
+export async function PATCH(request: Request) {
   try {
     const user = await requireAuthenticatedUser(request, EVIDENCE_REVIEWER_ROLES);
     const body = await request.json().catch(() => ({}));
@@ -174,5 +173,3 @@ async function handlePATCH(request: Request) {
     return handleApiError(error);
   }
 }
-
-export const PATCH = withApiLogging('PATCH', '/api/defense-application-evidence', handlePATCH);

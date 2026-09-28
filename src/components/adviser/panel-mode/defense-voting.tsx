@@ -168,19 +168,14 @@ export function DefenseVoting({ data }: { data: AdviserDashboardData }) {
     }
   }
 
-  async function submitChairDecision(
-    record: DefenseVotingRecord,
-    decision: 'approve' | 'redefense' | 'new_title' | 'new_title_approved',
-    remarks: string,
-    replacementTitle?: { title: string; description?: string; keywords?: string[]; backupDraftId?: string }
-  ) {
+  async function submitChairDecision(record: DefenseVotingRecord, decision: 'approve' | 'redefense' | 'new_title', remarks: string) {
     setIsSubmitting(true);
 
     try {
       const response = await fetch(`/api/defense-schedules/${record.id}/chair-decision`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ decision, remarks, ...replacementTitle })
+        body: JSON.stringify({ decision, remarks })
       });
 
       if (!response.ok) {

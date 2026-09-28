@@ -72,11 +72,6 @@ export type AcademicActivity = Prisma.AcademicActivityModel
  */
 export type Group = Prisma.GroupModel
 /**
- * Model TitleDraft
- * 
- */
-export type TitleDraft = Prisma.TitleDraftModel
-/**
  * Model Department
  * 
  */

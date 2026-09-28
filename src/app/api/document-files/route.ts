@@ -12,7 +12,7 @@ import {
   CONCEPT_GATE_EXEMPT_DOCUMENT_CATEGORIES,
   DOCUMENT_STORAGE_BUCKETS,
   DOCUMENT_UPLOAD_ERROR_MESSAGES,
-  EVIDENCE_FILE_TYPE_CATEGORIES,
+  UNRESTRICTED_FILE_TYPE_CATEGORIES,
   type DocumentStorageBucket
 } from '@/lib/storage/upload-config';
 import {
@@ -24,7 +24,6 @@ import {
 import {
   assertDocumentBucket,
   assertValidDocumentFile,
-  deleteFile,
   generateUniqueFilePath,
   uploadFile
 } from '@/lib/storage/supabase-storage';
@@ -33,7 +32,6 @@ import {
   recordCheckpointSubmission,
   resolveMilestoneCheckpointForSubmission
 } from '@/lib/milestone-checkpoint-tracking';
-import { withApiLogging } from '@/lib/api-logging';
 
 export const runtime = 'nodejs';
 
@@ -165,7 +163,7 @@ async function createUploadNotifications({
   }
 }
 
-async function handleGET(request: Request) {
+export async function GET(request: Request) {
   try {
     const user = await requireAuthenticatedUser(request, DOCUMENT_VIEWER_ROLES);
     const url = new URL(request.url);
@@ -178,42 +176,19 @@ async function handleGET(request: Request) {
       assertDocumentBucket(bucketName);
     }
 
-    // An Adviser and a Panel member need different scoping here, even though
-    // both can hold an Evaluation row on the same project: being asked to sit
-    // on one defense panel for a group you don't advise shouldn't pull that
-    // group's entire document history into your own "documents from groups I
-    // advise" queue (Document Submissions, Other Pending Documents) — that
-    // panel duty belongs to the Evaluations/defense-voting flow instead. A
-    // Panel account, by contrast, has no advisee projects of its own at all —
-    // the evaluator condition is its only legitimate grant, so it stays.
-    const adviserPanelProjectWhere = user.role === UserRole.ADVISER
+    const adviserPanelProjectWhere = user.role === UserRole.ADVISER || user.role === UserRole.PANEL
       ? {
           OR: [
             { adviserId: user.id },
-            { group: { groupMembers: { some: { userId: user.id, isActive: true } } } }
+            { group: { groupMembers: { some: { userId: user.id, isActive: true } } } },
+            { evaluations: { some: { evaluatorId: user.id } } }
           ]
         }
-      : user.role === UserRole.PANEL
-        ? {
-            OR: [
-              { adviserId: user.id },
-              { group: { groupMembers: { some: { userId: user.id, isActive: true } } } },
-              { evaluations: { some: { evaluatorId: user.id } } }
-            ]
-          }
-        : null;
+      : null;
 
     const where = {
       ...(bucketName ? { bucketName } : { bucketName: { not: null } }),
       ...(projectId ? { projectId } : {}),
-      // Backup title attachments (see /api/title-drafts) share this same
-      // thesis-documents bucket and (for a student) the same uploader — so
-      // without this they'd otherwise leak into the generic document listing
-      // here (a student's own Document Tracker, or an adviser/oversight
-      // role's submissions queue) even though they were never submitted
-      // anywhere. They stay reachable only through the dedicated
-      // /api/title-drafts* endpoints.
-      titleDraftId: null,
       ...(user.role === UserRole.STUDENT ? { userId: user.id } : {}),
       ...(adviserPanelProjectWhere ? { project: adviserPanelProjectWhere } : {}),
       ...(user.role === UserRole.PROGRAM_HEAD && user.department
@@ -331,7 +306,7 @@ async function handleGET(request: Request) {
   }
 }
 
-async function handlePOST(request: Request) {
+export async function POST(request: Request) {
   try {
     const user = await requireAuthenticatedUser(request, DOCUMENT_VIEWER_ROLES);
     const formData = await request.formData();
@@ -345,7 +320,7 @@ async function handlePOST(request: Request) {
 
     const documentCategory = normalizeText(formData.get('documentCategory')) || 'Uncategorized';
     const bucketNameValue = normalizeText(formData.get('bucketName')) || getBucketForCategory(documentCategory);
-    const fileTypeMode = EVIDENCE_FILE_TYPE_CATEGORIES.has(documentCategory);
+    const fileTypeMode = UNRESTRICTED_FILE_TYPE_CATEGORIES.has(documentCategory) ? 'any' : false;
     assertDocumentBucket(bucketNameValue);
     assertValidDocumentFile(file, bucketNameValue, fileTypeMode);
 
@@ -399,9 +374,6 @@ async function handlePOST(request: Request) {
       && Boolean(project?.id)
       && !ACHIEVEMENT_DOCUMENT_CATEGORIES.has(documentCategory);
 
-    // The object is already in storage by now, so if anything below rejects the
-    // upload (e.g. the duplicate-pending 409) the object has to be removed again —
-    // otherwise it sits in the bucket with no row pointing at it, using quota forever.
     const uploadedFile = await prisma.$transaction(async (tx) => {
       const checkpoint = shouldLinkCheckpoint && project?.id
         ? await resolveMilestoneCheckpointForSubmission(tx, {
@@ -509,12 +481,7 @@ async function handlePOST(request: Request) {
       }
 
       return savedFile;
-    }, { timeout: 15000 }).catch(async (error) => {
-      await deleteFile(bucketNameValue, filePath).catch((cleanupError) => {
-        console.error(`Failed to remove orphaned upload ${filePath}:`, cleanupError);
-      });
-      throw error;
-    });
+    }, { timeout: 15000 });
 
     await createUploadNotifications({
       bucketName: bucketNameValue,
@@ -535,6 +502,3 @@ async function handlePOST(request: Request) {
     return handleApiError(error);
   }
 }
-
-export const GET = withApiLogging('GET', '/api/document-files', handleGET);
-export const POST = withApiLogging('POST', '/api/document-files', handlePOST);

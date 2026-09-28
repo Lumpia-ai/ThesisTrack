@@ -1,7 +1,6 @@
 import { hashPassword } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { successResponse, handleApiError } from '@/lib/utils';
-import { withApiLogging } from '@/lib/api-logging';
 
 export const runtime = 'nodejs';
 
@@ -13,7 +12,7 @@ export const runtime = 'nodejs';
  *
  * ⚠️  DELETE THIS FILE before deploying to production.
  */
-async function handlePOST() {
+export async function POST() {
   try {
     const newPlainPassword = 'password123';
     const newHash = await hashPassword(newPlainPassword);
@@ -30,5 +29,3 @@ async function handlePOST() {
     return handleApiError(error);
   }
 }
-
-export const POST = withApiLogging('POST', '/api/auth/reset-all-passwords', handlePOST);

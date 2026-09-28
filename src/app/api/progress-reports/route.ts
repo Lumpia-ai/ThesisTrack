@@ -3,7 +3,6 @@ import { requireAuthenticatedUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { HttpError, handleApiError, normalizeText, successResponse } from '@/lib/utils';
 import { recordCheckpointSubmission } from '@/lib/milestone-checkpoint-tracking';
-import { withApiLogging } from '@/lib/api-logging';
 
 export const runtime = 'nodejs';
 
@@ -96,7 +95,7 @@ function toReportPayload(
   };
 }
 
-async function handleGET(request: Request) {
+export async function GET(request: Request) {
   try {
     const user = await requireAuthenticatedUser(request, [
       UserRole.STUDENT,
@@ -162,7 +161,7 @@ async function handleGET(request: Request) {
   }
 }
 
-async function handlePOST(request: Request) {
+export async function POST(request: Request) {
   try {
     const user = await requireAuthenticatedUser(request, [UserRole.STUDENT]);
     const body = await request.json();
@@ -241,6 +240,3 @@ async function handlePOST(request: Request) {
     return handleApiError(error);
   }
 }
-
-export const GET = withApiLogging('GET', '/api/progress-reports', handleGET);
-export const POST = withApiLogging('POST', '/api/progress-reports', handlePOST);

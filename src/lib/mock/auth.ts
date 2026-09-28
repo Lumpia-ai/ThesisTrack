@@ -424,7 +424,7 @@ export function getRoleRedirectPath(role: UserRole) {
       return '/system-admin/dashboard';
     case 'research_head':
     case 'admin':
-      return '/research-head/dashboard';
+      return '/admin/dashboard';
     case 'adviser':
       return '/adviser/adviser-mode/dashboard';
     case 'panel':

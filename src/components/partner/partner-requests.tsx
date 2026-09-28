@@ -6,47 +6,9 @@ import {
   getPartnerRequest,
   getPartnerStatusTone
 } from '@/components/partner/partner-data';
-import {
-  PartnerDepartmentBadge,
-  PartnerModal,
-  PartnerStatusBadge
-} from '@/components/partner/partner-primitives';
+import { PartnerModal } from '@/components/partner/partner-primitives';
 import { PartnerShell } from '@/components/partner/partner-shell';
-
-const REQUEST_STATS = [
-  {
-    title: 'Total Requests',
-    icon: 'fa-folder-open',
-    accent: '#2563EB',
-    soft: 'rgba(37, 99, 235, 0.14)',
-    note: 'All time',
-    value: () => PARTNER_REQUESTS.length
-  },
-  {
-    title: 'Pending Review',
-    icon: 'fa-clock',
-    accent: '#F59E0B',
-    soft: 'rgba(245, 158, 11, 0.14)',
-    note: 'Awaiting action',
-    value: () => PARTNER_REQUESTS.filter((request) => request.status === 'Pending').length
-  },
-  {
-    title: 'Approved',
-    icon: 'fa-check-circle',
-    accent: '#16A34A',
-    soft: 'rgba(22, 163, 74, 0.14)',
-    note: 'Ready for MOA',
-    value: () => PARTNER_REQUESTS.filter((request) => request.status === 'Approved').length
-  },
-  {
-    title: 'In Negotiation',
-    icon: 'fa-handshake',
-    accent: '#8B5CF6',
-    soft: 'rgba(139, 92, 246, 0.14)',
-    note: 'Terms being finalized',
-    value: () => PARTNER_REQUESTS.filter((request) => request.status === 'Negotiation').length
-  }
-];
+import { getDepartmentStyle } from '@/components/library/library-dashboard';
 
 export function PartnerRequests() {
   const [departmentFilter, setDepartmentFilter] = useState('All Departments');
@@ -69,6 +31,10 @@ export function PartnerRequests() {
 
   const selectedRequest = getPartnerRequest(selectedRequestId || null);
 
+  const pendingCount = PARTNER_REQUESTS.filter(i => i.status === 'Pending').length;
+  const approvedCount = PARTNER_REQUESTS.filter(i => i.status === 'Approved').length;
+  const negotiationCount = PARTNER_REQUESTS.filter(i => i.status === 'Negotiation').length;
+
   return (
     <PartnerShell
       activeNav="requests"
@@ -76,126 +42,294 @@ export function PartnerRequests() {
       description="Track and manage your technology adoption requests"
       notificationCount={1}
     >
-      <div className="flex flex-col gap-8">
-        {/* KPI Stat Bar */}
-        <section className="grid grid-cols-1 divide-y divide-[var(--border)] overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] sm:grid-cols-2 sm:divide-y-0 sm:divide-x lg:grid-cols-4">
-          {REQUEST_STATS.map((stat) => (
-            <div key={stat.title} className="flex items-center gap-4 p-5">
-              <span
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-xl"
-                style={{ background: stat.soft, color: stat.accent }}
-              >
-                <i aria-hidden="true" className={`fas ${stat.icon}`} />
-              </span>
-              <div className="min-w-0">
-                <p className="truncate text-xs font-bold uppercase tracking-wide text-[var(--muted)]">{stat.title}</p>
-                <p className="text-2xl font-extrabold leading-tight text-[var(--text)]">{stat.value()}</p>
-                <p className="truncate text-xs font-medium text-[var(--muted)]">{stat.note}</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem', paddingBottom: '2.5rem' }}>
+        
+        {/* Minimalist Bento KPI Section */}
+        <section className="partner-kpi-grid">
+          {/* Card 1: Total Requests */}
+          <article className="lib-bento-card">
+            <div>
+              <div className="lib-bento-head">
+                <span className="lib-bento-kicker">Total Requests</span>
+                <div className="lib-bento-icon-box">
+                  <i className="fas fa-folder-open" style={{ color: '#003A8F', fontSize: '1rem' }} aria-hidden="true" />
+                </div>
+              </div>
+              <div style={{ marginTop: '0.85rem' }}>
+                <div className="lib-bento-metric">{PARTNER_REQUESTS.length}</div>
+                <p className="lib-bento-subtext">Submitted applications</p>
               </div>
             </div>
-          ))}
+          </article>
+
+          {/* Card 2: Pending Review */}
+          <article className="lib-bento-card">
+            <div>
+              <div className="lib-bento-head">
+                <span className="lib-bento-kicker">Pending Review</span>
+                <div className="lib-bento-icon-box">
+                  <i className="fas fa-clock" style={{ color: '#F59E0B', fontSize: '1rem' }} aria-hidden="true" />
+                </div>
+              </div>
+              <div style={{ marginTop: '0.85rem' }}>
+                <div className="lib-bento-metric">{pendingCount}</div>
+                <p className="lib-bento-subtext">Awaiting administrative check</p>
+              </div>
+            </div>
+          </article>
+
+          {/* Card 3: Approved */}
+          <article className="lib-bento-card">
+            <div>
+              <div className="lib-bento-head">
+                <span className="lib-bento-kicker">Approved</span>
+                <div className="lib-bento-icon-box">
+                  <i className="fas fa-check-circle" style={{ color: '#16A34A', fontSize: '1rem' }} aria-hidden="true" />
+                </div>
+              </div>
+              <div style={{ marginTop: '0.85rem' }}>
+                <div className="lib-bento-metric">{approvedCount}</div>
+                <p className="lib-bento-subtext">Ready for MOA execution</p>
+              </div>
+            </div>
+          </article>
+
+          {/* Card 4: In Negotiation */}
+          <article className="lib-bento-card">
+            <div>
+              <div className="lib-bento-head">
+                <span className="lib-bento-kicker">In Negotiation</span>
+                <div className="lib-bento-icon-box">
+                  <i className="fas fa-handshake" style={{ color: '#8B5CF6', fontSize: '1rem' }} aria-hidden="true" />
+                </div>
+              </div>
+              <div style={{ marginTop: '0.85rem' }}>
+                <div className="lib-bento-metric">{negotiationCount}</div>
+                <p className="lib-bento-subtext">Terms & timeline alignment</p>
+              </div>
+            </div>
+          </article>
         </section>
 
         {/* Filter Bar */}
-        <div className="flex flex-wrap gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-[var(--shadow-sm)]">
-          <div className="flex min-w-[300px] flex-1 items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface-sunken)] px-4 py-2.5">
-            <i aria-hidden="true" className="fas fa-search text-sm text-[var(--muted)]" />
+        <div className="partner-filter-bar">
+          <div className="partner-search-wrap">
+            <i className="fas fa-search" style={{ color: '#003A8F', fontSize: '0.85rem' }} aria-hidden="true" />
             <input
+              className="partner-search-input"
               placeholder="Search by project title or ID..."
               type="text"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              className="w-full bg-transparent text-sm text-[var(--text)] outline-none placeholder:text-[var(--muted)]"
             />
           </div>
-          <select
-            value={departmentFilter}
-            onChange={(event) => setDepartmentFilter(event.target.value)}
-            className="cursor-pointer rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 text-sm font-semibold text-[var(--muted)] outline-none"
-          >
-            <option>All Departments</option>
-            <option>IT</option>
-            <option>MET</option>
-            <option>TCM</option>
-            <option>ESM</option>
-            <option>NAME</option>
-          </select>
-          <select
-            value={statusFilter}
-            onChange={(event) => setStatusFilter(event.target.value)}
-            className="cursor-pointer rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 text-sm font-semibold text-[var(--muted)] outline-none"
-          >
-            <option>All Statuses</option>
-            <option>Pending</option>
-            <option>Under Review</option>
-            <option>Approved</option>
-            <option>Negotiation</option>
-            <option>Completed</option>
-          </select>
+          <div className="partner-select-wrap">
+            <select
+              className="partner-select"
+              value={departmentFilter}
+              onChange={(event) => setDepartmentFilter(event.target.value)}
+            >
+              <option>All Departments</option>
+              <option>IT</option>
+              <option>MET</option>
+              <option>TCM</option>
+              <option>ESM</option>
+              <option>NAME</option>
+            </select>
+            <i
+              className="fas fa-chevron-down"
+              style={{
+                position: 'absolute',
+                right: '0.75rem',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                fontSize: '0.75rem',
+                color: '#64748B',
+                pointerEvents: 'none'
+              }}
+              aria-hidden="true"
+            />
+          </div>
+          <div className="partner-select-wrap">
+            <select
+              className="partner-select"
+              value={statusFilter}
+              onChange={(event) => setStatusFilter(event.target.value)}
+            >
+              <option>All Statuses</option>
+              <option>Pending</option>
+              <option>Under Review</option>
+              <option>Approved</option>
+              <option>Negotiation</option>
+              <option>Completed</option>
+            </select>
+            <i
+              className="fas fa-chevron-down"
+              style={{
+                position: 'absolute',
+                right: '0.75rem',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                fontSize: '0.75rem',
+                color: '#64748B',
+                pointerEvents: 'none'
+              }}
+              aria-hidden="true"
+            />
+          </div>
         </div>
 
-        {/* Table */}
-        <section className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]">
-          <div className="border-b border-[var(--border)] bg-[var(--surface-sunken)] px-6 py-5">
-            <h3 className="text-lg font-extrabold text-[var(--text)]">Active Requests</h3>
+        {/* Requests Table */}
+        <section className="partner-table-section">
+          <div className="partner-table-header">
+            <div>
+              <h3 className="partner-table-title">Active Requests</h3>
+              <p className="partner-table-subtitle">Track submission status, review feedback, and legal agreements.</p>
+            </div>
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.4rem 0.85rem',
+                background: '#FFFFFF',
+                border: '1px solid #E2E8F0',
+                borderRadius: '0.5rem',
+                fontSize: '0.82rem',
+                fontWeight: 600,
+                color: '#334155',
+                boxShadow: '0 1px 2px rgba(15, 23, 42, 0.03)'
+              }}
+            >
+              <i className="fas fa-list-check" style={{ color: '#003A8F' }} aria-hidden="true" />
+              <span>{filteredRequests.length} of {PARTNER_REQUESTS.length} Requests</span>
+            </div>
           </div>
-          <div className="table-scroll">
-            <table className="w-full min-w-[900px] border-collapse text-left">
+
+          <div className="table-scroll" style={{ padding: '0 1rem 1rem' }}>
+            <table className="lib-modern-table" style={{ width: '100%', minWidth: '850px' }}>
               <thead>
-                <tr className="border-b-2 border-[var(--border)] text-xs font-bold uppercase tracking-wide text-[var(--text-meta)]">
-                  <th className="px-4 py-4">Request ID</th>
-                  <th className="px-4 py-4">Project Title</th>
-                  <th className="px-4 py-4">Department</th>
-                  <th className="px-4 py-4">Request Date</th>
-                  <th className="px-4 py-4">Status</th>
-                  <th className="px-4 py-4">Actions</th>
+                <tr>
+                  <th style={{ width: '130px', minWidth: '130px' }}>Request ID</th>
+                  <th style={{ minWidth: '260px' }}>Project Title</th>
+                  <th className="lib-col-dept">Department</th>
+                  <th style={{ width: '130px', minWidth: '130px' }}>Request Date</th>
+                  <th style={{ width: '120px', minWidth: '120px' }}>Status</th>
+                  <th style={{ textAlign: 'right', width: '220px', minWidth: '220px' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredRequests.map((request, i) => (
-                  <tr
-                    key={request.id}
-                    className={`transition hover:bg-[var(--surface-alt)] ${i === filteredRequests.length - 1 ? '' : 'border-b border-[var(--border)]'}`}
-                  >
-                    <td className="px-4 py-4 text-sm font-semibold text-[var(--muted)]">{request.id}</td>
-                    <td className="px-4 py-4 font-bold text-[var(--text)]">{request.projectTitle}</td>
-                    <td className="px-4 py-4">
-                      <PartnerDepartmentBadge>{request.department}</PartnerDepartmentBadge>
-                    </td>
-                    <td className="px-4 py-4 text-sm text-[var(--muted)]">{request.requestDate}</td>
-                    <td className="px-4 py-4">
-                      <PartnerStatusBadge tone={getPartnerStatusTone(request.status)}>{request.status}</PartnerStatusBadge>
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="flex flex-wrap gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedRequestId(request.id)}
-                          className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-xs font-bold text-[var(--muted)] transition hover:border-[var(--primary)] hover:text-[var(--primary)]"
+                {filteredRequests.map((request) => {
+                  const deptStyle = getDepartmentStyle(request.department);
+                  const tone = getPartnerStatusTone(request.status);
+
+                  return (
+                    <tr key={request.id}>
+                      <td style={{ color: '#64748B', fontSize: '0.85rem', fontFamily: 'monospace', fontWeight: 600 }}>
+                        {request.id}
+                      </td>
+                      <td style={{ color: '#0F172A', fontWeight: 700, fontSize: '0.92rem' }}>
+                        {request.projectTitle}
+                      </td>
+                      <td className="lib-col-dept">
+                        <span
+                          className="lib-dept-pill"
+                          style={{
+                            background: deptStyle.badgeBg,
+                            color: deptStyle.text,
+                            borderColor: deptStyle.border
+                          }}
                         >
-                          View
-                        </button>
-                        {request.status === 'Approved' ? (
-                          <button className="rounded-lg bg-[var(--primary)] px-3 py-1.5 text-xs font-bold text-white shadow-sm transition hover:brightness-110">
-                            Proceed to MOA
+                          <i className={`fas ${deptStyle.icon}`} style={{ fontSize: '0.68rem' }} aria-hidden="true" />
+                          <span>{request.department}</span>
+                        </span>
+                      </td>
+                      <td style={{ color: '#64748B', fontSize: '0.85rem' }}>{request.requestDate}</td>
+                      <td>
+                        <span className={`partner-status-pill partner-status-${tone}`}>
+                          {request.status}
+                        </span>
+                      </td>
+                      <td style={{ textAlign: 'right' }}>
+                        <div style={{ display: 'flex', gap: '0.45rem', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedRequestId(request.id)}
+                            className="partner-action-mini-btn is-report"
+                          >
+                            <i className="fas fa-eye" style={{ color: '#003A8F', marginRight: '0.35rem', fontSize: '0.72rem' }} aria-hidden="true" />
+                            View
                           </button>
-                        ) : request.status === 'Pending' ? (
-                          <button className="rounded-lg border border-[var(--danger-soft)] bg-[var(--danger-soft)] px-3 py-1.5 text-xs font-bold text-[var(--danger)] transition hover:brightness-95">
-                            Cancel
-                          </button>
-                        ) : (
-                          <button className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-xs font-bold text-[var(--muted)] transition hover:border-[var(--primary)] hover:text-[var(--primary)]">
-                            Continue
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                          {request.status === 'Approved' ? (
+                            <button
+                              type="button"
+                              className="partner-action-mini-btn is-monitor"
+                            >
+                              <i className="fas fa-file-signature" style={{ color: '#003A8F', marginRight: '0.35rem', fontSize: '0.72rem' }} aria-hidden="true" />
+                              Proceed to MOA
+                            </button>
+                          ) : request.status === 'Pending' ? (
+                            <button
+                              type="button"
+                              style={{
+                                padding: '0.35rem 0.75rem',
+                                borderRadius: '0.45rem',
+                                border: '1px solid #FECACA',
+                                background: '#FEF2F2',
+                                color: '#DC2626',
+                                fontWeight: 600,
+                                fontSize: '0.8rem',
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center'
+                              }}
+                            >
+                              <i className="fas fa-times" style={{ color: '#DC2626', marginRight: '0.35rem', fontSize: '0.72rem' }} aria-hidden="true" />
+                              Cancel
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              className="partner-action-mini-btn is-report"
+                            >
+                              <i className="fas fa-arrow-right" style={{ color: '#475569', marginRight: '0.35rem', fontSize: '0.72rem' }} aria-hidden="true" />
+                              Continue
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         </section>
+
+        {/* Dynamic Pagination */}
+        <nav className="lib-pagination" aria-label="Requests Pagination">
+          <button
+            type="button"
+            className="lib-page-num-btn is-active"
+            aria-current="page"
+          >
+            1
+          </button>
+          <button
+            type="button"
+            className="lib-page-num-btn"
+          >
+            2
+          </button>
+          <button
+            type="button"
+            className="lib-page-nav-btn"
+            aria-label="Next Page"
+          >
+            <span>Next</span>
+            <i className="fas fa-chevron-right" style={{ fontSize: '0.75rem', color: '#003A8F' }} aria-hidden="true" />
+          </button>
+        </nav>
       </div>
 
       <PartnerModal
@@ -203,54 +337,89 @@ export function PartnerRequests() {
         title={`Request Details - ${selectedRequest.id}`}
         onClose={() => setSelectedRequestId('')}
         footer={
-          <div className="flex w-full justify-end gap-4">
+          <div style={{ display: 'flex', gap: '0.75rem', width: '100%', justifyContent: 'flex-end' }}>
             <button
-              type="button"
+              className="btn btn-outline"
               onClick={() => setSelectedRequestId('')}
-              className="rounded-xl border border-[var(--border-strong)] px-5 py-2.5 text-sm font-bold text-[var(--muted)] transition hover:border-[var(--primary)] hover:text-[var(--primary)]"
+              style={{ padding: '0.55rem 1.1rem', borderRadius: '0.5rem', fontWeight: 600, border: '1px solid #E2E8F0', color: '#475569', background: '#FFFFFF' }}
             >
               Close
             </button>
             <button
-              type="button"
+              className="btn btn-primary"
               onClick={() => setSelectedRequestId('')}
-              className="inline-flex items-center gap-2 rounded-xl bg-[var(--primary)] px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:brightness-110"
+              style={{
+                padding: '0.55rem 1.1rem',
+                borderRadius: '0.5rem',
+                background: '#003A8F',
+                border: '1px solid #003A8F',
+                fontWeight: 600,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                color: 'white',
+                cursor: 'pointer'
+              }}
             >
-              Download MOA Draft <i aria-hidden="true" className="fas fa-file-download" />
+              <span>Download MOA Draft</span>
+              <i className="fas fa-file-download" style={{ fontSize: '0.8rem' }} aria-hidden="true" />
             </button>
           </div>
         }
       >
-        <div className="flex flex-col gap-4 py-1">
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-sunken)] p-4">
-            <h4 className="mb-3 text-base font-extrabold text-[var(--text)]">{selectedRequest.projectTitle}</h4>
-            <div className="flex flex-wrap items-center gap-3">
-              <PartnerDepartmentBadge>{selectedRequest.department}</PartnerDepartmentBadge>
-              <PartnerStatusBadge tone={getPartnerStatusTone(selectedRequest.status)}>{selectedRequest.status}</PartnerStatusBadge>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', padding: '0.75rem 0 0.5rem' }}>
+          <div style={{ background: '#F8FAFC', padding: '1rem 1.25rem', borderRadius: '0.75rem', border: '1px solid #E2E8F0' }}>
+            <h4 style={{ margin: '0 0 0.6rem 0', fontSize: '1.05rem', color: '#0F172A', fontWeight: 700 }}>{selectedRequest.projectTitle}</h4>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
+              {(() => {
+                const deptStyle = getDepartmentStyle(selectedRequest.department);
+                const tone = getPartnerStatusTone(selectedRequest.status);
+                return (
+                  <>
+                    <span
+                      className="lib-dept-pill"
+                      style={{
+                        background: deptStyle.badgeBg,
+                        color: deptStyle.text,
+                        borderColor: deptStyle.border
+                      }}
+                    >
+                      <i className={`fas ${deptStyle.icon}`} style={{ fontSize: '0.68rem' }} aria-hidden="true" />
+                      <span>{selectedRequest.department}</span>
+                    </span>
+                    <span className={`partner-status-pill partner-status-${tone}`}>
+                      {selectedRequest.status}
+                    </span>
+                  </>
+                );
+              })()}
             </div>
           </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div>
-              <span className="mb-1 block text-xs font-bold uppercase tracking-wide text-[var(--muted)]">Request Date</span>
-              <strong className="text-sm text-[var(--text)]">{selectedRequest.requestDate}</strong>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+            <div style={{ background: '#FFFFFF', padding: '0.85rem', borderRadius: '0.5rem', border: '1px solid #F1F5F9' }}>
+              <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, marginBottom: '0.25rem' }}>Request Date</span>
+              <strong style={{ color: '#0F172A', fontSize: '0.92rem' }}>{selectedRequest.requestDate}</strong>
             </div>
-            <div>
-              <span className="mb-1 block text-xs font-bold uppercase tracking-wide text-[var(--muted)]">Budget Range</span>
-              <strong className="text-sm text-[var(--text)]">{selectedRequest.budgetRange}</strong>
+            <div style={{ background: '#FFFFFF', padding: '0.85rem', borderRadius: '0.5rem', border: '1px solid #F1F5F9' }}>
+              <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, marginBottom: '0.25rem' }}>Budget Range</span>
+              <strong style={{ color: '#0F172A', fontSize: '0.92rem' }}>{selectedRequest.budgetRange}</strong>
             </div>
-            <div className="sm:col-span-2">
-              <span className="mb-1 block text-xs font-bold uppercase tracking-wide text-[var(--muted)]">Timeline</span>
-              <strong className="text-sm text-[var(--text)]">{selectedRequest.timeline}</strong>
+            <div style={{ gridColumn: '1 / -1', background: '#FFFFFF', padding: '0.85rem', borderRadius: '0.5rem', border: '1px solid #F1F5F9' }}>
+              <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, marginBottom: '0.25rem' }}>Timeline</span>
+              <strong style={{ color: '#0F172A', fontSize: '0.92rem' }}>{selectedRequest.timeline}</strong>
             </div>
-            <div className="sm:col-span-2">
-              <span className="mb-1 block text-xs font-bold uppercase tracking-wide text-[var(--muted)]">Implementation Plan</span>
-              <p className="text-sm leading-relaxed text-[var(--muted)]">{selectedRequest.implementationPlan}</p>
+            <div style={{ gridColumn: '1 / -1', background: '#FFFFFF', padding: '0.85rem', borderRadius: '0.5rem', border: '1px solid #F1F5F9' }}>
+              <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, marginBottom: '0.35rem' }}>Implementation Plan</span>
+              <p style={{ margin: 0, color: '#475569', fontSize: '0.9rem', lineHeight: 1.6 }}>{selectedRequest.implementationPlan}</p>
             </div>
             {selectedRequest.comments ? (
-              <div className="rounded-xl border-l-4 border-[var(--warning)] bg-[var(--warning-soft)] p-4 sm:col-span-2">
-                <span className="mb-1 block text-xs font-bold uppercase tracking-wide text-[var(--warning)]">TTO Comments</span>
-                <p className="text-sm text-[var(--muted-strong)]">{selectedRequest.comments}</p>
+              <div style={{ gridColumn: '1 / -1', background: '#FEF9C3', padding: '1rem', borderRadius: '0.6rem', border: '1px solid #FDE68A', borderLeft: '4px solid #F59E0B' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.75rem', color: '#B45309', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, marginBottom: '0.4rem' }}>
+                  <i className="fas fa-comment-dots" style={{ color: '#B45309' }} aria-hidden="true" />
+                  TTO Comments
+                </span>
+                <p style={{ margin: 0, color: '#92400E', fontSize: '0.88rem', lineHeight: 1.5 }}>{selectedRequest.comments}</p>
               </div>
             ) : null}
           </div>
@@ -259,3 +428,4 @@ export function PartnerRequests() {
     </PartnerShell>
   );
 }
+

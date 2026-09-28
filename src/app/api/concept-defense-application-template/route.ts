@@ -3,8 +3,7 @@ import { requireAuthenticatedUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { HttpError, handleApiError, successResponse } from '@/lib/utils';
 import { DOCUMENT_STORAGE_BUCKETS, type DocumentStorageBucket } from '@/lib/storage/upload-config';
-import { assertValidDocumentFile, deleteFile, generateUniqueFilePath, uploadFile } from '@/lib/storage/supabase-storage';
-import { withApiLogging } from '@/lib/api-logging';
+import { assertValidDocumentFile, generateUniqueFilePath, uploadFile } from '@/lib/storage/supabase-storage';
 
 export const runtime = 'nodejs';
 
@@ -25,7 +24,7 @@ const TEMPLATE_VIEWER_ROLES = [
 ];
 
 // Only the Research Head manages this template — not System Admin/IT Admin,
-// even though they can both reach the /research-head route tree.
+// even though they can both reach the /admin route tree.
 const TEMPLATE_MANAGER_ROLES = [UserRole.RESEARCH_HEAD];
 
 type TemplateSettingValue = {
@@ -39,7 +38,7 @@ type TemplateSettingValue = {
   uploadedByName: string;
 };
 
-async function handleGET(request: Request) {
+export async function GET(request: Request) {
   try {
     await requireAuthenticatedUser(request, TEMPLATE_VIEWER_ROLES);
 
@@ -65,7 +64,7 @@ async function handleGET(request: Request) {
   }
 }
 
-async function handlePOST(request: Request) {
+export async function POST(request: Request) {
   try {
     const user = await requireAuthenticatedUser(request, TEMPLATE_MANAGER_ROLES);
     const formData = await request.formData();
@@ -78,11 +77,6 @@ async function handlePOST(request: Request) {
     }
 
     assertValidDocumentFile(file, DOCUMENT_STORAGE_BUCKETS.THESIS_DOCUMENTS);
-
-    const previousSetting = await prisma.systemSetting.findUnique({
-      where: { key: TEMPLATE_SETTING_KEY }
-    });
-    const previousTemplate = previousSetting?.value as unknown as TemplateSettingValue | null | undefined;
 
     const filePath = generateUniqueFilePath({
       bucketName: DOCUMENT_STORAGE_BUCKETS.THESIS_DOCUMENTS,
@@ -132,13 +126,6 @@ async function handlePOST(request: Request) {
       }
     });
 
-    // Only the current template is ever served, so the replaced one is dead weight in storage.
-    if (previousTemplate?.filePath && previousTemplate.bucketName && previousTemplate.filePath !== filePath) {
-      await deleteFile(previousTemplate.bucketName, previousTemplate.filePath).catch((error) => {
-        console.error(`Failed to remove previous template ${previousTemplate.filePath}:`, error);
-      });
-    }
-
     return successResponse(
       {
         template: {
@@ -153,6 +140,3 @@ async function handlePOST(request: Request) {
     return handleApiError(error);
   }
 }
-
-export const GET = withApiLogging('GET', '/api/concept-defense-application-template', handleGET);
-export const POST = withApiLogging('POST', '/api/concept-defense-application-template', handlePOST);

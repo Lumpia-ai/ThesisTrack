@@ -2,7 +2,6 @@ import { ProjectStatus, SubmissionStatus, UserRole } from '@/generated/prisma/cl
 import { requireAuthenticatedUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { HttpError, handleApiError, successResponse } from '@/lib/utils';
-import { withApiLogging } from '@/lib/api-logging';
 
 export const runtime = 'nodejs';
 
@@ -19,7 +18,7 @@ const CHOOSABLE_STATUSES: ProjectStatus[] = [
 
 const WITHDRAWN_REASON = 'Withdrawn — the group chose a different title to move forward with.';
 
-async function handlePOST(request: Request, context: { params: Promise<{ id: string }> }) {
+export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   try {
     const user = await requireAuthenticatedUser(request, [UserRole.STUDENT]);
     const { id: projectId } = await context.params;
@@ -104,5 +103,3 @@ async function handlePOST(request: Request, context: { params: Promise<{ id: str
     return handleApiError(error);
   }
 }
-
-export const POST = withApiLogging('POST', '/api/title-submissions/[id]/choose', handlePOST);

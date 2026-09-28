@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerAuthenticatedUser } from '@/lib/auth';
-import { withApiLogging } from '@/lib/api-logging';
 
 const DEFAULT_STUDENT_LIMIT = 100;
 const MAX_STUDENT_LIMIT = 200;
@@ -42,7 +41,7 @@ function parsePositiveInteger(value: string | null, fallback: number, max: numbe
   return Math.min(max, Math.floor(parsed));
 }
 
-async function handleGET(request: Request) {
+export async function GET(request: Request) {
   try {
     const user = await getServerAuthenticatedUser();
     if (!user) {
@@ -103,5 +102,3 @@ async function handleGET(request: Request) {
     return NextResponse.json({ error: 'Failed to fetch students' }, { status: 500 });
   }
 }
-
-export const GET = withApiLogging('GET', '/api/students', handleGET);

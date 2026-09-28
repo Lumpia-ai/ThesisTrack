@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { withApiLogging } from '@/lib/api-logging';
 
 const DEFAULT_NOTIFICATION_LIMIT = 50;
 const MAX_NOTIFICATION_LIMIT = 100;
@@ -24,7 +23,7 @@ function parsePositiveInteger(value: string | null, fallback: number, max: numbe
   return Math.min(max, Math.floor(parsed));
 }
 
-async function handlePOST(request: Request) {
+export async function POST(request: Request) {
   try {
     // We bypass strict getAuthenticatedUser() here to allow the mock/demo 
     // student accounts to successfully trigger notification requests.
@@ -123,7 +122,7 @@ async function handlePOST(request: Request) {
   }
 }
 
-async function handleGET(request: Request) {
+export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
@@ -170,7 +169,7 @@ async function handleGET(request: Request) {
   }
 }
 
-async function handlePATCH(request: Request) {
+export async function PATCH(request: Request) {
   try {
     const body = await request.json();
     const { notificationId, notificationIds, userId, action } = body;
@@ -278,7 +277,3 @@ async function handlePATCH(request: Request) {
     return NextResponse.json({ error: 'Failed to update notification' }, { status: 500 });
   }
 }
-
-export const POST = withApiLogging('POST', '/api/notifications', handlePOST);
-export const GET = withApiLogging('GET', '/api/notifications', handleGET);
-export const PATCH = withApiLogging('PATCH', '/api/notifications', handlePATCH);

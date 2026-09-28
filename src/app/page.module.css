@@ -19,8 +19,138 @@
   font-family: var(--font-sans), Arial, sans-serif;
 }
 
-.homeAboutSection {
-  scroll-margin-top: 5.8rem;
+:global(html[data-landing-theme='dark']) .landingPage {
+  --background: #07111f;
+  --surface: #0f1b2d;
+  --text-dark: #e5eefb;
+  --text-muted: #98a8bd;
+  --border: #23344c;
+  --footer: #030712;
+  --shadow-soft: 0 16px 38px rgb(0 0 0 / 0.3);
+  --shadow-card: 0 28px 70px rgb(0 0 0 / 0.36);
+}
+
+:global(html[data-landing-theme='dark']) .heroSection {
+  background:
+    radial-gradient(circle at 50% 16%, rgb(30 64 175 / 0.18), transparent 18rem),
+    radial-gradient(circle at 18% 25%, rgb(246 190 0 / 0.08), transparent 18rem),
+    radial-gradient(circle at 85% 38%, rgb(65 139 255 / 0.16), transparent 29rem),
+    linear-gradient(135deg, #07111f 0%, #0d1b2f 100%);
+}
+
+:global(html[data-landing-theme='dark']) .heroContent h1,
+:global(html[data-landing-theme='dark']) .heroContent h1 span {
+  color: #93c5fd !important;
+}
+
+:global(html[data-landing-theme='dark']) .heroContent h1 .heroTitleAccent {
+  color: #bfdbfe !important;
+}
+
+:global(html[data-landing-theme='dark']) .institutionSection,
+:global(html[data-landing-theme='dark']) .modulesSection,
+:global(html[data-landing-theme='dark']) .workflowSection,
+:global(html[data-landing-theme='dark']) .aboutTeaserSection {
+  background:
+    radial-gradient(circle at 16% 18%, rgb(246 190 0 / 0.09), transparent 18rem),
+    radial-gradient(circle at 86% 12%, rgb(59 130 246 / 0.13), transparent 21rem),
+    linear-gradient(180deg, #07111f 0%, #0d1b2f 52%, #081323 100%);
+}
+
+:global(html[data-landing-theme='dark']) .heroInfoCard,
+:global(html[data-landing-theme='dark']) .institutionCard,
+:global(html[data-landing-theme='dark']) .moduleCard,
+:global(html[data-landing-theme='dark']) .workflowStepBody,
+:global(html[data-landing-theme='dark']) .aboutSystemCard,
+:global(html[data-landing-theme='dark']) .aboutLearnCard,
+:global(html[data-landing-theme='dark']) .detailCard {
+  border-color: rgb(51 65 85 / 0.86);
+  background: rgb(15 27 45 / 0.88);
+  box-shadow: var(--shadow-soft);
+}
+
+:global(html[data-landing-theme='dark']) .institutionVisionCard,
+:global(html[data-landing-theme='dark']) .institutionMissionCard {
+  background:
+    radial-gradient(circle at 92% 12%, rgb(59 130 246 / 0.14), transparent 13rem),
+    rgb(15 27 45 / 0.88);
+}
+
+:global(html[data-landing-theme='dark']) .heroInfoCard h2,
+:global(html[data-landing-theme='dark']) .institutionCard h3,
+:global(html[data-landing-theme='dark']) .moduleCard h3,
+:global(html[data-landing-theme='dark']) .workflowStep h3,
+:global(html[data-landing-theme='dark']) .featureItem h3,
+:global(html[data-landing-theme='dark']) .institutionVisionNote strong {
+  color: #e5eefb;
+}
+
+:global(html[data-landing-theme='dark']) .heroContent p,
+:global(html[data-landing-theme='dark']) .heroInfoCard p,
+:global(html[data-landing-theme='dark']) .institutionVisionCard p,
+:global(html[data-landing-theme='dark']) .institutionMissionList li,
+:global(html[data-landing-theme='dark']) .moduleCard p,
+:global(html[data-landing-theme='dark']) .moduleCapabilityList li,
+:global(html[data-landing-theme='dark']) .workflowStep p,
+:global(html[data-landing-theme='dark']) .institutionVisionNote span {
+  color: #a8b6c8;
+}
+
+:global(html[data-landing-theme='dark']) .heroBadge,
+:global(html[data-landing-theme='dark']) .sectionKicker,
+:global(html[data-landing-theme='dark']) .institutionCardHeader > span,
+:global(html[data-landing-theme='dark']) .institutionMissionList li,
+:global(html[data-landing-theme='dark']) .moduleBadge,
+:global(html[data-landing-theme='dark']) .workflowArtifact {
+  border-color: rgb(51 65 85 / 0.86);
+  background: rgb(17 34 58 / 0.9);
+}
+
+:global(html[data-landing-theme='dark']) .institutionIcon,
+:global(html[data-landing-theme='dark']) .moduleIcon,
+:global(html[data-landing-theme='dark']) .detailIcon,
+:global(html[data-landing-theme='dark']) .workflowIcon,
+:global(html[data-landing-theme='dark']) .featureIcon,
+:global(html[data-landing-theme='dark']) .institutionMissionList li > span {
+  border-color: rgb(51 65 85 / 0.78);
+  background: #13233b;
+  box-shadow: none;
+}
+
+:global(html[data-landing-theme='dark']) .workflowTimeline::before {
+  box-shadow:
+    inset 0 0 0 1px rgb(15 23 42 / 0.82),
+    0 12px 28px rgb(0 0 0 / 0.32);
+}
+
+:global(html[data-landing-theme='dark']) .landingPage :global(#about) {
+  background: #07111f !important;
+}
+
+:global(html[data-landing-theme='dark']) .landingPage :global(#about article),
+:global(html[data-landing-theme='dark']) .landingPage :global(#about aside),
+:global(html[data-landing-theme='dark']) .landingPage :global(#about > div > div:last-child) {
+  border-color: rgb(51 65 85 / 0.86) !important;
+  background: rgb(15 27 45 / 0.88) !important;
+  box-shadow: var(--shadow-soft) !important;
+}
+
+:global(html[data-landing-theme='dark']) .landingPage :global(#about h2),
+:global(html[data-landing-theme='dark']) .landingPage :global(#about h3),
+:global(html[data-landing-theme='dark']) .landingPage :global(#about strong) {
+  color: #e5eefb !important;
+}
+
+:global(html[data-landing-theme='dark']) .landingPage :global(#about p) {
+  color: #a8b6c8 !important;
+}
+
+:global(html[data-landing-theme='dark']) .landingPage :global(#about .bg-white),
+:global(html[data-landing-theme='dark']) .landingPage :global(#about .bg-white\/60),
+:global(html[data-landing-theme='dark']) .landingPage :global(#about .bg-white\/70),
+:global(html[data-landing-theme='dark']) .landingPage :global(#about .bg-white\/80),
+:global(html[data-landing-theme='dark']) .landingPage :global(#about .bg-white\/90) {
+  background-color: rgb(17 34 58 / 0.88) !important;
 }
 
 .homeAboutSummaryCard,
@@ -30,21 +160,87 @@
   isolation: isolate;
 }
 
-/* Styling hooks only — appearance is set inline via Tailwind classes in page.tsx.
-   These must still exist as real rules or the CSS Modules import resolves to undefined. */
-.homeAboutFlowKicker,
-.homeAboutFlowBadge,
-.homeAboutFlowRail,
-.homeAboutFlowIcon,
-.homeAboutFlowLabel,
-.homeAboutOutcomeIcon,
-.homeAboutOutcomeTitle,
-.homeAboutOutcomeText,
-.homeAboutCtaBand,
-.homeAboutCtaTitle,
-.homeAboutCtaText,
-.homeAboutSecondaryLink {
-  isolation: isolate;
+:global(html[data-landing-theme='dark']) .homeAboutSection {
+  background:
+    radial-gradient(circle at 18% 18%, rgb(246 190 0 / 0.08), transparent 19rem),
+    radial-gradient(circle at 86% 8%, rgb(59 130 246 / 0.13), transparent 22rem),
+    linear-gradient(180deg, #07111f 0%, #0d1b2f 54%, #081323 100%) !important;
+}
+
+:global(html[data-landing-theme='dark']) .homeAboutSummaryCard,
+:global(html[data-landing-theme='dark']) .homeAboutFlowCard,
+:global(html[data-landing-theme='dark']) .homeAboutOutcomeCard,
+:global(html[data-landing-theme='dark']) .homeAboutCtaShell {
+  border-color: rgb(51 65 85 / 0.86) !important;
+  background: rgb(15 27 45 / 0.88) !important;
+  box-shadow: 0 22px 58px rgb(0 0 0 / 0.34) !important;
+}
+
+:global(html[data-landing-theme='dark']) .homeAboutSummaryCard::before,
+:global(html[data-landing-theme='dark']) .homeAboutFlowCard::before,
+:global(html[data-landing-theme='dark']) .homeAboutOutcomeCard::before {
+  background: linear-gradient(135deg, rgb(59 130 246 / 0.08), transparent) !important;
+}
+
+:global(html[data-landing-theme='dark']) .homeAboutSummaryCard :global(.text-\[\#003a8f\]),
+:global(html[data-landing-theme='dark']) .homeAboutSummaryCard :global(.text-\[\#102033\]),
+:global(html[data-landing-theme='dark']) .homeAboutSummaryCard :global(.text-\[\#14243a\]) {
+  color: #e5eefb !important;
+}
+
+:global(html[data-landing-theme='dark']) .homeAboutSummaryCard :global(.text-\[\#536982\]),
+:global(html[data-landing-theme='dark']) .homeAboutSummaryCard :global(.text-\[\#66758a\]) {
+  color: #a8b6c8 !important;
+}
+
+:global(html[data-landing-theme='dark']) .homeAboutSummaryCard :global(.bg-\[\#ebf5ff\]\/80),
+:global(html[data-landing-theme='dark']) .homeAboutSummaryCard :global(.bg-white\/90) {
+  border-color: rgb(51 65 85 / 0.86) !important;
+  background-color: rgb(17 34 58 / 0.88) !important;
+  box-shadow: none !important;
+}
+
+:global(html[data-landing-theme='dark']) .homeAboutFlowKicker {
+  color: #dbeafe !important;
+}
+
+:global(html[data-landing-theme='dark']) .homeAboutFlowBadge,
+:global(html[data-landing-theme='dark']) .homeAboutFlowLabel {
+  border-color: rgb(51 65 85 / 0.86) !important;
+  background: rgb(17 34 58 / 0.9) !important;
+  color: #cbd5e1 !important;
+}
+
+:global(html[data-landing-theme='dark']) .homeAboutFlowRail {
+  background: rgb(51 65 85 / 0.82) !important;
+}
+
+:global(html[data-landing-theme='dark']) .homeAboutFlowIcon,
+:global(html[data-landing-theme='dark']) .homeAboutOutcomeIcon {
+  border-color: rgb(51 65 85 / 0.82) !important;
+  background: #13233b !important;
+  color: #93c5fd !important;
+  box-shadow: none !important;
+}
+
+:global(html[data-landing-theme='dark']) .homeAboutOutcomeTitle,
+:global(html[data-landing-theme='dark']) .homeAboutCtaTitle {
+  color: #e5eefb !important;
+}
+
+:global(html[data-landing-theme='dark']) .homeAboutOutcomeText,
+:global(html[data-landing-theme='dark']) .homeAboutCtaText {
+  color: #a8b6c8 !important;
+}
+
+:global(html[data-landing-theme='dark']) .homeAboutCtaBand {
+  background:
+    linear-gradient(135deg, rgb(0 58 143 / 0.18), transparent 48%),
+    rgb(17 34 58 / 0.88) !important;
+}
+
+:global(html[data-landing-theme='dark']) .homeAboutSecondaryLink {
+  color: #4a3500 !important;
 }
 
 .landingPage *,
@@ -119,65 +315,14 @@
   position: fixed;
   inset: 0 0 auto;
   z-index: 40;
-  /* Glass: translucent surface + blur/saturate so the page tints through, with a top highlight edge. */
-  border-bottom: 1px solid rgb(255 255 255 / 0.45);
-  background: linear-gradient(180deg, rgb(255 255 255 / 0.62), rgb(255 255 255 / 0.42));
-  backdrop-filter: blur(20px) saturate(180%);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.7),
-    0 8px 30px rgb(15 43 89 / 0.05);
-  transition: background 0.3s ease-out, box-shadow 0.3s ease-out, border-color 0.3s ease-out;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 12px 35px rgb(15 43 89 / 0.07);
 }
 
-/* Once scrolled over busy content (cards, photos), firm up the glass so links stay legible. */
-.navbarScrolled {
-  border-bottom-color: rgb(219 233 251 / 0.8);
-  background: linear-gradient(180deg, rgb(255 255 255 / 0.66), rgb(255 255 255 / 0.54));
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.8),
-    0 12px 35px rgb(15 43 89 / 0.1);
-}
-
-/* Landing navbar: a floating glass pill. The outer bar is transparent spacing; the glass is
-   drawn on .navbarInner::before so the mobile dropdown (a child of .navbarInner) keeps its own blur. */
-.navbarFloating {
-  border-bottom: 0;
-  background: transparent;
-  backdrop-filter: none;
-  box-shadow: none;
-  padding-top: 0.75rem;
-  pointer-events: none;
-}
-
-.navbarFloating .navbarInner {
-  isolation: isolate;
-  width: min(1680px, calc(100% - 2rem));
-  min-height: 4.1rem;
-  padding: 0.45rem 0.55rem 0.45rem 1.4rem;
-  pointer-events: auto;
-}
-
-.navbarFloating .navbarInner::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border: 1px solid rgb(255 255 255 / 0.6);
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgb(255 255 255 / 0.62), rgb(255 255 255 / 0.42));
-  backdrop-filter: blur(20px) saturate(180%);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.75),
-    0 10px 30px rgb(15 43 89 / 0.08);
-  transition: background 0.3s ease-out, box-shadow 0.3s ease-out, border-color 0.3s ease-out;
-}
-
-.navbarFloating.navbarScrolled .navbarInner::before {
-  border-color: rgb(219 233 251 / 0.85);
-  background: linear-gradient(180deg, rgb(255 255 255 / 0.72), rgb(255 255 255 / 0.6));
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.85),
-    0 14px 38px rgb(15 43 89 / 0.14);
+:global(html[data-landing-theme='dark']) .navbar {
+  box-shadow: 0 12px 35px rgb(0 0 0 / 0.28);
 }
 
 .departmentNavbar {
@@ -355,11 +500,7 @@
   font-size: 0.92rem;
   font-weight: 800;
   letter-spacing: 0;
-  transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease-out;
-}
-
-.navLink:active {
-  opacity: 0.7;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .navLink::after {
@@ -459,23 +600,6 @@
   animation: none;
 }
 
-.buttonPrimary:focus-visible,
-.buttonSecondary:focus-visible,
-.buttonGhost:focus-visible,
-.navLink:focus-visible,
-.mobileMenuButton:focus-visible,
-.footerSocials a:focus-visible,
-.footerColumn a:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 3px;
-}
-
-.buttonPrimary:active,
-.buttonSecondary:active,
-.buttonGhost:active {
-  transform: translateY(0) scale(0.97);
-}
-
 .buttonIcon {
   display: inline-flex;
   width: 1.9rem;
@@ -493,55 +617,61 @@
   background: rgb(255 255 255 / 0.72);
 }
 
-/* Landing navbar auth buttons: compact so they don't outweigh the nav links; no icon or glow. */
-.navAuthButton {
+.navActionButton {
+  min-width: 6.8rem;
+  min-height: 2.8rem;
+  padding-block: 0.42rem;
+}
+
+.themeToggleButton {
   display: inline-flex;
-  min-height: 2.5rem;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid transparent;
+  min-width: 5.65rem;
+  height: 2.8rem;
+  gap: 0.45rem;
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
   border-radius: 999px;
-  padding: 0 1.15rem;
-  font-size: 0.875rem;
-  font-weight: 800;
-  line-height: 1;
-  white-space: nowrap;
-  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.navAuthButton:hover {
-  transform: translateY(-1px);
-}
-
-.navAuthButton:active {
-  transform: translateY(0) scale(0.97);
-}
-
-.navAuthButton:focus-visible {
-  outline: 2px solid var(--primary-blue);
-  outline-offset: 3px;
-}
-
-.navAuthPrimary {
-  border-color: var(--primary-blue);
-  background: var(--primary-blue);
-  color: #fff;
-  box-shadow: 0 1px 2px rgb(15 43 89 / 0.14);
-}
-
-.navAuthPrimary:hover {
-  border-color: var(--hover-blue);
-  background: var(--hover-blue);
-}
-
-.navAuthOutline {
-  border-color: var(--accent-gold);
-  background: transparent;
+  background: color-mix(in srgb, var(--surface) 90%, white 10%);
   color: var(--primary-blue);
+  padding: 0 0.75rem 0 0.58rem;
+  cursor: pointer;
+  box-shadow: 0 14px 28px rgb(15 43 89 / 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease;
 }
 
-.navAuthOutline:hover {
-  background: color-mix(in srgb, var(--accent-gold) 12%, transparent);
+.themeToggleIcon {
+  display: inline-grid;
+  width: 1.75rem;
+  height: 1.75rem;
+  place-items: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primary-blue) 10%, white);
+  font-size: 0.78rem;
+}
+
+.themeToggleText {
+  font-size: 0.78rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.themeToggleButton:hover,
+.themeToggleButton:focus-visible {
+  outline: none;
+  transform: translateY(-2px);
+  box-shadow: 0 18px 34px rgb(15 43 89 / 0.14);
+}
+
+:global(html[data-landing-theme='dark']) .themeToggleButton {
+  border-color: rgb(71 85 105 / 0.72);
+  background: #17243a;
+  color: var(--accent-gold);
+  box-shadow: 0 16px 30px rgb(0 0 0 / 0.24);
+}
+
+:global(html[data-landing-theme='dark']) .themeToggleIcon {
+  background: rgb(246 190 0 / 0.14);
 }
 
 .mobileMenuButton {
@@ -555,11 +685,6 @@
   background: linear-gradient(135deg, var(--primary-blue), var(--hover-blue));
   color: #fff;
   box-shadow: 0 12px 26px rgb(0 58 143 / 0.22);
-  transition: transform 0.2s ease-out;
-}
-
-.mobileMenuButton:active {
-  transform: scale(0.92);
 }
 
 .mobileMenuIcon {
@@ -598,15 +723,12 @@
 .heroSection {
   position: relative;
   overflow: hidden;
-  /* Extend the hero up behind the floating navbar (cancels .main's 4.7rem offset) so its
-     gradient fills the strip around the pill instead of showing a separate band. */
-  margin-top: -4.7rem;
-  padding: calc(4.7rem + 4.7rem) 0 4.3rem;
+  padding: 4.7rem 0 4.3rem;
   background:
-    radial-gradient(ellipse 60% 45% at 50% 8%, #f6be0033, #0000 70%),
-    radial-gradient(circle at 92% 15%, #418bff40, #0000 45%),
-    radial-gradient(circle at 5% 90%, #418bff26, #0000 45%),
-    linear-gradient(135deg, #f8fbff, #eef7ff);
+    radial-gradient(circle at 50% 16%, rgb(255 255 255 / 0.78), transparent 18rem),
+    radial-gradient(circle at 18% 25%, rgb(246 190 0 / 0.08), transparent 18rem),
+    radial-gradient(circle at 85% 38%, rgb(65 139 255 / 0.14), transparent 29rem),
+    linear-gradient(135deg, #f8fbff 0%, #eef7ff 100%);
 }
 
 .heroSection::before {
@@ -618,16 +740,10 @@
     repeating-radial-gradient(ellipse at 15% 45%, rgb(0 58 143 / 0.06) 0 1px, transparent 1px 18px);
   mask-image: linear-gradient(90deg, #000, transparent 78%);
   pointer-events: none;
-  opacity: 0.6;
 }
 
 .heroSection::after {
-  content: '';
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 7rem;
-  background: linear-gradient(to bottom, transparent, var(--background));
-  pointer-events: none;
+  display: none;
 }
 
 .heroGrid {
@@ -921,19 +1037,12 @@
     linear-gradient(180deg, #ffffff, #f2f8ff);
 }
 
-.bgMesh {
-  background:
-    radial-gradient(circle at 16% 10%, color-mix(in srgb, var(--accent-gold) 9%, transparent), transparent 18rem),
-    radial-gradient(circle at 86% 14%, color-mix(in srgb, var(--primary-blue) 7%, transparent), transparent 24rem),
-    linear-gradient(180deg, var(--background) 0%, var(--surface) 55%, var(--background) 100%);
-}
-
-.bgPlain {
-  background: linear-gradient(180deg, var(--background) 0%, var(--surface) 55%, var(--background) 100%);
-}
-
 .institutionSection {
   overflow: hidden;
+  background:
+    radial-gradient(circle at 14% 22%, rgb(246 190 0 / 0.13), transparent 17rem),
+    radial-gradient(circle at 84% 18%, rgb(0 58 143 / 0.1), transparent 23rem),
+    linear-gradient(180deg, #ffffff 0%, #f4f9ff 58%, #eef7ff 100%);
 }
 
 .institutionSection::before {
@@ -974,19 +1083,21 @@
 
 .institutionIntro {
   margin: 0;
-  text-align: center;
+  text-align: left;
 }
 
 .institutionIntro p {
   max-width: 44rem;
-  text-wrap: balance;
   margin-right: auto;
   margin-left: auto;
 }
 
 .modulesSection {
   overflow: hidden;
-  padding-top: 3.5rem;
+  background:
+    radial-gradient(circle at 16% 18%, rgb(246 190 0 / 0.12), transparent 18rem),
+    radial-gradient(circle at 86% 12%, rgb(0 58 143 / 0.08), transparent 21rem),
+    linear-gradient(180deg, #f8fbff 0%, #ffffff 52%, #eef7ff 100%);
 }
 
 .modulesSection .container {
@@ -994,166 +1105,15 @@
   z-index: 1;
 }
 
-/* USTP Vision & Mission: narrower Vision card (5) beside a wider Mission card (7), equal height. */
 .visionMissionGrid {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  align-items: stretch;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
   max-width: 1180px;
   margin-inline: auto;
-  gap: 1.5rem;
+  gap: 1.2rem;
 }
 
-.visionCard,
-.missionCard {
-  display: flex;
-  flex-direction: column;
-  border-radius: 20px;
-  padding: 2.25rem;
-}
-
-.visionCard {
-  border: 1px solid #d6e2f5;
-  background: #eaf1fb;
-}
-
-.missionCard {
-  border: 1px solid var(--border);
-  background: #ffffff;
-  box-shadow: 0 12px 32px rgb(15 43 89 / 0.06);
-}
-
-.visionIcon,
-.missionIcon {
-  display: inline-flex;
-  flex: 0 0 auto;
-  width: 3.25rem;
-  height: 3.25rem;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.9rem;
-  font-size: 1.3rem;
-}
-
-.visionIcon {
-  background: #ffffff;
-  box-shadow: 0 6px 16px rgb(15 43 89 / 0.08);
-  color: var(--primary-blue);
-}
-
-.missionIcon {
-  background: #fff4d6;
-  color: #9a6b00;
-}
-
-.visionLabel,
-.missionLabel {
-  margin: 0;
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.visionLabel {
-  margin-top: 1.4rem;
-  color: var(--primary-blue);
-}
-
-.missionLabel {
-  color: #9a6b00;
-}
-
-/* Grows to fill the card so the support box sits at the bottom and the card never looks empty. */
-.visionStatement {
-  flex: 1 0 auto;
-  margin: 0.9rem 0 0;
-  color: #102033;
-  font-family: var(--font-serif), Georgia, serif;
-  font-size: clamp(1.5rem, 2.3vw, 1.875rem);
-  font-weight: 700;
-  line-height: 1.4;
-}
-
-.visionSupport {
-  display: grid;
-  gap: 0.35rem;
-  margin-top: 2rem;
-  border-radius: 14px;
-  background: #ffffff;
-  padding: 1.1rem 1.25rem;
-}
-
-.visionSupport strong {
-  color: #102033;
-  font-size: 0.9rem;
-  font-weight: 800;
-}
-
-.visionSupport span {
-  color: #536982;
-  font-size: 0.875rem;
-  line-height: 1.55;
-}
-
-.missionHeader {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-}
-
-.missionTimeline {
-  display: grid;
-  gap: 1.75rem;
-  margin: 2rem 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.missionTimeline li {
-  position: relative;
-  display: grid;
-  grid-template-columns: 2.5rem minmax(0, 1fr);
-  align-items: start;
-  gap: 1.1rem;
-}
-
-/* Connector: from this circle's centre down to the next circle's centre (item height + list gap),
-   drawn behind the circles. The last item has none, so the line ends at circle 3. */
-.missionTimeline li:not(:last-child)::before {
-  content: '';
-  position: absolute;
-  top: 1.25rem;
-  left: calc(1.25rem - 1px);
-  width: 2px;
-  height: calc(100% + 1.75rem);
-  background: #f3e3b0;
-}
-
-.missionStep {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  width: 2.5rem;
-  height: 2.5rem;
-  place-items: center;
-  border-radius: 999px;
-  background: var(--accent-gold);
-  color: #102033;
-  font-size: 1rem;
-  font-weight: 800;
-}
-
-/* padding-top centres the first text line (1.65 x 16px) on the 40px circle. */
-.missionTimeline p {
-  margin: 0;
-  padding-top: 0.45rem;
-  color: #374151;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.65;
-}
-
+.institutionCard,
 .moduleCard,
 .aboutSystemCard,
 .aboutLearnCard,
@@ -1164,6 +1124,85 @@
   box-shadow: var(--shadow-soft);
 }
 
+.institutionCard {
+  position: relative;
+  overflow: hidden;
+  min-height: 23rem;
+  border-color: rgb(204 219 239 / 0.95);
+  border-radius: 1rem;
+  background: rgb(255 255 255 / 0.94);
+  padding: 1.7rem;
+  transform-style: flat;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.institutionCard::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 0.35rem;
+  background: linear-gradient(90deg, var(--primary-blue), var(--hover-blue), var(--accent-gold));
+}
+
+.institutionCard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(120deg, transparent 0 36%, rgb(255 255 255 / 0.76) 48%, transparent 62% 100%);
+  opacity: 0;
+  transform: translateX(-125%);
+  pointer-events: none;
+}
+
+.institutionCard:hover {
+  border-color: color-mix(in srgb, var(--primary-blue) 20%, white);
+  box-shadow: 0 34px 78px rgb(15 43 89 / 0.13);
+  transform: translateY(-1px);
+}
+
+.institutionCard:hover::after {
+  animation: none;
+}
+
+.institutionVisionCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background:
+    radial-gradient(circle at 94% 12%, rgb(0 58 143 / 0.09), transparent 12rem),
+    rgb(255 255 255 / 0.95);
+}
+
+.institutionMissionCard {
+  background:
+    radial-gradient(circle at 88% 15%, rgb(246 190 0 / 0.12), transparent 13rem),
+    rgb(255 255 255 / 0.95);
+}
+
+.institutionCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.institutionCardHeader > span {
+  display: inline-flex;
+  min-height: 1.9rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(211 224 242 / 0.9);
+  border-radius: 999px;
+  background: #f8fbff;
+  color: var(--primary-blue);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.institutionIcon,
 .moduleIcon,
 .detailIcon {
   display: inline-flex;
@@ -1177,6 +1216,12 @@
   font-size: 1.55rem;
 }
 
+.institutionCard:nth-child(2) .institutionIcon {
+  background: linear-gradient(135deg, #fff2c7, #fffaf0);
+  color: var(--accent-gold);
+}
+
+.institutionCard h3,
 .moduleCard h3,
 .workflowStep h3,
 .detailCard h3 {
@@ -1187,10 +1232,106 @@
   letter-spacing: 0;
 }
 
+.institutionCard p,
 .detailCard,
 .teamCard p {
   color: var(--text-muted);
   line-height: 1.72;
+}
+
+.institutionCard p {
+  margin: 0.9rem 0 0;
+}
+
+.institutionVisionCard h3 {
+  margin-top: 1.35rem;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(1.9rem, 3vw, 2.65rem);
+  line-height: 1.08;
+}
+
+.institutionVisionCard p {
+  max-width: 32rem;
+  color: #435b76;
+  font-size: 1rem;
+}
+
+.institutionVisionNote {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 2rem;
+  border-left: 4px solid var(--accent-gold);
+  background: linear-gradient(90deg, rgb(246 190 0 / 0.12), transparent);
+  padding: 0.9rem 1rem;
+}
+
+.institutionVisionNote strong,
+.institutionVisionNote span {
+  display: block;
+}
+
+.institutionVisionNote strong {
+  color: #102033;
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.institutionVisionNote span {
+  color: #536982;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.institutionMissionList {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1.2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.institutionMissionList li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.55rem;
+  border: 1px solid rgb(211 224 242 / 0.9);
+  border-radius: 0.7rem;
+  background: rgb(255 255 255 / 0.72);
+  color: #425872;
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.45;
+  transition: transform 0.45s var(--motion-luxe), border-color 0.45s var(--motion-luxe), box-shadow 0.45s var(--motion-luxe);
+}
+
+.institutionMissionList li:hover {
+  border-color: color-mix(in srgb, var(--primary-blue) 20%, white);
+  box-shadow: 0 14px 30px rgb(15 43 89 / 0.08);
+  transform: translateX(5px);
+}
+
+.institutionMissionList li > span {
+  display: grid;
+  width: 2.15rem;
+  height: 2.15rem;
+  place-items: center;
+  border-radius: 0.58rem;
+  background: #eaf3ff;
+  color: var(--primary-blue);
+  font-size: 0.85rem;
+}
+
+.institutionMissionList li:nth-child(2) > span {
+  background: #fff5d8;
+  color: var(--accent-gold);
+}
+
+.institutionMissionList li:nth-child(3) > span {
+  background: color-mix(in srgb, var(--primary-blue) 12%, white);
+  color: var(--primary-blue);
 }
 
 .cleanList,
@@ -1260,7 +1401,6 @@
 
 .moduleCard {
   --module-accent: var(--primary-blue);
-  --module-text-accent: var(--module-accent);
   position: relative;
   isolation: isolate;
   display: flex;
@@ -1305,9 +1445,6 @@
 
 .moduleCard:nth-child(3) {
   --module-accent: var(--accent-gold);
-  /* Gold has poor contrast as text on this light card; keep gold for the icon
-     and top border (--module-accent) but use navy for the readable labels. */
-  --module-text-accent: var(--primary-blue);
 }
 
 .moduleCard:nth-child(4) {
@@ -1360,7 +1497,7 @@
   border: 1px solid color-mix(in srgb, var(--module-accent) 20%, white);
   border-radius: 999px;
   background: color-mix(in srgb, var(--module-accent) 8%, white);
-  color: color-mix(in srgb, var(--module-text-accent) 82%, #102033);
+  color: color-mix(in srgb, var(--module-accent) 82%, #102033);
   padding: 0.32rem 0.68rem;
   font-size: 0.68rem;
   font-weight: 900;
@@ -1369,11 +1506,11 @@
 
 .moduleCardBody {
   display: grid;
-  gap: 0.5rem;
+  gap: 0.42rem;
 }
 
 .moduleAudience {
-  color: var(--module-text-accent);
+  color: var(--module-accent);
   font-size: 0.76rem;
   font-weight: 900;
   line-height: 1.2;
@@ -1387,10 +1524,10 @@
 }
 
 .moduleCard p {
-  margin: 0.2rem 0 0;
+  margin: 0.1rem 0 0;
   color: #536982;
   font-size: 0.84rem;
-  line-height: 1.65;
+  line-height: 1.62;
 }
 
 .moduleCapabilityList {
@@ -1443,6 +1580,10 @@
 .workflowSection {
   position: relative;
   overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 30%, rgb(0 58 143 / 0.04), transparent 30rem),
+    radial-gradient(circle at 82% 70%, rgb(246 190 0 / 0.04), transparent 30rem),
+    linear-gradient(180deg, #ffffff 0%, #f6fafe 100%);
 }
 
 .workflowSection::before {
@@ -1456,31 +1597,17 @@
 
 .workflowHeader {
   max-width: 46rem;
-  margin: 0 auto 2.6rem;
+  margin-bottom: 2.6rem;
 }
 
 .workflowIntro {
-  margin: 0 auto;
-  text-align: center;
-}
-
-.hallIntro {
   margin: 0;
   text-align: left;
 }
 
-.hallIntro p {
+.workflowIntro p {
   margin-right: 0;
   margin-left: 0;
-}
-
-.hallIntro .sectionKicker::before {
-  background: var(--department-primary, var(--primary-blue));
-}
-
-.workflowIntro p {
-  margin-right: auto;
-  margin-left: auto;
 }
 
 .workflowTimeline {
@@ -1670,6 +1797,37 @@
   font-family: 'Font Awesome 6 Free';
   font-size: 0.66rem;
   font-weight: 900;
+}
+
+:global(html[data-landing-theme='dark']) .workflowStepBody,
+:global(html[data-landing-theme='dark']) .workflowStep:hover .workflowStepBody {
+  border-color: rgb(51 65 85 / 0.86);
+  background: rgb(15 27 45 / 0.88);
+  box-shadow: 0 18px 42px rgb(0 0 0 / 0.28);
+}
+
+:global(html[data-landing-theme='dark']) .workflowStep h3 {
+  color: #e5eefb;
+}
+
+:global(html[data-landing-theme='dark']) .workflowStep p {
+  color: #a8b6c8;
+}
+
+:global(html[data-landing-theme='dark']) .workflowIcon,
+:global(html[data-landing-theme='dark']) .workflowStep:hover .workflowIcon {
+  border-color: rgb(51 65 85 / 0.86);
+  background: #13233b;
+  color: var(--stage-accent);
+  box-shadow:
+    0 14px 28px rgb(0 0 0 / 0.24),
+    inset 0 0 0 0.45rem rgb(255 255 255 / 0.04);
+}
+
+:global(html[data-landing-theme='dark']) .workflowArtifact {
+  border-color: color-mix(in srgb, var(--stage-accent) 34%, #334155);
+  background: rgb(17 34 58 / 0.9);
+  color: color-mix(in srgb, var(--stage-accent) 58%, #e5eefb);
 }
 
 .aboutTeaserSection {
@@ -2509,19 +2667,6 @@
   border-radius: 0.7rem;
   background: rgb(255 255 255 / 0.08);
   color: #fff;
-  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-}
-
-.footerSocials a:hover,
-.footerSocials a:focus-visible {
-  border-color: color-mix(in srgb, var(--accent-gold) 55%, transparent);
-  background: rgb(255 255 255 / 0.14);
-  color: var(--accent-gold);
-  transform: translateY(-2px);
-}
-
-.footerSocials a:active {
-  transform: translateY(0) scale(0.92);
 }
 
 .footerBottom {
@@ -2540,13 +2685,11 @@
 .aboutPageHero {
   position: relative;
   overflow: hidden;
-  /* Extend the hero up behind the floating navbar (cancels .main's 4.7rem offset) so its
-     gradient fills the strip around the pill; height, padding and mockup offset grow to match. */
-  margin-top: -4.7rem;
-  min-height: calc(36rem + 4.7rem);
-  padding: calc(6.2rem + 4.7rem) 0 4.8rem;
-  /* Soft white gradient with a faint cool-blue edge; no gold tint. */
-  background: linear-gradient(90deg, #f4f8fe 0%, #ffffff 55%, #f7faff 100%);
+  min-height: 36rem;
+  padding: 6.2rem 0 4.8rem;
+  background:
+    linear-gradient(90deg, rgb(255 255 255 / 0.97) 0%, rgb(255 255 255 / 0.86) 48%, rgb(255 255 255 / 0.62) 100%),
+    linear-gradient(135deg, #f8fbff 0%, #eaf3ff 52%, #fff6d9 100%);
 }
 
 .aboutPageHero::before {
@@ -2554,22 +2697,10 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgb(0 58 143 / 0.07) 1px, transparent 1px),
-    linear-gradient(180deg, rgb(0 58 143 / 0.055) 1px, transparent 1px);
+    linear-gradient(90deg, rgb(0 58 143 / 0.045) 1px, transparent 1px),
+    linear-gradient(180deg, rgb(0 58 143 / 0.035) 1px, transparent 1px);
   background-size: 4rem 4rem;
   mask-image: linear-gradient(90deg, #000 0%, #000 74%, transparent 100%);
-  pointer-events: none;
-}
-
-/* Fade the hero's bottom edge into the white System Model section below. Sits above the
-   mockup (z-index 1, later in paint order) but under the content container (z-index 2). */
-.aboutPageHero::after {
-  content: '';
-  position: absolute;
-  inset: auto 0 0;
-  z-index: 1;
-  height: 7rem;
-  background: linear-gradient(180deg, transparent, #ffffff);
   pointer-events: none;
 }
 
@@ -2580,7 +2711,7 @@
 
 .aboutHeroScene {
   position: absolute;
-  top: calc(3.2rem + 4.7rem);
+  top: 3.2rem;
   right: max(-8rem, calc((100vw - 1680px) / 2));
   z-index: 1;
   width: min(54rem, 52vw);
@@ -2788,7 +2919,7 @@
 
 .aboutHeroMetrics strong {
   display: block;
-  color: var(--primary-blue);
+  color: var(--accent-gold);
   font-size: 2.05rem;
   line-height: 1;
 }
@@ -3806,6 +3937,204 @@
   background: #f7fbff;
 }
 
+:global(html[data-landing-theme='dark']) .aboutPageHero {
+  background:
+    radial-gradient(circle at 14% 18%, rgb(246 190 0 / 0.08), transparent 18rem),
+    radial-gradient(circle at 86% 12%, rgb(59 130 246 / 0.14), transparent 24rem),
+    linear-gradient(135deg, #07111f 0%, #0d1b2f 54%, #081323 100%);
+}
+
+:global(html[data-landing-theme='dark']) .aboutPageHero::before {
+  background:
+    linear-gradient(90deg, rgb(148 163 184 / 0.05) 1px, transparent 1px),
+    linear-gradient(180deg, rgb(148 163 184 / 0.04) 1px, transparent 1px);
+}
+
+:global(html[data-landing-theme='dark']) .aboutHeroContent h1 {
+  color: #facc15;
+}
+
+:global(html[data-landing-theme='dark']) .aboutHeroContent h1 span {
+  color: #e5eefb;
+}
+
+:global(html[data-landing-theme='dark']) .aboutHeroContent p,
+:global(html[data-landing-theme='dark']) .departmentSystemIntro p,
+:global(html[data-landing-theme='dark']) .systemDefinitionPanel p,
+:global(html[data-landing-theme='dark']) .processCard p,
+:global(html[data-landing-theme='dark']) .capabilityCard p,
+:global(html[data-landing-theme='dark']) .roleCard p,
+:global(html[data-landing-theme='dark']) .systemRuleCard p {
+  color: #a8b6c8;
+}
+
+:global(html[data-landing-theme='dark']) .aboutHeroMetrics div,
+:global(html[data-landing-theme='dark']) .aboutScenePanel,
+:global(html[data-landing-theme='dark']) .aboutSceneWidePanel,
+:global(html[data-landing-theme='dark']) .systemDefinitionPanel,
+:global(html[data-landing-theme='dark']) .processCard,
+:global(html[data-landing-theme='dark']) .capabilityCard,
+:global(html[data-landing-theme='dark']) .roleCard,
+:global(html[data-landing-theme='dark']) .departmentInsightCard,
+:global(html[data-landing-theme='dark']) .systemRuleCard {
+  border-color: rgb(51 65 85 / 0.86);
+  background: rgb(15 27 45 / 0.88);
+  box-shadow: 0 18px 42px rgb(0 0 0 / 0.28);
+}
+
+:global(html[data-landing-theme='dark']) .aboutHeroMetrics span,
+:global(html[data-landing-theme='dark']) .aboutScenePanel span,
+:global(html[data-landing-theme='dark']) .aboutSceneWidePanel span,
+:global(html[data-landing-theme='dark']) .departmentInsightCard span {
+  color: #94a3b8;
+}
+
+:global(html[data-landing-theme='dark']) .aboutScenePanel strong,
+:global(html[data-landing-theme='dark']) .processCard h3,
+:global(html[data-landing-theme='dark']) .capabilityCard h3,
+:global(html[data-landing-theme='dark']) .roleCard h3,
+:global(html[data-landing-theme='dark']) .systemRuleCard h3 {
+  color: #e5eefb;
+}
+
+:global(html[data-landing-theme='dark']) .aboutHeroScene {
+  border-color: rgb(51 65 85 / 0.86);
+  background: rgb(15 27 45 / 0.78);
+  box-shadow: 0 28px 70px rgb(0 0 0 / 0.36);
+}
+
+:global(html[data-landing-theme='dark']) .aboutHeroScene::before {
+  background:
+    linear-gradient(90deg, rgb(148 163 184 / 0.06) 1px, transparent 1px),
+    linear-gradient(180deg, rgb(148 163 184 / 0.05) 1px, transparent 1px);
+}
+
+:global(html[data-landing-theme='dark']) .aboutSceneChrome {
+  border-bottom-color: rgb(51 65 85 / 0.86);
+  background: rgb(17 34 58 / 0.92);
+}
+
+:global(html[data-landing-theme='dark']) .aboutSceneWidePanel b,
+:global(html[data-landing-theme='dark']) .capabilityCard > span,
+:global(html[data-landing-theme='dark']) .roleIcon,
+:global(html[data-landing-theme='dark']) .systemRuleCard i,
+:global(html[data-landing-theme='dark']) .processCardTop i {
+  border-color: rgb(51 65 85 / 0.72);
+  background: #13233b;
+  color: #93c5fd;
+}
+
+:global(html[data-landing-theme='dark']) .aboutSceneWidePanel b:nth-child(2),
+:global(html[data-landing-theme='dark']) .capabilityCard:nth-child(2) > span {
+  background: rgb(246 190 0 / 0.12);
+  color: #facc15;
+}
+
+:global(html[data-landing-theme='dark']) .aboutSceneWidePanel b:nth-child(3),
+:global(html[data-landing-theme='dark']) .capabilityCard:nth-child(3) > span {
+  background: rgb(15 118 110 / 0.18);
+  color: #5eead4;
+}
+
+:global(html[data-landing-theme='dark']) .aboutSceneWidePanel b:nth-child(4),
+:global(html[data-landing-theme='dark']) .capabilityCard:nth-child(4) > span {
+  background: rgb(100 116 139 / 0.2);
+  color: #cbd5e1;
+}
+
+:global(html[data-landing-theme='dark']) .systemModelSection,
+:global(html[data-landing-theme='dark']) .roleWorkspaceSection,
+:global(html[data-landing-theme='dark']) .systemRulesSection,
+:global(html[data-landing-theme='dark']) .detailSection {
+  background: #07111f;
+}
+
+:global(html[data-landing-theme='dark']) .capabilitySection,
+:global(html[data-landing-theme='dark']) .departmentSystemSection {
+  background:
+    linear-gradient(90deg, rgb(148 163 184 / 0.035) 1px, transparent 1px),
+    linear-gradient(180deg, #07111f 0%, #0d1b2f 54%, #081323 100%);
+}
+
+:global(html[data-landing-theme='dark']) .systemDefinitionPanel {
+  border-left-color: #60a5fa;
+}
+
+:global(html[data-landing-theme='dark']) .systemDefinitionPanel span,
+:global(html[data-landing-theme='dark']) .processCardTop span,
+:global(html[data-landing-theme='dark']) .departmentSystemIntro h2,
+:global(html[data-landing-theme='dark']) .departmentInsightCard strong {
+  color: #e5eefb;
+}
+
+:global(html[data-landing-theme='dark']) .processCard em,
+:global(html[data-landing-theme='dark']) .departmentExploreLink {
+  border-color: rgb(51 65 85 / 0.86);
+  background: rgb(17 34 58 / 0.9);
+  color: #dbeafe;
+}
+
+:global(html[data-landing-theme='dark']) .roleCard strong {
+  color: #5eead4;
+}
+
+:global(html[data-landing-theme='dark']) .departmentCardTopline i,
+:global(html[data-landing-theme='dark']) .departmentExploreLink i {
+  background: rgb(255 255 255 / 0.08);
+  color: currentColor;
+}
+
+:global(html[data-landing-theme='dark']) .systemRulesBand {
+  border-color: rgb(51 65 85 / 0.86);
+}
+
+:global(html[data-landing-theme='dark']) .departmentLogoCard {
+  background: rgb(15 23 42 / 0.6);
+  border-color: rgb(51 65 85 / 0.8);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.3);
+}
+
+:global(html[data-landing-theme='dark']) .departmentLogoCard:hover {
+  background: rgb(15 23 42 / 0.9);
+  border-color: color-mix(in srgb, var(--department-primary) 40%, rgb(51 65 85));
+  box-shadow: 0 16px 40px color-mix(in srgb, var(--department-primary) 15%, rgb(0 0 0 / 0.4));
+}
+
+:global(html[data-landing-theme='dark']) .departmentLogoCard strong {
+  color: #f8fafc;
+}
+
+:global(html[data-landing-theme='dark']) .departmentLogoCard:hover strong {
+  color: color-mix(in srgb, var(--department-primary) 80%, white);
+}
+
+:global(html[data-landing-theme='dark']) .departmentLogoCard p {
+  color: #94a3b8;
+}
+
+:global(html[data-landing-theme='dark']) .departmentCardFooter {
+  border-color: rgb(51 65 85 / 0.6);
+}
+
+:global(html[data-landing-theme='dark']) .departmentCardFooter em {
+  background: color-mix(in srgb, var(--department-primary) 12%, rgb(15 23 42));
+}
+
+:global(html[data-landing-theme='dark']) .departmentLogoCard:hover .departmentCardFooter em {
+  background: color-mix(in srgb, var(--department-primary) 20%, rgb(15 23 42));
+}
+
+:global(html[data-landing-theme='dark']) .departmentCardTopline span {
+  background: color-mix(in srgb, var(--department-primary) 15%, rgb(15 23 42));
+  color: color-mix(in srgb, var(--department-primary) 80%, white);
+}
+
+:global(html[data-landing-theme='dark']) .departmentLogoMark {
+  background: rgb(15 23 42);
+  border-color: rgb(51 65 85);
+  box-shadow: inset 0 2px 8px rgb(0 0 0 / 0.4);
+}
+
 .detailGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3993,16 +4322,6 @@
     min-height: 4.6rem;
   }
 
-  .navbarFloating {
-    padding-top: 0.5rem;
-  }
-
-  .navbarFloating .navbarInner {
-    width: calc(100% - 1rem);
-    min-height: 3.9rem;
-    padding: 0.4rem 0.45rem 0.4rem 1rem;
-  }
-
   .departmentNavbarInner {
     align-items: stretch;
     flex-direction: column;
@@ -4064,6 +4383,7 @@
     border-radius: 1.75rem;
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     box-shadow: 
       0 40px 80px rgba(15, 43, 89, 0.2), 
       inset 0 0 0 1px rgba(255, 255, 255, 0.7),
@@ -4136,9 +4456,23 @@
     border-top: 1px solid rgba(0, 58, 143, 0.08);
   }
 
-  .navAuthButton {
+  .navActionButton {
     width: 100%;
-    min-height: 2.75rem;
+  }
+
+  .themeToggleButton {
+    width: 2.8rem;
+    min-width: 2.8rem;
+    padding: 0;
+  }
+
+  .themeToggleText {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 
   .aboutHeroGrid,
@@ -4197,13 +4531,8 @@
     padding: 3.8rem 0;
   }
 
-  .heroSection {
-    padding-top: calc(3.8rem + 4.7rem);
-  }
-
   .aboutPageHero {
     min-height: auto;
-    padding-top: calc(3.8rem + 4.7rem);
   }
 
   .heroSection::before {
@@ -4339,9 +4668,8 @@
     margin-bottom: 1.5rem;
   }
 
-  .visionCard,
-  .missionCard {
-    padding: 1.6rem;
+  .institutionCard {
+    min-height: auto;
   }
 
   .moduleShowcaseHeader {
@@ -4415,8 +4743,7 @@
     font-size: 2.15rem;
   }
 
-  .visionCard,
-  .missionCard,
+  .institutionCard,
   .moduleCard,
   .aboutSystemCard,
   .aboutLearnCard,

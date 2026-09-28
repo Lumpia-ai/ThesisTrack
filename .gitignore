@@ -8,4 +8,6 @@ dist
 env
 capstone-dev-main/
 scratch/
+push.bat
+push.ps1
 

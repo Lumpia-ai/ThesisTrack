@@ -236,23 +236,6 @@ export type EnumGroupLifecycleStatusWithAggregatesFilter<$PrismaModel = never> =
   _max?: Prisma.NestedEnumGroupLifecycleStatusFilter<$PrismaModel>
 }
 
-export type EnumMilestoneCheckpointReviewStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.MilestoneCheckpointReviewStatus | Prisma.EnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.MilestoneCheckpointReviewStatus[] | Prisma.ListEnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.MilestoneCheckpointReviewStatus[] | Prisma.ListEnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumMilestoneCheckpointReviewStatusFilter<$PrismaModel> | $Enums.MilestoneCheckpointReviewStatus
-}
-
-export type EnumMilestoneCheckpointReviewStatusWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.MilestoneCheckpointReviewStatus | Prisma.EnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.MilestoneCheckpointReviewStatus[] | Prisma.ListEnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.MilestoneCheckpointReviewStatus[] | Prisma.ListEnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumMilestoneCheckpointReviewStatusWithAggregatesFilter<$PrismaModel> | $Enums.MilestoneCheckpointReviewStatus
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumMilestoneCheckpointReviewStatusFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumMilestoneCheckpointReviewStatusFilter<$PrismaModel>
-}
-
 export type JsonFilter<$PrismaModel = never> =
 | Prisma.PatchUndefined<
     Prisma.Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -362,6 +345,13 @@ export type EnumMilestoneCheckpointStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumMilestoneCheckpointStatusFilter<$PrismaModel> | $Enums.MilestoneCheckpointStatus
 }
 
+export type EnumMilestoneCheckpointReviewStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MilestoneCheckpointReviewStatus | Prisma.EnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MilestoneCheckpointReviewStatus[] | Prisma.ListEnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MilestoneCheckpointReviewStatus[] | Prisma.ListEnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMilestoneCheckpointReviewStatusFilter<$PrismaModel> | $Enums.MilestoneCheckpointReviewStatus
+}
+
 export type EnumMilestoneCheckpointStatusWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.MilestoneCheckpointStatus | Prisma.EnumMilestoneCheckpointStatusFieldRefInput<$PrismaModel>
   in?: $Enums.MilestoneCheckpointStatus[] | Prisma.ListEnumMilestoneCheckpointStatusFieldRefInput<$PrismaModel>
@@ -370,6 +360,16 @@ export type EnumMilestoneCheckpointStatusWithAggregatesFilter<$PrismaModel = nev
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumMilestoneCheckpointStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumMilestoneCheckpointStatusFilter<$PrismaModel>
+}
+
+export type EnumMilestoneCheckpointReviewStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MilestoneCheckpointReviewStatus | Prisma.EnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MilestoneCheckpointReviewStatus[] | Prisma.ListEnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MilestoneCheckpointReviewStatus[] | Prisma.ListEnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMilestoneCheckpointReviewStatusWithAggregatesFilter<$PrismaModel> | $Enums.MilestoneCheckpointReviewStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMilestoneCheckpointReviewStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMilestoneCheckpointReviewStatusFilter<$PrismaModel>
 }
 
 export type EnumSubmissionStatusFilter<$PrismaModel = never> = {
@@ -845,23 +845,6 @@ export type NestedEnumGroupLifecycleStatusWithAggregatesFilter<$PrismaModel = ne
   _max?: Prisma.NestedEnumGroupLifecycleStatusFilter<$PrismaModel>
 }
 
-export type NestedEnumMilestoneCheckpointReviewStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.MilestoneCheckpointReviewStatus | Prisma.EnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.MilestoneCheckpointReviewStatus[] | Prisma.ListEnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.MilestoneCheckpointReviewStatus[] | Prisma.ListEnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumMilestoneCheckpointReviewStatusFilter<$PrismaModel> | $Enums.MilestoneCheckpointReviewStatus
-}
-
-export type NestedEnumMilestoneCheckpointReviewStatusWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.MilestoneCheckpointReviewStatus | Prisma.EnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.MilestoneCheckpointReviewStatus[] | Prisma.ListEnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.MilestoneCheckpointReviewStatus[] | Prisma.ListEnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumMilestoneCheckpointReviewStatusWithAggregatesFilter<$PrismaModel> | $Enums.MilestoneCheckpointReviewStatus
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumMilestoneCheckpointReviewStatusFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumMilestoneCheckpointReviewStatusFilter<$PrismaModel>
-}
-
 export type NestedJsonFilter<$PrismaModel = never> =
 | Prisma.PatchUndefined<
     Prisma.Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -944,6 +927,13 @@ export type NestedEnumMilestoneCheckpointStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumMilestoneCheckpointStatusFilter<$PrismaModel> | $Enums.MilestoneCheckpointStatus
 }
 
+export type NestedEnumMilestoneCheckpointReviewStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MilestoneCheckpointReviewStatus | Prisma.EnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MilestoneCheckpointReviewStatus[] | Prisma.ListEnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MilestoneCheckpointReviewStatus[] | Prisma.ListEnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMilestoneCheckpointReviewStatusFilter<$PrismaModel> | $Enums.MilestoneCheckpointReviewStatus
+}
+
 export type NestedEnumMilestoneCheckpointStatusWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.MilestoneCheckpointStatus | Prisma.EnumMilestoneCheckpointStatusFieldRefInput<$PrismaModel>
   in?: $Enums.MilestoneCheckpointStatus[] | Prisma.ListEnumMilestoneCheckpointStatusFieldRefInput<$PrismaModel>
@@ -952,6 +942,16 @@ export type NestedEnumMilestoneCheckpointStatusWithAggregatesFilter<$PrismaModel
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumMilestoneCheckpointStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumMilestoneCheckpointStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumMilestoneCheckpointReviewStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MilestoneCheckpointReviewStatus | Prisma.EnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MilestoneCheckpointReviewStatus[] | Prisma.ListEnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MilestoneCheckpointReviewStatus[] | Prisma.ListEnumMilestoneCheckpointReviewStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMilestoneCheckpointReviewStatusWithAggregatesFilter<$PrismaModel> | $Enums.MilestoneCheckpointReviewStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMilestoneCheckpointReviewStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMilestoneCheckpointReviewStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumSubmissionStatusFilter<$PrismaModel = never> = {

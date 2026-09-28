@@ -1,31 +1,3 @@
-import type { MouseEvent } from 'react';
-
-/**
- * Open the auth modal only for a plain left click; let modifier/middle clicks
- * (new tab, new window) fall through to the real /login or /register link.
- */
-export function shouldOpenAuthModal(event: MouseEvent<HTMLAnchorElement>) {
-  return !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
-}
-
-/**
- * Which auth modal view an admin-configurable link should open, if any: '/login' and
- * '/register' (ignoring any ?query or #hash) open the modal; every other link navigates normally.
- */
-export function getAuthViewForHref(href: string): 'login' | 'register' | null {
-  const path = href.trim().split(/[?#]/)[0].replace(/\/+$/, '');
-
-  if (path === '/login') {
-    return 'login';
-  }
-
-  if (path === '/register') {
-    return 'register';
-  }
-
-  return null;
-}
-
 export function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(' ');
 }
@@ -224,10 +196,7 @@ export const authUi = {
   modalBody: 'space-y-4 px-5 py-5 sm:px-6',
   modalActions:
     'flex flex-col-reverse gap-3 border-t border-slate-200 bg-slate-50/80 px-5 py-5 sm:flex-row sm:justify-end sm:px-6',
-  modalActionButton: 'w-full sm:w-auto',
-  // Auth modal (white surface): the glass field/toggle styles above are nearly invisible on white.
-  modalField: '!border-slate-200 !bg-slate-50 hover:!bg-white focus:!bg-white',
-  modalToggle: '!border-slate-200 !bg-white'
+  modalActionButton: 'w-full sm:w-auto'
 };
 
 export function getInputClass(hasError?: boolean) {

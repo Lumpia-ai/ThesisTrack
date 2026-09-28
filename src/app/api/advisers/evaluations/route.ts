@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuthenticatedUser } from '@/lib/auth';
 import { UserRole } from '@/generated/prisma/client';
-import { withApiLogging } from '@/lib/api-logging';
 
 const DEFAULT_EVALUATION_LIMIT = 50;
 const MAX_EVALUATION_LIMIT = 100;
@@ -18,7 +17,7 @@ function parsePositiveInteger(value: string | null, fallback: number, max: numbe
   return Math.min(max, Math.floor(parsed));
 }
 
-async function handleGET(request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     const user = await requireAuthenticatedUser(request, [UserRole.ADVISER, UserRole.PANEL]);
     const userId = user.id;
@@ -106,7 +105,7 @@ async function handleGET(request: NextRequest) {
   }
 }
 
-async function handlePOST(request: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
     const user = await requireAuthenticatedUser(request, [UserRole.ADVISER, UserRole.PANEL]);
 
@@ -136,6 +135,3 @@ async function handlePOST(request: NextRequest) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
-
-export const GET = withApiLogging('GET', '/api/advisers/evaluations', handleGET);
-export const POST = withApiLogging('POST', '/api/advisers/evaluations', handlePOST);

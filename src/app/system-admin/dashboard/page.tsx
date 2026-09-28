@@ -1,4 +1,4 @@
-import { SystemAdminDashboard } from '@/components/system-admin/system-admin-dashboard';
+import { SystemAdminDashboard } from '@/components/system-admin/system-admin-pages';
 
 export default function Page() {
   return <SystemAdminDashboard />;

@@ -12,7 +12,16 @@ export function useShellSidebar({
   storageKey
 }: UseShellSidebarOptions) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        return window.localStorage.getItem(storageKey) === 'true';
+      } catch {
+        return false;
+      }
+    }
+    return false;
+  });
   const [isMobile, setIsMobile] = useState(false);
   const [preferencesReady, setPreferencesReady] = useState(false);
 
@@ -21,9 +30,13 @@ export function useShellSidebar({
       return;
     }
 
-    const storedValue = window.localStorage.getItem(storageKey);
-    if (storedValue === 'true') {
-      setSidebarCollapsed(true);
+    try {
+      const storedValue = window.localStorage.getItem(storageKey);
+      if (storedValue !== null) {
+        setSidebarCollapsed(storedValue === 'true');
+      }
+    } catch {
+      // ignore storage access errors
     }
 
     setPreferencesReady(true);

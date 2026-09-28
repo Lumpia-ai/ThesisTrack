@@ -4,7 +4,6 @@ import { requireAuthenticatedUser } from '@/lib/auth';
 import { getAuthorizedDocumentFile } from '@/lib/storage/document-authorization';
 import { assertDocumentBucket, createSignedUrl } from '@/lib/storage/supabase-storage';
 import { HttpError, handleApiError } from '@/lib/utils';
-import { withApiLogging } from '@/lib/api-logging';
 
 export const runtime = 'nodejs';
 
@@ -18,7 +17,7 @@ const DOCUMENT_VIEWER_ROLES = [
   UserRole.ADMIN
 ];
 
-async function handleGET(
+export async function GET(
   request: Request,
   props: { params: Promise<{ id: string }> }
 ) {
@@ -43,5 +42,3 @@ async function handleGET(
     return handleApiError(error);
   }
 }
-
-export const GET = withApiLogging('GET', '/api/document-files/[id]/download', handleGET);
